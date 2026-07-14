@@ -155,9 +155,6 @@ export default function Sidebar() {
       <div className={classes.header}>
         <Group justify="space-between">
           <Logo style={{ width: rem(120) }} />
-          <Text size="xs" className={classes.version}>
-            v{version}
-          </Text>
         </Group>
       </div>
 

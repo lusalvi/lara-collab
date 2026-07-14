@@ -108,7 +108,7 @@ export default function TableRow({ item }) {
             }}
           >
             {can("download invoice") && (
-              <ActionIcon variant="subtle" color="blue" onClick={() => downloadPdf()}>
+              <ActionIcon variant="subtle" color="hospitalPrimary" onClick={() => downloadPdf()}>
                 <IconFileDownload style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
               </ActionIcon>
             )}
@@ -116,7 +116,7 @@ export default function TableRow({ item }) {
             {can("print invoice") && (
               <ActionIcon
                 variant="subtle"
-                color="blue"
+                color="hospitalPrimary"
                 loading={printLoading}
                 onClick={() => printPdf()}
               >

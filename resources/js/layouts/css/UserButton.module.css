@@ -6,6 +6,6 @@
     transition: 0.3s ease background-color;
 
     @mixin hover {
-        background-color: light-dark(var(--mantine-color-blue-9), var(--mantine-color-dark-8)) !important;
+        background-color: light-dark(var(--mantine-color-hospitalPrimary-9), var(--mantine-color-dark-8)) !important;
     }
 }

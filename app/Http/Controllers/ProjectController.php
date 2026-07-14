@@ -63,8 +63,6 @@ class ProjectController extends Controller
     {
         $data = $request->validated();
 
-        $data['rate'] *= 100;
-
         $project = Project::create($data);
 
         $project->users()->attach($data['users']);
@@ -96,8 +94,6 @@ class ProjectController extends Controller
     public function update(UpdateProjectRequest $request, Project $project)
     {
         $data = $request->validated();
-
-        $data['rate'] *= 100;
 
         $project->update($data);
 

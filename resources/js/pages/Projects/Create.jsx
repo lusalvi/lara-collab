@@ -17,34 +17,15 @@ import {
   Title,
 } from '@mantine/core';
 import { useEffect, useState } from 'react';
-import { PricingType } from '@/utils/enums';
 
 const ProjectCreate = ({ dropdowns: { companies, users, currencies } }) => {
-  const [currencySymbol, setCurrencySymbol] = useState();
 
   const [form, submit, updateValue] = useForm('post', route('projects.store'), {
     name: '',
     description: '',
-    default_pricing_type: PricingType.HOURLY,
-    rate: 0,
     client_company_id: '',
     users: [],
   });
-
-  const pricingTypes = [
-    { value: PricingType.HOURLY, label: 'Hourly' },
-    { value: PricingType.FIXED, label: 'Fixed' },
-  ];
-
-  useEffect(() => {
-    let symbol = currencies.find(i =>
-      i.client_companies.find(c => c.id.toString() === form.data.client_company_id)
-    )?.symbol;
-
-    if (symbol) {
-      setCurrencySymbol(symbol);
-    }
-  }, [form.data.client_company_id]);
 
   return (
     <>
@@ -117,30 +98,6 @@ const ProjectCreate = ({ dropdowns: { companies, users, currencies } }) => {
             onChange={values => updateValue('users', values)}
             data={users}
             error={form.errors.users}
-          />
-
-          <Select
-            label='Default pricing type'
-            placeholder='Select pricing type'
-            required
-            mt='md'
-            value={form.data.default_pricing_type}
-            onChange={value => updateValue('default_pricing_type', value)}
-            data={pricingTypes}
-            error={form.errors.default_pricing_type}
-          />
-
-          <NumberInput
-            label='Hourly rate'
-            mt='md'
-            allowNegative={false}
-            clampBehavior='strict'
-            decimalScale={2}
-            fixedDecimalScale={true}
-            prefix={currencySymbol}
-            value={form.data.rate}
-            onChange={value => updateValue('rate', value)}
-            error={form.errors.rate}
           />
 
           <Group

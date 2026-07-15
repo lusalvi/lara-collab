@@ -21,6 +21,7 @@ use App\Http\Controllers\Task\AttachmentController;
 use App\Http\Controllers\Task\CommentController;
 use App\Http\Controllers\Task\GroupController;
 use App\Http\Controllers\Task\TimeLogController;
+use App\Http\Controllers\ProjectCalendarController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -39,7 +40,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('{projectId}/restore', [ProjectController::class, 'restore'])->name('restore');
         Route::put('{project}/favorite/toggle', [ProjectController::class, 'favoriteToggle'])->name('favorite.toggle');
         Route::post('{project}/user-access', [ProjectController::class, 'userAccess'])->name('user_access');
-
+        // CALENDAR
+        Route::get('{project}/calendar', [ProjectCalendarController::class, 'index']) ->name('calendar');
         // TASK GROUPS
         Route::post('{project}/task-groups', [GroupController::class, 'store'])->name('task-groups.store');
         Route::put('{project}/task-groups/{taskGroup}', [GroupController::class, 'update'])->name('task-groups.update')->scopeBindings();

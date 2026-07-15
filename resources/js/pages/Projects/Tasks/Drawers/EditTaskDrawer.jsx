@@ -83,7 +83,11 @@ export function EditTaskDrawer() {
         estimation: task?.estimation || 0,
         priority_id: task?.priority_id || '',
         fixed_price: task?.fixed_price ? task.fixed_price / 100 : 0,
-        due_on: task?.due_on ? dayjs(task?.due_on).toDate() : '',
+        due_on: task?.due_on
+          ? dayjs(
+              typeof task.due_on === 'string' ? task.due_on.split('T')[0] : task.due_on
+            ).toDate()
+          : '',
         hidden_from_clients:
           task?.hidden_from_clients !== undefined ? task.hidden_from_clients : false,
         billable: task?.billable !== undefined ? task.billable : true,

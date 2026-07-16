@@ -89,8 +89,21 @@ class TaskCreatedMentionedUserNotification extends Notification implements Shoul
             'title' => "{$this->task->createdByUser->name} has mentioned you in a new \"{$this->task->name}\" task",
             'subtitle' => "On \"{$this->task->project->name}\" project",
             'link' => route('projects.tasks.open', [$this->task->project_id, $this->task->id]),
-            'created_at' => $notifiable->created_at,
-            'read_at' => $notifiable->read_at,
+        ];
+    }
+
+    /**
+     * Get the broadcastable representation of the notification.
+     *
+     * @return array<string, mixed>
+     */
+    public function toBroadcast(object $notifiable): array
+    {
+        return [
+            'id' => $this->id,
+            ...$this->toArray($notifiable),
+            'read_at' => null,
+            'created_at' => now()->toJSON(),
         ];
     }
 }

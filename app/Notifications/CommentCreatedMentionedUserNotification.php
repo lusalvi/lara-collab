@@ -89,8 +89,21 @@ class CommentCreatedMentionedUserNotification extends Notification implements Sh
             'title' => "{$this->comment->user->name} has mentioned you in a comment on \"{$this->comment->task->name}\" task",
             'subtitle' => "On \"{$this->comment->task->project->name}\" project",
             'link' => route('projects.tasks.open', [$this->comment->task->project_id, $this->comment->task->id]),
-            'created_at' => $notifiable->created_at,
-            'read_at' => $notifiable->read_at,
+        ];
+    }
+
+    /**
+     * Get the broadcastable representation of the notification.
+     *
+     * @return array<string, mixed>
+     */
+    public function toBroadcast(object $notifiable): array
+    {
+        return [
+            'id' => $this->id,
+            ...$this->toArray($notifiable),
+            'read_at' => null,
+            'created_at' => now()->toJSON(),
         ];
     }
 }

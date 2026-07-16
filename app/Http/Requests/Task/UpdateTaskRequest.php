@@ -33,7 +33,7 @@ class UpdateTaskRequest extends FormRequest
             'priority_id' => ['nullable', 'exists:task_priorities,id'],
             'pricing_type' => ['string', Rule::enum(PricingType::class)],
             'fixed_price' => ['nullable', 'numeric', 'min:0'],
-            'start_on'=>['nullable'],
+            'start_on' => ['nullable'],
             'due_on' => ['nullable'],
             'hidden_from_clients' => ['boolean'],
             'billable' => ['boolean'],

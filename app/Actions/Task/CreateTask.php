@@ -32,7 +32,7 @@ class CreateTask
                 'name' => $data['name'],
                 'number' => $project->tasks()->withArchived()->count() + 1,
                 'description' => $data['description'],
-                'start_on'=> $data['start_on'],
+                'start_on' => $data['start_on'],
                 'due_on' => $data['due_on'],
                 'estimation' => $data['estimation'],
                 'priority_id' => $data['priority_id'] ?? null,
@@ -61,7 +61,7 @@ class CreateTask
     {
         $rows = collect($items)
             ->map(function (UploadedFile $item) use ($task) {
-                $filename = strtolower(Str::ulid()) . '.' . $item->getClientOriginalExtension();
+                $filename = strtolower(Str::ulid()).'.'.$item->getClientOriginalExtension();
                 $filepath = "tasks/{$task->id}/{$filename}";
 
                 $item->storeAs('public', $filepath);
@@ -83,8 +83,8 @@ class CreateTask
         $task->activities()->create([
             'project_id' => $task->project_id,
             'user_id' => auth()->id(),
-            'title' => ($attachments->count() > 1 ? 'Attachments where' : 'Attachment was') . ' uploaded',
-            'subtitle' => "to \"{$task->name}\" by " . auth()->user()->name,
+            'title' => ($attachments->count() > 1 ? 'Attachments where' : 'Attachment was').' uploaded',
+            'subtitle' => "to \"{$task->name}\" by ".auth()->user()->name,
         ]);
 
         if ($dispatchEvent) {

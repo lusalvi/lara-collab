@@ -36,6 +36,7 @@ class Task extends Model implements AuditableContract, Sortable
         'name',
         'number',
         'description',
+        'start_on',
         'due_on',
         'estimation',
         'priority_id',
@@ -54,6 +55,7 @@ class Task extends Model implements AuditableContract, Sortable
     ];
 
     protected $casts = [
+        'start_on'=>'date',
         'due_on' => 'date',
         'completed_at' => 'datetime',
         'hidden_from_clients' => 'boolean',

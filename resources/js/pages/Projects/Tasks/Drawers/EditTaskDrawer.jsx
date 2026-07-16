@@ -83,6 +83,11 @@ export function EditTaskDrawer() {
         estimation: task?.estimation || 0,
         priority_id: task?.priority_id || '',
         fixed_price: task?.fixed_price ? task.fixed_price / 100 : 0,
+        start_on: task?.start_on
+          ? dayjs(
+              typeof task.start_on === 'string' ? task.start_on.split('T')[0] : task.start_on
+            ).toDate()
+          : '',
         due_on: task?.due_on
           ? dayjs(
               typeof task.due_on === 'string' ? task.due_on.split('T')[0] : task.due_on
@@ -252,6 +257,16 @@ export function EditTaskDrawer() {
                   value: i.id.toString(),
                   label: i.name,
                 }))}
+                readOnly={!can('edit task')}
+              />
+              <DateInput
+                clearable
+                valueFormat='DD MMM YYYY'
+                mt='md'
+                label='Start date'
+                placeholder='Pick task start date'
+                value={data.start_on}
+                onChange={value => updateValue('start_on', value)}
                 readOnly={!can('edit task')}
               />
 

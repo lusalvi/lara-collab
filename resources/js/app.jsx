@@ -46,16 +46,16 @@ const theme = createTheme({
       '#7f6846',
     ],
     dark: [
-      '#C1C2C5',
-      '#A6A7AB',
-      '#909296',
-      '#5c5f66',
-      '#373A40',
-      '#2C2E33',
-      '#25262b',
-      '#1A1B1E',
-      '#141517',
-      '#101113',
+      '#e0e7ec',
+      '#b8c7d4',
+      '#94abbe',
+      '#708fa8',
+      '#00345f',
+      '#002e54',
+      '#002848',
+      '#00203a',
+      '#00172a',
+      '#000f1c',
     ],
     hospitalGray: [
       '#f4f4f4',
@@ -69,6 +69,70 @@ const theme = createTheme({
       '#414143',
       '#353537',
     ],
+  },
+  components: {
+    Button: {
+      defaultProps: {
+        radius: 'lg',
+      },
+    },
+
+    Paper: {
+      defaultProps: {
+        radius: 'lg',
+        withBorder: true,
+      },
+    },
+
+    TextInput: {
+      defaultProps: {
+        radius: 'md',
+      },
+    },
+
+    PasswordInput: {
+      defaultProps: {
+        radius: 'md',
+      },
+    },
+
+    Select: {
+      defaultProps: {
+        radius: 'md',
+      },
+    },
+
+    Textarea: {
+      defaultProps: {
+        radius: 'md',
+      },
+    },
+
+    Modal: {
+      defaultProps: {
+        radius: 'lg',
+        shadow: 'xl',
+      },
+    },
+
+    Drawer: {
+      defaultProps: {
+        radius: 'lg',
+        shadow: 'xl',
+      },
+    },
+
+    Menu: {
+      defaultProps: {
+        shadow: 'md',
+      },
+    },
+
+    ActionIcon: {
+      defaultProps: {
+        radius: 'xl',
+      },
+    },
   },
 });
 

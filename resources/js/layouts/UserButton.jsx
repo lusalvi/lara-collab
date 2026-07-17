@@ -1,6 +1,6 @@
-import { redirectTo } from "@/utils/route";
-import { getInitials } from "@/utils/user";
-import { router, usePage } from "@inertiajs/react";
+import { redirectTo } from '@/utils/route';
+import { getInitials } from '@/utils/user';
+import { router, usePage } from '@inertiajs/react';
 import {
   Avatar,
   Group,
@@ -12,17 +12,10 @@ import {
   useComputedColorScheme,
   useMantineColorScheme,
   useMantineTheme,
-} from "@mantine/core";
-import { upperFirst } from "@mantine/hooks";
-import {
-  IconBell,
-  IconChevronRight,
-  IconLogout,
-  IconMoon,
-  IconSun,
-  IconUser,
-} from "@tabler/icons-react";
-import classes from "./css/UserButton.module.css";
+} from '@mantine/core';
+import { upperFirst } from '@mantine/hooks';
+import AppIcon from '@/components/AppIcon';
+import classes from './css/UserButton.module.css';
 
 export default function UserButton() {
   const { user } = usePage().props.auth;
@@ -31,50 +24,50 @@ export default function UserButton() {
   const { colors } = useMantineTheme();
 
   const logout = () => {
-    router.delete(route("logout"), {
-      onSuccess: redirectTo("auth.login.form"),
+    router.delete(route('logout'), {
+      onSuccess: redirectTo('auth.login.form'),
     });
   };
 
   return (
     <Menu
-      position="right"
+      position='right'
       offset={10}
       withArrow
       width={200}
-      shadow="md"
-      styles={{ dropdown: { translate: "0 -12px" } }}
+      shadow='md'
+      styles={{ dropdown: { translate: '0 -12px' } }}
     >
       <Menu.Target>
-        <UnstyledButton
-          className={classes.user}
-          bg={
-            computedColorScheme === "light"
-              ? darken(colors.blue[8], 0.15)
-              : "var(--mantine-color-dark-7)"
-          }
-        >
+        <UnstyledButton className={classes.user}>
           <Group>
             <Avatar
               src={user.avatar}
-              radius="xl"
-              color={computedColorScheme === "light" ? "white" : "blue"}
+              radius='xl'
+              color={computedColorScheme === 'light' ? 'white' : 'blue'}
               alt={user.name}
             >
               {getInitials(user.name)}
             </Avatar>
-
             <div style={{ flex: 1 }}>
-              <Text size="sm" fw={500}>
+              <Text
+                size='sm'
+                fw={500}
+              >
                 {user.name}
               </Text>
 
-              <Text c={computedColorScheme === "light" ? "blue.4" : "dimmed"} size="xs">
+              <Text
+                c={computedColorScheme === 'light' ? 'blue.4' : 'dimmed'}
+                size='xs'
+              >
                 {user.job_title}
               </Text>
             </div>
-
-            <IconChevronRight style={{ width: rem(14), height: rem(14) }} stroke={1.5} />
+            <AppIcon
+              name='chevron_right'
+              size={18}
+            />{' '}
           </Group>
         </UnstyledButton>
       </Menu.Target>
@@ -82,14 +75,24 @@ export default function UserButton() {
       <Menu.Dropdown>
         <Menu.Label>Account</Menu.Label>
         <Menu.Item
-          leftSection={<IconUser style={{ width: rem(14), height: rem(14) }} />}
-          onClick={() => redirectTo("account.profile.edit")}
+          leftSection={
+            <AppIcon
+              name='person'
+              size={18}
+            />
+          }
+          onClick={() => redirectTo('account.profile.edit')}
         >
           My Profile
         </Menu.Item>
         <Menu.Item
-          leftSection={<IconBell style={{ width: rem(14), height: rem(14) }} />}
-          onClick={() => redirectTo("notifications")}
+          leftSection={
+            <AppIcon
+              name='notifications'
+              size={18}
+            />
+          }
+          onClick={() => redirectTo('notifications')}
         >
           Notifications
         </Menu.Item>
@@ -98,13 +101,19 @@ export default function UserButton() {
 
         <Menu.Item
           leftSection={
-            computedColorScheme === "light" ? (
-              <IconSun style={{ width: rem(14), height: rem(14) }} />
+            computedColorScheme === 'light' ? (
+              <AppIcon
+                name='light_mode'
+                size={18}
+              />
             ) : (
-              <IconMoon style={{ width: rem(14), height: rem(14) }} />
+              <AppIcon
+                name='dark_mode'
+                size={18}
+              />
             )
           }
-          onClick={() => setColorScheme(computedColorScheme === "light" ? "dark" : "light")}
+          onClick={() => setColorScheme(computedColorScheme === 'light' ? 'dark' : 'light')}
         >
           {upperFirst(computedColorScheme)} mode
         </Menu.Item>
@@ -112,8 +121,13 @@ export default function UserButton() {
         <Menu.Divider />
 
         <Menu.Item
-          color="red"
-          leftSection={<IconLogout style={{ width: rem(14), height: rem(14) }} />}
+          color='red'
+          leftSection={
+            <AppIcon
+              name='logout'
+              size={18}
+            />
+          }
           onClick={logout}
         >
           Logout

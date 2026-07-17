@@ -2,10 +2,13 @@
     display: block;
     width: 100%;
     padding: var(--mantine-spacing-md);
-    color: light-dark(var(--mantine-color-white), var(--mantine-color-dark-0));
-    transition: 0.3s ease background-color;
 
-    @mixin hover {
-        background-color: light-dark(var(--mantine-color-hospitalPrimary-9), var(--mantine-color-dark-8)) !important;
-    }
+    background-color: var(--mantine-color-hospitalPrimary-8);
+    color: var(--mantine-color-white);
+
+    transition: background-color 0.2s ease;
+}
+
+.user:hover {
+    background-color: var(--mantine-color-hospitalPrimary-7);
 }

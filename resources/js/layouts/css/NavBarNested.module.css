@@ -29,10 +29,3 @@
     margin-right: calc(var(--mantine-spacing-md) * -1);
     border-top: rem(1px) solid light-dark(var(--mantine-color-hospitalPrimary-7), var(--mantine-color-dark-4));
 }
-
-.version {
-    font-weight: 600;
-    background-color: light-dark(var(--mantine-color-hospitalPrimary-9), var(--mantine-color-dark-6));
-    padding: 3px 7px;
-    border-radius: var(--mantine-radius-sm);
-}

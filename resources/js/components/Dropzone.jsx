@@ -55,7 +55,7 @@ export default function Dropzone({ selected, onChange, remove, ...props }) {
               style={{
                 width: rem(42),
                 height: rem(42),
-                color: "var(--mantine-color-blue-6)",
+                color: "var(--mantine-color-hospitalPrimary-6)",
               }}
               stroke={1.5}
             />

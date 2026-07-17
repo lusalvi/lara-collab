@@ -13,7 +13,7 @@ export default function TableRow({ item }) {
             src={item.avatar}
             size={40}
             radius={40}
-            color="blue"
+            color="hospitalPrimary"
             alt={item.name}
           >
             {getInitials(item.name)}

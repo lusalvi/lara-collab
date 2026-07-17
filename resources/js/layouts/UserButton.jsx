@@ -13,6 +13,8 @@ import {
   useMantineColorScheme,
   useMantineTheme,
 } from '@mantine/core';
+import { upperFirst } from '@mantine/hooks';
+import AppIcon from '@/components/AppIcon';
 import {
   IconBell,
   IconChevronRight,
@@ -45,6 +47,7 @@ export default function UserButton() {
       styles={{ dropdown: { translate: '0 -12px' } }}
     >
       <Menu.Target>
+        <UnstyledButton className={classes.user}>
         <UnstyledButton
           className={classes.user}
           bg={
@@ -62,7 +65,6 @@ export default function UserButton() {
             >
               {getInitials(user.name)}
             </Avatar>
-
             <div style={{ flex: 1 }}>
               <Text
                 size='sm'
@@ -78,6 +80,10 @@ export default function UserButton() {
                 {user.job_title}
               </Text>
             </div>
+            <AppIcon
+              name='chevron_right'
+              size={18}
+            />{' '}
 
             <IconChevronRight
               style={{ width: rem(14), height: rem(14) }}
@@ -90,12 +96,24 @@ export default function UserButton() {
       <Menu.Dropdown>
         <Menu.Label>Cuenta</Menu.Label>
         <Menu.Item
+          leftSection={
+            <AppIcon
+              name='person'
+              size={18}
+            />
+          }
           leftSection={<IconUser style={{ width: rem(14), height: rem(14) }} />}
           onClick={() => redirectTo('account.profile.edit')}
         >
           Mi perfil
         </Menu.Item>
         <Menu.Item
+          leftSection={
+            <AppIcon
+              name='notifications'
+              size={18}
+            />
+          }
           leftSection={<IconBell style={{ width: rem(14), height: rem(14) }} />}
           onClick={() => redirectTo('notifications')}
         >
@@ -107,9 +125,16 @@ export default function UserButton() {
         <Menu.Item
           leftSection={
             computedColorScheme === 'light' ? (
+              <AppIcon
+                name='light_mode'
+                size={18}
+              />
               <IconSun style={{ width: rem(14), height: rem(14) }} />
             ) : (
-              <IconMoon style={{ width: rem(14), height: rem(14) }} />
+              <AppIcon
+                name='dark_mode'
+                size={18}
+              />
             )
           }
           onClick={() => setColorScheme(computedColorScheme === 'light' ? 'dark' : 'light')}
@@ -121,6 +146,12 @@ export default function UserButton() {
 
         <Menu.Item
           color='red'
+          leftSection={
+            <AppIcon
+              name='logout'
+              size={18}
+            />
+          }
           leftSection={<IconLogout style={{ width: rem(14), height: rem(14) }} />}
           onClick={logout}
         >

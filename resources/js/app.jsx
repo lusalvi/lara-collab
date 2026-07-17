@@ -13,7 +13,7 @@ import { ModalsProvider } from '@mantine/modals';
 import { Notifications } from '@mantine/notifications';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';
-
+// arreglar hover
 const theme = createTheme({
   primaryColor: 'hospitalPrimary',
   primaryShade: { light: 6, dark: 6 },

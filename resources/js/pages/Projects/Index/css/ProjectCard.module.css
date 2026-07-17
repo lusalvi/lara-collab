@@ -9,12 +9,12 @@
         border: 1px solid light-dark(var(--mantine-color-gray-4), var(--mantine-color-gray-7));
 
         .title {
-            color: var(--mantine-color-hospitalPrimary-5);
+            color: var(--mantine-color-blue-5);
         }
     }
 }
 
 .title {
-    color: var(--mantine-color-hospitalPrimary-6);
+    color: var(--mantine-color-blue-6);
     transition: 0.2s ease all;
 }

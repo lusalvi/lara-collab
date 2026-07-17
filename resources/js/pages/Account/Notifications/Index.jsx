@@ -24,7 +24,7 @@ const NotificationsIndex = () => {
     <>
       <Grid justify="space-between" align="flex-end" gutter="xl" mb="lg">
         <Grid.Col span="auto">
-          <Title order={1}>Notifications</Title>
+          <Title order={1}>Notificaciones</Title>
         </Grid.Col>
         <Grid.Col span="content"></Grid.Col>
       </Grid>
@@ -70,8 +70,8 @@ const NotificationsIndex = () => {
         ) : (
           <Center mih={160}>
             <EmptyWithIcon
-              title="No notifications"
-              subtitle="List of recent notifications"
+              title="Sin notificaciones"
+              subtitle="Lista vacía, no hay notificaciones para mostrar."
               icon={IconMessage}
             />
           </Center>

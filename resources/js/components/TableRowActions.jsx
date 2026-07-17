@@ -33,7 +33,7 @@ export default function TableRowActions({
       title: restore.title,
       content: restore.content,
       confirmLabel: restore.confirmLabel,
-      confirmProps: { color: "hospitalPrimary" },
+      confirmProps: { color: "blue" },
       onConfirm: () => restoreForm.submit(),
     });
 
@@ -41,7 +41,7 @@ export default function TableRowActions({
     <Group gap={0} justify="flex-end" wrap="nowrap">
       {children}
       {can(editPermission) && !route().params.archived && (
-        <ActionIcon variant="subtle" color="hospitalPrimary" onClick={() => redirectTo(editRoute, item.id)}>
+        <ActionIcon variant="subtle" color="blue" onClick={() => redirectTo(editRoute, item.id)}>
           <IconPencil style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
         </ActionIcon>
       )}
@@ -67,7 +67,7 @@ export default function TableRowActions({
                   leftSection={
                     <IconArchiveOff style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
                   }
-                  color="hospitalPrimary"
+                  color="blue"
                   onClick={openRestoreModal}
                 >
                   Restore

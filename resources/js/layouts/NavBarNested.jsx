@@ -2,11 +2,20 @@ import Logo from "@/components/Logo";
 import useNavigationStore from "@/hooks/store/useNavigationStore";
 import { usePage } from "@inertiajs/react";
 import { Group, ScrollArea, Text, rem } from "@mantine/core";
+import {
+  IconBuildingSkyscraper,
+  IconFileDollar,
+  IconGauge,
+  IconLayoutList,
+  IconListDetails,
+  IconReportAnalytics,
+  IconSettings,
+  IconUsers,
+} from "@tabler/icons-react";
 import { useEffect } from "react";
 import NavbarLinksGroup from "./NavbarLinksGroup";
 import UserButton from "./UserButton";
 import classes from "./css/NavBarNested.module.css";
-import AppIcon from "@/components/AppIcon";
 
 export default function Sidebar() {
   const { version } = usePage().props;
@@ -16,21 +25,21 @@ export default function Sidebar() {
     setItems([
       {
         label: "Dashboard",
-        icon: "dashboard",
+        icon: IconGauge,
         link: route("dashboard"),
         active: route().current("dashboard"),
         visible: true,
       },
       {
         label: "Projects",
-        icon: "folder_open",
+        icon: IconListDetails,
         link: route("projects.index"),
         active: route().current("projects.*"),
         visible: can("view projects"),
       },
       {
         label: "My Work",
-        icon: "assignment",
+        icon: IconLayoutList,
         active: route().current("my-work.*"),
         opened: route().current("my-work.*"),
         visible: can("view tasks") || can("view activities"),
@@ -51,7 +60,7 @@ export default function Sidebar() {
       },
       {
         label: "Clients",
-        icon: "apartment",
+        icon: IconBuildingSkyscraper,
         active: route().current("clients.*"),
         opened: route().current("clients.*"),
         visible: can("view client users") || can("view client companies"),
@@ -72,21 +81,21 @@ export default function Sidebar() {
       },
       {
         label: "Users",
-        icon: "group",
+        icon: IconUsers,
         link: route("users.index"),
         active: route().current("users.*"),
         visible: can("view users"),
       },
       {
         label: "Invoices",
-        icon: "receipt_long",
+        icon: IconFileDollar,
         link: route("invoices.index"),
         active: route().current("invoices.*"),
         visible: can("view invoices"),
       },
       {
         label: "Reports",
-        icon: "analytics",
+        icon: IconReportAnalytics,
         active: route().current("reports.*"),
         opened: route().current("reports.*"),
         visible: can("view logged time sum report") || can("view daily logged time report") || can("view fixed price sum report"),
@@ -113,7 +122,7 @@ export default function Sidebar() {
       },
       {
         label: "Settings",
-        icon: "settings",
+        icon: IconSettings,
         active: route().current("settings.*"),
         opened: route().current("settings.*"),
         visible: can("view owner company") || can("view roles") || can("view labels"),
@@ -146,6 +155,9 @@ export default function Sidebar() {
       <div className={classes.header}>
         <Group justify="space-between">
           <Logo style={{ width: rem(120) }} />
+          <Text size="xs" className={classes.version}>
+            v{version}
+          </Text>
         </Group>
       </div>
 

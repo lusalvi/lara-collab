@@ -1,17 +1,6 @@
 :root[data-mantine-color-scheme=light] {
-    /* Texto principal */
     --mantine-color-text: #343d43;
-
-    /* Fondo general de la aplicación */
-    --mantine-color-body: #F6F8FA;
-
-    /* Tarjetas y superficies */
-    --mantine-color-default: #FFFFFF;
-    --mantine-color-default-border: #E3E8EE;
-
-    /* Links */
-    --mantine-color-anchor: var(--mantine-color-hospitalPrimary-6);
-
-    /* Gris para elementos filled */
-    --mantine-color-gray-filled: #D6DEE6;
+    --mantine-color-gray-filled: var(--mantine-color-gray-3) !important;
+    --mantine-color-body: var(--mantine-color-gray-0);
+    --mantine-color-anchor: var(--mantine-color-blue-7);
 }

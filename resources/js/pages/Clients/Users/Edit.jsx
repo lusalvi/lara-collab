@@ -63,7 +63,7 @@ const ClientEdit = () => {
                   form.data.avatar === null ? item.avatar : URL.createObjectURL(form.data.avatar)
                 }
                 size={120}
-                color="hospitalPrimary"
+                color="blue"
               >
                 {getInitials(form.data.name)}
               </Avatar>

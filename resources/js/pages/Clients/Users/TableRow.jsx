@@ -8,7 +8,7 @@ export default function TableRow({ item }) {
     <Table.Tr key={item.id}>
       <Table.Td>
         <Group gap="sm">
-          <Avatar src={item.avatar} size={40} radius={40} color="hospitalPrimary" alt={item.name}>
+          <Avatar src={item.avatar} size={40} radius={40} color="blue" alt={item.name}>
             {getInitials(item.name)}
           </Avatar>
           <div>

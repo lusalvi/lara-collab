@@ -1,6 +1,6 @@
 .link {
     @mixin hover {
         cursor: pointer;
-        color: var(--mantine-color-hospitalPrimary-6);
+        color: var(--mantine-color-blue-6);
     }
 }

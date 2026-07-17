@@ -25,7 +25,7 @@ export default function ProjectCardActions({ item }) {
       title: "Restore project",
       content: `Are you sure you want to restore this project?`,
       confirmLabel: "Restore",
-      confirmProps: { color: "hospitalPrimary" },
+      confirmProps: { color: "blue" },
       onConfirm: () => restoreForm.submit({ preserveScroll: true }),
     });
 
@@ -90,7 +90,7 @@ export default function ProjectCardActions({ item }) {
                     data-ignore-link
                   />
                 }
-                color="hospitalPrimary"
+                color="blue"
                 onClick={openRestoreModal}
                 data-ignore-link
               >

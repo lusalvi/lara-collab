@@ -26,7 +26,7 @@
 }
 
 .mention {
-    color: var(--mantine-color-hospitalPrimary-8);
+    color: var(--mantine-color-blue-8);
     box-decoration-break: clone;
     padding: 0 rem(1px);
 }

@@ -49,6 +49,7 @@ export default function UserButton() {
             >
               {getInitials(user.name)}
             </Avatar>
+
             <div style={{ flex: 1 }}>
               <Text
                 size='sm'
@@ -107,10 +108,7 @@ export default function UserButton() {
                 size={18}
               />
             ) : (
-              <AppIcon
-                name='dark_mode'
-                size={18}
-              />
+              <IconMoon style={{ width: rem(14), height: rem(14) }} />
             )
           }
           onClick={() => setColorScheme(computedColorScheme === 'light' ? 'dark' : 'light')}

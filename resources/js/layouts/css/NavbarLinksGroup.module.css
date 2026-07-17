@@ -3,12 +3,12 @@
     display: block;
     width: 100%;
     padding: var(--mantine-spacing-xs) var(--mantine-spacing-md);
-    color: light-dark(var(--mantine-color-hospitalPrimary-2), var(--mantine-color-text));
+    color: light-dark(var(--mantine-color-blue-2), var(--mantine-color-text));
     font-size: var(--mantine-font-size-sm);
     border-radius: var(--mantine-radius-sm);
 
     @mixin hover {
-        background-color: light-dark(var(--mantine-color-hospitalPrimary-7), var(--mantine-color-dark-6));
+        background-color: light-dark(var(--mantine-color-blue-7), var(--mantine-color-dark-6));
         color: light-dark(var(--mantine-color-white), var(--mantine-color-white));
 
         & .linkIcon {
@@ -20,11 +20,11 @@
 
         &,
         &:hover {
-            background-color: light-dark(var(--mantine-color-hospitalPrimary-9), var(--mantine-color-hospitalPrimary-light));
-            color: light-dark(var(--mantine-color-white), var(--mantine-color-hospitalPrimary-light-color));
+            background-color: light-dark(var(--mantine-color-blue-9), var(--mantine-color-blue-light));
+            color: light-dark(var(--mantine-color-white), var(--mantine-color-blue-light-color));
 
             & .linkIcon {
-                color: light-dark(var(--mantine-color-white), var(--mantine-color-hospitalPrimary-light-color));
+                color: light-dark(var(--mantine-color-white), var(--mantine-color-blue-light-color));
             }
         }
     }
@@ -39,13 +39,13 @@
     padding-left: var(--mantine-spacing-md);
     margin-left: var(--mantine-spacing-xl);
     font-size: var(--mantine-font-size-sm);
-    color: light-dark(var(--mantine-color-hospitalPrimary-2), var(--mantine-color-dark-0));
-    border-left: 1px solid light-dark(var(--mantine-color-hospitalPrimary-4), var(--mantine-color-dark-4));
+    color: light-dark(var(--mantine-color-blue-2), var(--mantine-color-dark-0));
+    border-left: 1px solid light-dark(var(--mantine-color-blue-4), var(--mantine-color-dark-4));
     border-top-right-radius: var(--mantine-radius-sm);
     border-bottom-right-radius: var(--mantine-radius-sm);
 
     @mixin hover {
-        background-color: light-dark(var(--mantine-color-hospitalPrimary-7), var(--mantine-color-dark-6));
+        background-color: light-dark(var(--mantine-color-blue-7), var(--mantine-color-dark-6));
         color: light-dark(var(--mantine-color-white), var(--mantine-color-white));
     }
 
@@ -53,14 +53,14 @@
 
         &,
         &:hover {
-            background-color: light-dark(var(--mantine-color-hospitalPrimary-7), var(--mantine-color-dark-6));
+            background-color: light-dark(var(--mantine-color-blue-7), var(--mantine-color-dark-6));
             color: light-dark(var(--mantine-color-white), var(--mantine-color-white));
         }
     }
 }
 
 .linkIcon {
-    color: light-dark(var(--mantine-color-hospitalPrimary-2), var(--mantine-color-dark-2));
+    color: light-dark(var(--mantine-color-blue-2), var(--mantine-color-dark-2));
     margin-right: var(--mantine-spacing-sm);
     width: rem(25px);
     height: rem(25px);

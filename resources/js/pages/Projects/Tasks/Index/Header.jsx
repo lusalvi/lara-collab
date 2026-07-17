@@ -8,7 +8,6 @@ import { redirectTo, reloadWithQuery } from "@/utils/route";
 import { usePage } from "@inertiajs/react";
 import { ActionIcon, Button, Grid, Group, Text, Title, Tooltip } from "@mantine/core";
 import {
-  IconCalendar,
   IconFilter,
   IconFilterCog,
   IconLayoutKanban,
@@ -54,18 +53,6 @@ export default function Header() {
             )}
             {usingFilters && <ClearFiltersButton />}
           </ActionIcon.Group>
-             <Tooltip label="Calendar" openDelay={500} withArrow>
-            <ActionIcon
-              variant="default"
-              size="lg"
-              onClick={() => redirectTo("projects.calendar", project.id)}
-            >
-              <IconCalendar
-                style={{ width: "60%", height: "60%" }}
-                stroke={1.5}
-              />
-            </ActionIcon>
-          </Tooltip>
 
           {can("view notes") && (
             <Tooltip label="Notes" openDelay={500} withArrow>

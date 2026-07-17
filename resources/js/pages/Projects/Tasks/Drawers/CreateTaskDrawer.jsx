@@ -44,7 +44,6 @@ export function CreateTaskDrawer() {
     estimation: '',
     priority_id: null,
     fixed_price: '',
-    start_on: '',
     due_on: '',
     hidden_from_clients: false,
     billable: true,
@@ -218,16 +217,6 @@ export function CreateTaskDrawer() {
           <DateInput
             clearable
             valueFormat='DD MMM YYYY'
-            mt='md'
-            label='Start date'
-            placeholder='Pick task start date'
-            value={form.data.start_on}
-            onChange={value => updateValue('start_on', value)}
-          />
-
-          <DateInput
-            clearable
-            valueFormat='DD MMM YYYY'
             minDate={new Date()}
             mt='md'
             label='Due date'
@@ -261,6 +250,7 @@ export function CreateTaskDrawer() {
             onChange={value => updateValue('priority_id', value || null)}
             mt='md'
           />
+
 
           <Select
             label='Pricing type'

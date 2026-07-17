@@ -89,21 +89,8 @@ class TaskCreatedNotification extends Notification implements ShouldQueue
             'title' => "{$this->task->createdByUser->name} created a new task",
             'subtitle' => "On \"{$this->task->project->name}\" project",
             'link' => route('projects.tasks.open', [$this->task->project_id, $this->task->id]),
-        ];
-    }
-
-    /**
-     * Get the broadcastable representation of the notification.
-     *
-     * @return array<string, mixed>
-     */
-    public function toBroadcast(object $notifiable): array
-    {
-        return [
-            'id' => $this->id,
-            ...$this->toArray($notifiable),
-            'read_at' => null,
-            'created_at' => now()->toJSON(),
+            'created_at' => $notifiable->created_at,
+            'read_at' => $notifiable->read_at,
         ];
     }
 }

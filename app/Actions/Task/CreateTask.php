@@ -25,6 +25,7 @@ class CreateTask
             } elseif (isset($data['fixed_price']) && isset($data['pricing_type']) && $data['pricing_type'] === PricingType::FIXED->value) {
                 $data['fixed_price'] = (int) ($data['fixed_price'] * 100);
             }
+
             $task = $project->tasks()->create([
                 'group_id' => $data['group_id'],
                 'created_by_user_id' => auth()->id(),
@@ -32,7 +33,6 @@ class CreateTask
                 'name' => $data['name'],
                 'number' => $project->tasks()->withArchived()->count() + 1,
                 'description' => $data['description'],
-                'start_on' => $data['start_on'],
                 'due_on' => $data['due_on'],
                 'estimation' => $data['estimation'],
                 'priority_id' => $data['priority_id'] ?? null,

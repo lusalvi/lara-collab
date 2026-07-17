@@ -28,24 +28,24 @@ const ResetPassword = ({ token }) => {
   return (
     <>
       <Title className={classes.title} ta="center">
-        Restablecer contraseña
+        Reset Password
       </Title>
       <Text c="dimmed" fz="sm" ta="center">
-        Ingresa tu correo electrónico y elige una nueva contraseña para tu cuenta.
+        Enter your email and new password
       </Text>
 
       <ContainerBox shadow="md" p={30} mt="xl" radius="md">
         <form onSubmit={submit}>
           <TextInput
-            label="Correo electrónico"
-            placeholder="Tu correo electrónico"
+            label="Email"
+            placeholder="Your email"
             required
             onChange={(e) => form.setData("email", e.target.value)}
             error={form.errors.email}
           />
           <PasswordInput
-            label="Contraseña"
-            placeholder="Nueva contraseña"
+            label="Password"
+            placeholder="New password"
             required
             mt="md"
             value={form.data.password}
@@ -53,8 +53,8 @@ const ResetPassword = ({ token }) => {
             error={form.errors.password}
           />
           <PasswordInput
-            label="Confirmar contraseña"
-            placeholder="Repite la nueva contraseña"
+            label="Confirm Password"
+            placeholder="Repeat new password"
             required
             mt="md"
             value={form.data.password_confirmation}
@@ -62,7 +62,7 @@ const ResetPassword = ({ token }) => {
             error={form.errors.password_confirmation}
           />
           <Button type="submit" fullWidth mt="xl" disabled={form.processing}>
-            Restablecer contraseña
+            Reset password
           </Button>
         </form>
       </ContainerBox>

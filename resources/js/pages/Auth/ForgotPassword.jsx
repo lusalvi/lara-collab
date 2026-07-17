@@ -32,27 +32,28 @@ const ForgotPassword = ({ status }) => {
   return (
     <>
       <Title className={classes.title} ta="center">
-        ¿Olvidaste tu contraseña?
+        Forgot your password?
       </Title>
       <Text c="dimmed" fz="sm" ta="center">
-        Ingresa tu correo electrónico para recibir un enlace de restablecimiento de contraseña.
+        Enter your email to get a reset link
       </Text>
 
       <ContainerBox shadow="md" p={30} mt="xl" radius="md">
         <Text c="dimmed" fz="sm" mb={20}>
-          Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña, con el que podrás elegir una nueva.
+          Enter your email and we will email you a password reset link that will allow you to choose
+          a new one.
         </Text>
 
         {status && (
           <Alert radius="md" title={status} icon={<IconInfoCircle />} mb={10}>
-            Por favor, lee las instrucciones que figuran en el correo electrónico para establecer una nueva contraseña para tu cuenta.
+            Please read instruction in the email to set a new password for your account.
           </Alert>
         )}
 
         <form onSubmit={submit}>
           <TextInput
-            label="Correo electrónico"
-            placeholder="Tu correo electrónico"
+            label="Email"
+            placeholder="Your email"
             required
             onChange={(e) => form.setData("email", e.target.value)}
             onBlur={() => form.validate("email")}
@@ -67,11 +68,11 @@ const ForgotPassword = ({ status }) => {
             >
               <Center inline>
                 <IconArrowLeft style={{ width: rem(12), height: rem(12) }} stroke={1.5} />
-                <Box ml={5}>Volver</Box>
+                <Box ml={5}>Back to the login</Box>
               </Center>
             </Anchor>
             <Button type="submit" className={classes.control} disabled={form.processing}>
-              Restablecer contraseña
+              Reset password
             </Button>
           </Group>
         </form>

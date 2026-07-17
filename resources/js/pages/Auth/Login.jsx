@@ -39,10 +39,10 @@ const Login = ({ notify }) => {
   return (
     <>
       <Title ta="center" className={classes.title}>
-        ¡Bienvenido de nuevo!
+        Welcome back!
       </Title>
       <Text c="dimmed" size="sm" ta="center" mt={5}>
-        Puede iniciar sesión aquí abajo.
+        You may login to your account below
       </Text>
 
       <LoginNotification notify={notify} />
@@ -63,11 +63,11 @@ const Login = ({ notify }) => {
             </Button>
           </Group>
 
-          <Divider label="O continúa con tu correo electrónico" labelPosition="center" my="lg" />
+          <Divider label="Or continue with email" labelPosition="center" my="lg" />
 
           <TextInput
-            label="Correo electrónico"
-            placeholder="Tu correo electrónico"
+            label="Email"
+            placeholder="Your email"
             required
             value={form.data.email}
             onChange={(e) => form.setData("email", e.target.value)}
@@ -76,25 +76,25 @@ const Login = ({ notify }) => {
           />
           <PasswordInput
             ref={passwordRef}
-            label="Contraseña"
-            placeholder="Tu contraseña"
+            label="Password"
+            placeholder="Your password"
             required
             mt="md"
             value={form.data.password}
             onChange={(e) => form.setData("password", e.target.value)}
           />
           <Group justify="space-between" mt="lg">
-            <Checkbox label="Recuerdame" />
+            <Checkbox label="Remember me" />
             <Anchor
               type="button"
               size="sm"
               onClick={() => router.get(route("auth.forgotPassword.form"))}
             >
-              ¿Olvidaste tu contraseña?
+              Forgot password?
             </Anchor>
           </Group>
           <Button type="submit" fullWidth mt="xl" disabled={form.processing}>
-            Iniciar sesión
+            Sign in
           </Button>
         </ContainerBox>
       </form>

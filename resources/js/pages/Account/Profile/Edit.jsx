@@ -35,7 +35,7 @@ const ProfileIndex = () => {
     <>
       <Grid justify="space-between" align="flex-end" gutter="xl" mb="lg">
         <Grid.Col span="auto">
-          <Title order={1}>Mi Perfil</Title>
+          <Title order={1}>My Profile</Title>
         </Grid.Col>
         <Grid.Col span="content"></Grid.Col>
       </Grid>
@@ -56,25 +56,26 @@ const ProfileIndex = () => {
             </Grid.Col>
             <Grid.Col span="auto">
               <FileInput
-                label="Foto de perfil"
-                placeholder="Elige una imagen"
+                label="Profile image"
+                placeholder="Choose image"
                 accept="image/png,image/jpeg"
                 onChange={(image) => updateValue("avatar", image)}
                 clearable
                 error={form.errors.avatar}
               />
               <Text size="xs" c="dimmed" mt="sm">
-                Si no se sube ninguna imagen, intentaremos obtenerla a través del servicio de {" "} 
+                If no image is uploaded we will try to fetch it via{" "}
                 <Anchor href="https://unavatar.io" target="_blank" opacity={0.6}>
                   unavatar.io
                 </Anchor>{" "}
+                service.
               </Text>
             </Grid.Col>
           </Grid>
 
           <TextInput
-            label="Nombre"
-            placeholder="Nombre completo del usuario"
+            label="Name"
+            placeholder="User full name"
             required
             mt="md"
             value={form.data.name}
@@ -83,8 +84,8 @@ const ProfileIndex = () => {
           />
 
           <TextInput
-            label="Título del trabajo"
-            placeholder="ej. Frontend Developer"
+            label="Job title"
+            placeholder="e.g. Frontend Developer"
             required
             mt="md"
             value={form.data.job_title}
@@ -93,19 +94,19 @@ const ProfileIndex = () => {
           />
 
           <TextInput
-            label="Teléfono"
-            placeholder="Número de teléfono del usuario"
+            label="Phone"
+            placeholder="Users phone number"
             mt="md"
             value={form.data.phone}
             onChange={(e) => updateValue("phone", e.target.value)}
             error={form.errors.phone}
           />
 
-          <Divider mt="xl" mb="md" label="Credenciales de inicio de sesión" labelPosition="center" />
+          <Divider mt="xl" mb="md" label="Login credentials" labelPosition="center" />
 
           <TextInput
-            label="Correo electrónico"
-            placeholder="Correo electrónico del usuario"
+            label="Email"
+            placeholder="User email"
             required
             value={form.data.email}
             onChange={(e) => updateValue("email", e.target.value)}
@@ -114,8 +115,8 @@ const ProfileIndex = () => {
           />
 
           <PasswordInput
-            label="Contraseña"
-            placeholder="Contraseña del usuario"
+            label="Password"
+            placeholder="User password"
             mt="md"
             value={form.data.password}
             onChange={(e) => updateValue("password", e.target.value)}
@@ -123,8 +124,8 @@ const ProfileIndex = () => {
           />
 
           <PasswordInput
-            label="Confirmar contraseña"
-            placeholder="Confirmar contraseña"
+            label="Confirm password"
+            placeholder="Confirm password"
             mt="md"
             value={form.data.password_confirmation}
             onChange={(e) => updateValue("password_confirmation", e.target.value)}
@@ -132,7 +133,7 @@ const ProfileIndex = () => {
           />
 
           <Group justify="flex-end" mt="xl">
-            <ActionButton loading={form.processing}>Actualizar</ActionButton>
+            <ActionButton loading={form.processing}>Update</ActionButton>
           </Group>
         </form>
       </ContainerBox>

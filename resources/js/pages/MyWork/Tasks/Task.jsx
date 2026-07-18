@@ -8,6 +8,7 @@ import { shortName } from "@/utils/user";
 import { Link } from "@inertiajs/react";
 import { Flex, Group, Pill, Text, Tooltip, rem } from "@mantine/core";
 import classes from "./css/Task.module.css";
+import translateGroupName from "@/utils/translateGroupName";
 
 export default function Task({ task }) {
   const priorityConfig = getTaskPriorityConfig(task.priority);
@@ -19,7 +20,7 @@ export default function Task({ task }) {
     >
       <Group gap="sm" wrap="nowrap">
         <Tooltip label="Task group" openDelay={1000} withArrow>
-          <TaskGroupLabel size="sm">{task.task_group.name}</TaskGroupLabel>
+          <TaskGroupLabel size="sm">{translateGroupName(task.task_group.name)}</TaskGroupLabel>
         </Tooltip>
         {task.assigned_to_user && (
           <Link href={route("users.edit", task.assigned_to_user.id)}>

@@ -23,7 +23,7 @@ export default function ImageModal({ image, opened, close }) {
     >
       {loading ? (
         <Center miw={150} maw="80vw" h={150}>
-          <Loader color="blue" size="lg" />
+          <Loader color="hospitalPrimary" size="lg" />
         </Center>
       ) : (
         <Image

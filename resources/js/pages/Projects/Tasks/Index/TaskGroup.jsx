@@ -5,6 +5,7 @@ import { IconGripVertical, IconPlus } from "@tabler/icons-react";
 import Task from "./Task";
 import TaskGroupActions from "./TaskGroupActions";
 import classes from "./css/TaskGroup.module.css";
+import translateGroupName from "@/utils/translateGroupName";
 
 export default function TaskGroup({ group, tasks, ...props }) {
   const { openCreateTask } = useTaskDrawerStore();
@@ -32,7 +33,7 @@ export default function TaskGroup({ group, tasks, ...props }) {
                 />
               </div>
               <Text size="xl" fw={700}>
-                {group.name}
+                {translateGroupName(group.name)}
               </Text>
               <TaskGroupActions group={group} className={classes.actions} />
             </Group>

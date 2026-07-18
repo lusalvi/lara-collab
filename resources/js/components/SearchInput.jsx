@@ -1,7 +1,7 @@
+import AppIcon from "@/components/AppIcon";
 import { reloadWithoutQueryParams } from "@/utils/route";
-import { TextInput, rem } from "@mantine/core";
+import { TextInput } from "@mantine/core";
 import { useDebouncedValue, useDidUpdate } from "@mantine/hooks";
-import { IconSearch, IconX } from "@tabler/icons-react";
 import { useState } from "react";
 
 export default function SearchInput({ search, ...props }) {
@@ -20,20 +20,23 @@ export default function SearchInput({ search, ...props }) {
       radius="xl"
       leftSectionWidth={42}
       leftSection={
-        <IconSearch style={{ width: rem(16), height: rem(16) }} stroke={2.5} />
+        <AppIcon
+          name="search"
+          size={18}
+        />
       }
       rightSectionWidth={38}
       rightSection={
         debounced !== "" && (
-          <IconX
-            style={{
-              width: rem(16),
-              height: rem(16),
-              cursor: "pointer",
-            }}
-            stroke={2.5}
+          <div
             onClick={() => setValue("")}
-          />
+            style={{ cursor: "pointer", display: "flex" }}
+          >
+            <AppIcon
+              name="close"
+              size={18}
+            />
+          </div>
         )
       }
       {...props}

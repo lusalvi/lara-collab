@@ -39,9 +39,9 @@ export default function RecentComments({ comments }) {
               >
                 <Group justify="space-between">
                   <Group gap="xs" align="start">
-                    <Avatar src={comment.user.avatar} radius="xl" color="blue" />
+                    <Avatar src={comment.user.avatar} radius="xl" color="hospitalPrimary" />
                     <div>
-                      <Text size="sm" c="blue" fw={600}>
+                      <Text size="sm" c="hospitalPrimary" fw={600}>
                         {comment.user.name}
                       </Text>
                       <Text fz={11} fw={500} c="dimmed">

@@ -1,8 +1,8 @@
 .card {
-    transition: 0.3s ease all;
-    background-color: light-dark(var(--mantine-color-white), var(--mantine-color-body)) !important;
+    transition: 0.3s ease box-shadow, 0.3s ease background-color;
+    background-color: light-dark(var(--mantine-color-white), var(--mantine-color-dark-6)) !important;
 
     @mixin hover {
-        border: 1px solid light-dark(var(--mantine-color-gray-4), var(--mantine-color-gray-7));
+        box-shadow: 0 0 0 1px light-dark(var(--mantine-color-hospitalPrimary-5), var(--mantine-color-white));
     }
 }

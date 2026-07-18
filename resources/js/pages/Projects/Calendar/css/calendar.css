@@ -1,46 +1,155 @@
-.fc-event{
-    cursor:pointer;
-    transition: filter 0.15s ease;
-}
-.fc-event{
-    background:#003764;
-    border:none;
-    border-radius:6px;
-    padding:2px 6px;
+/* ==========================================================
+   FULLCALENDAR - HOSPITAL UNIVERSITARIO
+========================================================== */
+
+/* ---------- Contenedor ---------- */
+
+.fc {
+    background: transparent;
+    border: none;
+    box-shadow: none;
 }
 
-.fc-event:hover{
-    filter:brightness(1.08);
-    transform: translateY(-1px);
+/* ---------- Grilla ---------- */
+
+.fc-scrollgrid {
+    border: 1px solid #D9E2EC !important;
+    border-radius: var(--mantine-radius-md);
+    overflow: hidden;
 }
 
-/* Color de casilla del dia en modo claro y oscuro */
-.fc .fc-day-today {
-    background-color: rgba(7, 92, 161, 0.205) !important;
-}
-[data-mantine-color-scheme="dark"] .fc .fc-day-today {
-    background-color: rgba(0, 55, 100, 0.25) !important;
-}
-
-/* bordes calendario modo noche */
-[data-mantine-color-scheme="dark"]
 .fc-theme-standard td,
-[data-mantine-color-scheme="dark"]
-.fc-theme-standard th{
-    border-color:#e0dede;
-}
-/* Bordes internos modo claro */
-[data-mantine-color-scheme="light"] .fc-theme-standard td,
-[data-mantine-color-scheme="light"] .fc-theme-standard th {
-    border-color: #595b5e;
+.fc-theme-standard th {
+    border-color: #D9E2EC;
 }
 
-/* Borde exterior modo claro */
-[data-mantine-color-scheme="light"] .fc-scrollgrid {
-    border-color: #595b5e !important;
-}
-/* Titulos de calendario en modo noche */
-[data-mantine-color-scheme="dark"] .fc-col-header-cell-cushion{
-    color:#030303;
+/* ---------- Cabecera ---------- */
+
+.fc-col-header-cell {
+    background: #F6F8FA;
 }
 
+.fc-col-header-cell-cushion {
+    color: var(--mantine-color-hospitalPrimary-6);
+    font-weight: 600;
+    text-decoration: none;
+    padding: .6rem 0;
+}
+
+/* ---------- Toolbar ---------- */
+
+.fc-toolbar {
+    margin-bottom: 1rem !important;
+}
+
+.fc-toolbar-title {
+    color: var(--mantine-color-dark-8);
+    font-weight: 700;
+}
+
+/* ---------- Días ---------- */
+
+.fc-daygrid-day-number {
+    color: var(--mantine-color-dark-7);
+    text-decoration: none;
+    font-weight: 500;
+    padding: .45rem;
+}
+
+.fc-daygrid-day:hover {
+    background: rgba(0,55,100,.03);
+    transition: .2s;
+}
+
+/* ---------- Día actual ---------- */
+
+.fc .fc-day-today {
+    background: rgba(0,55,100,.08) !important;
+}
+
+.fc-day-today .fc-daygrid-day-number {
+    color: var(--mantine-color-hospitalPrimary-6);
+    font-weight: 700;
+}
+
+/* ---------- Eventos ---------- */
+
+.fc-event {
+    cursor: pointer;
+    background: var(--mantine-color-hospitalPrimary-6);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    padding: 3px 8px;
+    font-size: .85rem;
+    font-weight: 500;
+    transition: all .2s ease;
+}
+
+.fc-event:hover {
+    background: var(--mantine-color-hospitalPrimary-7);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,55,100,.18);
+}
+
+/* ---------- Botones ---------- */
+
+.fc .fc-button-primary {
+    background: var(--mantine-color-hospitalPrimary-6);
+    border: none;
+    border-radius: var(--mantine-radius-md);
+    box-shadow: none;
+}
+
+.fc .fc-button-primary:hover {
+    background: var(--mantine-color-hospitalPrimary-7);
+}
+
+.fc .fc-button-primary:focus {
+    box-shadow: none;
+}
+
+.fc .fc-button-primary.fc-button-active {
+    background: var(--mantine-color-hospitalSecondary-6);
+}
+
+/* ==========================================================
+   DARK MODE
+========================================================== */
+
+[data-mantine-color-scheme="dark"] .fc-scrollgrid {
+    border-color: var(--mantine-color-dark-4) !important;
+}
+
+[data-mantine-color-scheme="dark"] .fc-theme-standard td,
+[data-mantine-color-scheme="dark"] .fc-theme-standard th {
+    border-color: var(--mantine-color-dark-4);
+}
+
+[data-mantine-color-scheme="dark"] .fc-col-header-cell {
+    background: var(--mantine-color-dark-6);
+}
+
+[data-mantine-color-scheme="dark"] .fc-col-header-cell-cushion {
+    color: white;
+}
+
+[data-mantine-color-scheme="dark"] .fc-toolbar-title {
+    color: white;
+}
+
+[data-mantine-color-scheme="dark"] .fc-daygrid-day-number {
+    color: #DCE3EA;
+}
+
+[data-mantine-color-scheme="dark"] .fc-daygrid-day:hover {
+    background: rgba(255,255,255,.04);
+}
+
+[data-mantine-color-scheme="dark"] .fc .fc-day-today {
+    background: rgba(199,163,110,.15) !important;
+}
+
+[data-mantine-color-scheme="dark"] .fc-event:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,.35);
+}

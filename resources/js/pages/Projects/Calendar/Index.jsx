@@ -52,14 +52,6 @@ const CalendarIndex = () => {
         initialView='dayGridMonth'
         events={events}
         height='auto'
-        datesSet={() => {
-          const title = document.querySelector('.fc-toolbar-title');
-
-          if (title) {
-            title.textContent =
-              title.textContent.charAt(0).toUpperCase() + title.textContent.slice(1);
-          }
-        }}
         eventClick={info => {
           router.get(
             route('projects.tasks.open', {

@@ -16,6 +16,7 @@ import {
 } from "@mantine/core";
 import { IconRocket } from "@tabler/icons-react";
 import classes from "./css/OverdueTasks.module.css";
+import translateGroupName from "@/utils/translateGroupName";
 
 export default function OverdueTasks({ tasks }) {
   return (
@@ -43,7 +44,7 @@ export default function OverdueTasks({ tasks }) {
                     </Text>
                     <Group>
                       <Tooltip label="Task group" openDelay={500} withArrow>
-                        <TaskGroupLabel>{task.task_group.name}</TaskGroupLabel>
+                        <TaskGroupLabel>{translateGroupName(task.task_group.name)}</TaskGroupLabel>
                       </Tooltip>
                       <Text fz={11} c="dimmed">
                         {task.project.name}

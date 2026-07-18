@@ -59,7 +59,7 @@ const ClientCreate = () => {
               <Avatar
                 src={form.data.avatar !== null ? URL.createObjectURL(form.data.avatar) : null}
                 size={120}
-                color="blue"
+                color="hospitalPrimary"
               >
                 {getInitials(form.data.name)}
               </Avatar>

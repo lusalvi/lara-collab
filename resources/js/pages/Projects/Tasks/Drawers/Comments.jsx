@@ -58,7 +58,7 @@ export default function Comments({ task }) {
 
       {loading ? (
         <Center mih={100}>
-          <Loader color="blue" />
+          <Loader color="hospitalPrimary" />
         </Center>
       ) : (
         <Stack gap={30} mt="md">
@@ -66,9 +66,9 @@ export default function Comments({ task }) {
             <div key={comment.id}>
               <Group justify="space-between">
                 <Group>
-                  <Avatar src={comment.user.avatar} radius="xl" color="blue" />
+                  <Avatar src={comment.user.avatar} radius="xl" color="hospitalPrimary" />
                   <div>
-                    <Text size="sm" c="blue" fw={500}>
+                    <Text size="sm" c="hospitalPrimary" fw={500}>
                       {comment.user.name}
                     </Text>
                     <Text size="xs" c="dimmed">

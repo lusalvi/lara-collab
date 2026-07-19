@@ -12,6 +12,11 @@ const useNotificationsStore = create((set) => ({
   },
   addNotification: (notification) => {
     return set(produce(state => {
+      const alreadyExists = state.notifications.some(i => i.id === notification.id);
+      if (alreadyExists) {
+        return;
+      }
+
       const oldNotifications = state.notifications.length >= 6
         ? state.notifications.slice(0, state.notifications.length - 1)
         : state.notifications;

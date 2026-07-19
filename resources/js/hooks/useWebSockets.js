@@ -16,7 +16,9 @@ export default function useWebSockets() {
   } = useTaskGroupsStore();
 
   const initUserWebSocket = () => {
-    window.Echo.private(`App.Models.User.${user.id}`).notification((notification) => {
+    const channel = window.Echo.private(`App.Models.User.${user.id}`);
+
+    channel.notification((notification) => {
       addNotification(notification);
 
       showNotification({
@@ -25,6 +27,8 @@ export default function useWebSockets() {
         autoClose: 8000,
       });
     });
+
+    return () => window.Echo.leave(`App.Models.User.${user.id}`);
   };
 
   const initProjectWebSocket = (project) => {

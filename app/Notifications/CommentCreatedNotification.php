@@ -89,8 +89,23 @@ class CommentCreatedNotification extends Notification implements ShouldQueue
             'title' => "{$this->comment->user->name} commented on \"{$this->comment->task->name}\"",
             'subtitle' => "On \"{$this->comment->task->project->name}\" project",
             'link' => route('projects.tasks.open', [$this->comment->task->project_id, $this->comment->task->id]),
-            'created_at' => $notifiable->created_at,
-            'read_at' => $notifiable->read_at,
+        ];
+    }
+
+    /**
+     * Get the broadcastable representation of the notification.
+     *
+     * @return array<string, mixed>
+     */
+    public function toBroadcast(object $notifiable): array
+    {
+        $stored = $notifiable->notifications()->find($this->id);
+
+        return [
+            'id' => $this->id,
+            ...$this->toArray($notifiable),
+            'read_at' => null,
+            'created_at' => $stored?->created_at?->toJSON() ?? now()->toJSON(),
         ];
     }
 }

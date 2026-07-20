@@ -22,7 +22,7 @@ import { useEffect } from 'react';
 import LabelsDropdown from './LabelsDropdown';
 import PriorityDropdown from './PriorityDropdown';
 import classes from './css/TaskDrawer.module.css';
-import { PricingType } from '@/utils/enums';
+
 
 export function CreateTaskDrawer() {
   const { create, closeCreateTask } = useTaskDrawerStore();
@@ -40,14 +40,11 @@ export function CreateTaskDrawer() {
     assigned_to_user_id: '',
     name: '',
     description: '',
-    pricing_type: project?.default_pricing_type || PricingType.HOURLY,
     estimation: '',
     priority_id: null,
-    fixed_price: '',
     start_on: '',
     due_on: '',
     hidden_from_clients: false,
-    billable: true,
     subscribed_users: [user.id.toString()],
     labels: [],
     attachments: [],
@@ -86,13 +83,6 @@ export function CreateTaskDrawer() {
     updateValue('attachments', files);
   };
 
-  const pricingTypes = [
-    { value: PricingType.HOURLY, label: 'Hourly' },
-    { value: PricingType.FIXED, label: 'Fixed' },
-  ];
-
-  const isFixedPrice = form.data.pricing_type === PricingType.FIXED;
-  const currencySymbol = currency?.symbol || '';
 
   return (
     <Drawer
@@ -243,57 +233,12 @@ export function CreateTaskDrawer() {
             mt='md'
           />
 
-          <NumberInput
-            label='Time estimation'
-            mt='md'
-            decimalScale={2}
-            fixedDecimalScale
-            defaultValue={0}
-            min={0}
-            allowNegative={false}
-            step={0.5}
-            suffix=' hours'
-            onChange={value => updateValue('estimation', value)}
-          />
-
           <PriorityDropdown
             value={form.data.priority_id}
             onChange={value => updateValue('priority_id', value || null)}
             mt='md'
           />
 
-          <Select
-            label='Pricing type'
-            placeholder='Select pricing type'
-            required
-            mt='md'
-            value={form.data.pricing_type}
-            onChange={value => updateValue('pricing_type', value)}
-            data={pricingTypes}
-            error={form.errors.pricing_type}
-          />
-
-          {isFixedPrice ? (
-            <NumberInput
-              label='Fixed price'
-              mt='md'
-              decimalScale={2}
-              fixedDecimalScale
-              defaultValue={0}
-              min={0}
-              allowNegative={false}
-              prefix={currencySymbol}
-              onChange={value => updateValue('fixed_price', value)}
-              error={form.errors.fixed_price}
-            />
-          ) : null}
-
-          <Checkbox
-            label='Billable'
-            mt='xl'
-            checked={form.data.billable}
-            onChange={event => updateValue('billable', event.currentTarget.checked)}
-          />
 
           {!hasRoles(user, ['client']) && (
             <Checkbox

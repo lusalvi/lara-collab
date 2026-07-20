@@ -26,7 +26,6 @@ import LabelsDropdown from './LabelsDropdown';
 import PriorityDropdown from './PriorityDropdown';
 import Timer from './Timer';
 import classes from './css/TaskDrawer.module.css';
-import { PricingType } from '@/utils/enums';
 
 export function EditTaskDrawer() {
   const editorRef = useRef(null);
@@ -55,13 +54,10 @@ export function EditTaskDrawer() {
     assigned_to_user_id: '',
     name: '',
     description: '',
-    pricing_type: PricingType.HOURLY,
     estimation: 0,
     priority_id: '',
-    fixed_price: 0,
     due_on: '',
     hidden_from_clients: false,
-    billable: true,
     subscribed_users: [],
     labels: [],
   });
@@ -79,10 +75,8 @@ export function EditTaskDrawer() {
         assigned_to_user_id: task?.assigned_to_user_id || '',
         name: task?.name || '',
         description: task?.description || '',
-        pricing_type: task?.pricing_type || PricingType.HOURLY,
         estimation: task?.estimation || 0,
         priority_id: task?.priority_id || '',
-        fixed_price: task?.fixed_price ? task.fixed_price / 100 : 0,
         start_on: task?.start_on
           ? dayjs(
               typeof task.start_on === 'string' ? task.start_on.split('T')[0] : task.start_on
@@ -95,7 +89,6 @@ export function EditTaskDrawer() {
           : '',
         hidden_from_clients:
           task?.hidden_from_clients !== undefined ? task.hidden_from_clients : false,
-        billable: task?.billable !== undefined ? task.billable : true,
         subscribed_users: (task?.subscribed_users || []).map(i => i.id.toString()),
         labels: (task?.labels || []).map(i => i.id),
       });
@@ -109,7 +102,7 @@ export function EditTaskDrawer() {
     setData({ ...data, [field]: value });
 
     const dropdowns = ['labels', 'subscribed_users'];
-    const onBlurInputs = ['name', 'description', 'fixed_price'];
+    const onBlurInputs = ['name', 'description'];
 
     if (dropdowns.includes(field)) {
       const options = {
@@ -129,21 +122,9 @@ export function EditTaskDrawer() {
 
   const onBlurUpdate = property => {
     if (data.name.length > 0) {
-      if (property === 'fixed_price') {
-        updateTaskProperty(task, property, data[property] * 100);
-      } else {
         updateTaskProperty(task, property, data[property]);
-      }
     }
   };
-
-  const pricingTypes = [
-    { value: PricingType.HOURLY, label: 'Hourly' },
-    { value: PricingType.FIXED, label: 'Fixed' },
-  ];
-
-  const isFixedPrice = data.pricing_type === PricingType.FIXED;
-  const currencySymbol = currency?.symbol || '';
 
   return (
     <Drawer
@@ -289,19 +270,6 @@ export function EditTaskDrawer() {
                 mt='md'
               />
 
-              <NumberInput
-                label='Time estimation'
-                mt='md'
-                decimalScale={2}
-                fixedDecimalScale
-                value={data.estimation}
-                min={0}
-                allowNegative={false}
-                step={0.5}
-                suffix=' hours'
-                onChange={value => updateValue('estimation', value)}
-                readOnly={!can('edit task')}
-              />
 
               <PriorityDropdown
                 value={data.priority_id}
@@ -309,47 +277,6 @@ export function EditTaskDrawer() {
                   updateValue('priority_id', value || null);
                 }}
                 mt='md'
-              />
-
-              <Select
-                label='Pricing type'
-                placeholder='Select pricing type'
-                mt='md'
-                value={data.pricing_type}
-                onChange={value => updateValue('pricing_type', value)}
-                data={pricingTypes}
-                readOnly={!can('edit task')}
-              />
-
-              {isFixedPrice && (can('view time logs') || can('add time log')) && (
-                <NumberInput
-                  label='Fixed price'
-                  mt='md'
-                  decimalScale={2}
-                  fixedDecimalScale
-                  value={data.fixed_price}
-                  min={0}
-                  allowNegative={false}
-                  onChange={value => updateValue('fixed_price', value)}
-                  onBlur={() => onBlurUpdate('fixed_price')}
-                  prefix={currencySymbol}
-                  readOnly={!can('edit task')}
-                />
-              )}
-
-              {!isFixedPrice && (can('view time logs') || can('add time log')) && (
-                <Timer
-                  mt='xl'
-                  task={task}
-                />
-              )}
-
-              <Checkbox
-                label='Billable'
-                mt='xl'
-                checked={data.billable}
-                onChange={event => updateValue('billable', event.currentTarget.checked)}
-                disabled={!can('edit task')}
               />
 
               {!hasRoles(user, ['client']) && (

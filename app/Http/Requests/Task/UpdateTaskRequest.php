@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests\Task;
 
-use App\Enums\PricingType;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
+
 
 class UpdateTaskRequest extends FormRequest
 {
@@ -31,12 +30,9 @@ class UpdateTaskRequest extends FormRequest
             'description' => ['nullable'],
             'estimation' => ['nullable'],
             'priority_id' => ['nullable', 'exists:task_priorities,id'],
-            'pricing_type' => ['string', Rule::enum(PricingType::class)],
-            'fixed_price' => ['nullable', 'numeric', 'min:0'],
             'start_on' => ['nullable'],
             'due_on' => ['nullable'],
             'hidden_from_clients' => ['boolean'],
-            'billable' => ['boolean'],
             'subscribed_users' => ['array'],
             'labels' => ['array'],
         ];

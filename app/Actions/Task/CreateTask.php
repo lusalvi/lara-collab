@@ -20,7 +20,7 @@ class CreateTask
     public function create(Project $project, array $data): Task
     {
         return DB::transaction(function () use ($project, $data) {
-          
+
             $task = $project->tasks()->create([
                 'group_id' => $data['group_id'],
                 'created_by_user_id' => auth()->id(),

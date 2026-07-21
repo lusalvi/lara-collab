@@ -69,11 +69,11 @@ class ProjectController extends Controller
 
         $project->taskGroups()->createMany([
             ['name' => 'Backlog'],
-            ['name' => 'Todo'],
-            ['name' => 'In progress'],
-            ['name' => 'QA'],
-            ['name' => 'Done'],
-            ['name' => 'Deployed'],
+            ['name' => 'Por hacer'],
+            ['name' => 'En curso'],
+            ['name' => 'En revisión'],
+            ['name' => 'Finalizado'],
+            ['name' => 'Desplegado'],
         ]);
 
         return redirect()->route('projects.index')->success('Project created', 'A new project was successfully created.');

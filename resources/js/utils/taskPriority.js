@@ -1,9 +1,7 @@
 export const priorityConfig = {
-  1: { color: "red", label: "Very high" },
-  2: { color: "orange", label: "High" },
-  3: { color: "yellow", label: "Medium" },
-  4: { color: "sky", label: "Low" },
-  5: { color: "emerald", label: "Very low" },
+  1: { color: "red", label: "Alta" },
+  2: { color: "yellow", label: "Media" },
+  3: { color: "emerald", label: "Baja" },
 };
 
 export function getTaskPriorityConfig(priority) {

@@ -13,11 +13,9 @@ class TaskPrioritySeeder extends Seeder
      */
     public function run(): void
     {
-        TaskPriority::create(['label' => 'Very high', 'color' => '#FF0000', 'order' => 1]);
-        TaskPriority::create(['label' => 'High', 'color' => '#E7590D', 'order' => 2]);
-        TaskPriority::create(['label' => 'Medium', 'color' => '#EDD118', 'order' => 3]);
-        TaskPriority::create(['label' => 'Low', 'color' => '#2771C2', 'order' => 4]);
-        TaskPriority::create(['label' => 'Very low', 'color' => '#309E44', 'order' => 5]);
+        TaskPriority::create(['label' => 'Alta', 'color' => '#FF0000', 'order' => 1]);
+        TaskPriority::create(['label' => 'Media', 'color' => '#EDD118', 'order' => 2]);
+        TaskPriority::create(['label' => 'Baja', 'color' => '#309E44', 'order' => 3]);
 
         // assign permissions to admin role
         $adminRole = Role::where('name', 'admin')->first();

@@ -11,8 +11,7 @@ import {
   IconCalendar,
   IconFilter,
   IconFilterCog,
-  IconLayoutKanban,
-  IconLayoutList,
+  IconChartBar,
   IconNote,
   IconPlus,
 } from '@tabler/icons-react';
@@ -87,7 +86,7 @@ export default function Header() {
             {usingFilters && <ClearFiltersButton />}
           </ActionIcon.Group>
           <Tooltip
-            label='Calendar'
+            label='Calendario'
             openDelay={500}
             withArrow
           >
@@ -103,9 +102,26 @@ export default function Header() {
             </ActionIcon>
           </Tooltip>
 
+           <Tooltip
+            label='Cronograma'
+            openDelay={500}
+            withArrow
+          >
+            <ActionIcon
+              variant='default'
+              size='lg'
+              onClick={() => redirectTo('projects.timeline', project.id)}
+            >
+              <IconChartBar
+                style={{ width: '60%', height: '60%' }}
+                stroke={1.5}
+              />
+            </ActionIcon>
+          </Tooltip>
+
           {can('view notes') && (
             <Tooltip
-              label='Notes'
+              label='Notas'
               openDelay={500}
               withArrow
             >

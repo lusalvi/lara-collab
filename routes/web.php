@@ -12,6 +12,7 @@ use App\Http\Controllers\MyWork\ActivityController;
 use App\Http\Controllers\MyWork\MyWorkTaskController;
 use App\Http\Controllers\Note\NoteController;
 use App\Http\Controllers\ProjectCalendarController;
+use App\Http\Controllers\ProjectTimelineController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\Settings\LabelController;
@@ -42,6 +43,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('{project}/user-access', [ProjectController::class, 'userAccess'])->name('user_access');
         // CALENDAR
         Route::get('{project}/calendar', [ProjectCalendarController::class, 'index'])->name('calendar');
+        // TIMELINE
+        Route::get('{project}/timeline', [ProjectTimelineController::class, 'index'])->name('timeline');
         // TASK GROUPS
         Route::post('{project}/task-groups', [GroupController::class, 'store'])->name('task-groups.store');
         Route::put('{project}/task-groups/{taskGroup}', [GroupController::class, 'update'])->name('task-groups.update')->scopeBindings();

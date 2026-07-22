@@ -15,7 +15,7 @@ import {
   IconNote,
   IconPlus,
 } from '@tabler/icons-react';
-import { SegmentedControl } from "@mantine/core";
+import { SegmentedControl } from '@mantine/core';
 
 export default function Header() {
   const { project } = usePage().props;
@@ -58,7 +58,7 @@ export default function Header() {
           />
 
           <ActionIcon.Group>
-            {tasksView === 'kanban' && (
+            {!route().params.archived && (
               <Tooltip
                 label='Filters'
                 openDelay={500}
@@ -102,7 +102,7 @@ export default function Header() {
             </ActionIcon>
           </Tooltip>
 
-           <Tooltip
+          <Tooltip
             label='Cronograma'
             openDelay={500}
             withArrow

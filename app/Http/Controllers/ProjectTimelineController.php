@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Project;
 use App\Models\Task;
+use App\Services\PermissionService;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -26,17 +27,16 @@ class ProjectTimelineController extends Controller
                 'id' => $task->id,
                 'number' => $task->number,
                 'name' => $task->name,
-                // El gantt necesita un rango de fechas: si falta start_on
-                // usamos due_on (o viceversa) para no perder la tarea del cronograma.
                 'start_on' => $task->start_on?->toDateString() ?? $task->due_on?->toDateString(),
                 'due_on' => $task->due_on?->toDateString() ?? $task->start_on?->toDateString(),
                 'completed_at' => $task->completed_at?->toDateString(),
-                'status' => $task->completed_at ? 'done' : ($task->start_on && $task->start_on->isPast() ? 'in_progress' : 'todo'),
+                'group_id' => $task->group_id,
                 'group' => $task->taskGroup ? [
                     'id' => $task->taskGroup->id,
                     'name' => $task->taskGroup->name,
                     'color' => $task->taskGroup->color,
                 ] : null,
+                'assigned_to_user_id' => $task->assigned_to_user_id,
                 'assigned_to_user' => $task->assignedToUser,
                 'priority' => $task->priority,
             ])
@@ -45,6 +45,8 @@ class ProjectTimelineController extends Controller
         return Inertia::render('Projects/Timeline/Index', [
             'project' => $project,
             'tasks' => $tasks,
+            'taskGroups' => $project->taskGroups()->get(['id', 'name', 'color']),
+            'usersWithAccessToProject' => PermissionService::usersWithAccessToProject($project),
         ]);
     }
 }

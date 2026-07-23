@@ -11,7 +11,7 @@ dayjs.extend(isBetween);
 import { useEffect, useMemo, useRef, useState } from 'react';
 import './css/timeline.css';
 import Toolbar from './components/Toolbar';
-import Sidebar from './components/Sidebar';
+import Sidebar from './components/Sidebar/Sidebar';
 import Header from './components/Header';
 import Grid from './components/Grid';
 import Bars from './components/Bars';
@@ -134,7 +134,8 @@ function buildGroupedHeader(columnStarts, format) {
 }
 
 export default function TimelineIndex() {
-  const { project, tasks } = usePage().props;
+  const { project, tasks: initialTasks, taskGroups } = usePage().props;
+  const [tasks, setTasks] = useState(initialTasks);
   currentProject = project;
 
   const [zoom, setZoom] = useState('month');
@@ -175,6 +176,14 @@ export default function TimelineIndex() {
     const targetLeft = Math.max(todayOffset - container.clientWidth / 2, 0);
     container.scrollTo({ left: targetLeft, behavior: 'smooth' });
   };
+
+  const handleTaskChange = (taskId, changes) => {
+    setTasks(prev => prev.map(task => (task.id === taskId ? { ...task, ...changes } : task)));
+  };
+
+  useEffect(() => {
+    setTasks(initialTasks);
+  }, [initialTasks]);
 
   useEffect(() => {
     scrollToToday();
@@ -300,7 +309,9 @@ export default function TimelineIndex() {
         <Sidebar
           project={project}
           tasks={tasks}
+          taskGroups={taskGroups}
           columns={columns}
+          onTaskChange={handleTaskChange}
           listWidth={listWidth}
           listScrollRef={listScrollRef}
           ganttScrollRef={ganttScrollRef}
@@ -370,7 +381,7 @@ TimelineIndex.layout = page => <Layout title={currentProject?.name}>{page}</Layo
 const MIN_COLUMNS = {
   activity: 180,
   assignee: 150,
-  status: 120,
+  status: 140,
 };
 
 const INITIAL_COLUMNS = {

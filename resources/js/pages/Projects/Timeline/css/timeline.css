@@ -323,7 +323,38 @@
 
 .timeline-status-column {
     display: flex;
-    justify-content: center;
     align-items: center;
     flex-shrink: 0;
+    overflow: hidden;
+}
+
+.timeline-task-name {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    width: 100%;
+    min-width: 0;
+}
+
+.timeline-task-name-text {
+    flex: 1;
+    min-width: 0;
+}
+
+.timeline-group-select {
+    width: 125px;
+    flex-shrink: 0;
+}
+
+.timeline-group-select .mantine-Input-input {
+    height: 28px;
+    min-height: 28px;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    text-transform: uppercase;
+
+    border-radius: var(--mantine-radius-sm);
 }

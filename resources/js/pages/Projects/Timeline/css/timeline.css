@@ -1,11 +1,21 @@
+:root {
+  --timeline-border: 1px solid light-dark(var(--mantine-color-gray-3),
+      var(--mantine-color-dark-4));
+
+  --timeline-header-bg: light-dark(var(--mantine-color-gray-0),
+      var(--mantine-color-dark-7));
+
+  --timeline-sticky-bg: light-dark(white,
+      var(--mantine-color-dark-8));
+}
+
 .timeline-wrapper {
   display: flex;
   overflow: hidden;
 
   background: var(--mantine-color-body);
 
-  border: 1px solid light-dark(var(--mantine-color-gray-3),
-      var(--mantine-color-dark-4));
+  border: var(--timeline-border);
 
   border-radius: var(--mantine-radius-md);
 }
@@ -13,8 +23,7 @@
 /* ---------- Lista (izquierda) ---------- */
 .timeline-list {
   flex-shrink: 0;
-  border-right: 1px solid light-dark(var(--mantine-color-gray-3),
-      var(--mantine-color-dark-4));
+  border-right: var(--timeline-border);
   display: flex;
   flex-direction: column;
 }
@@ -26,10 +35,8 @@
   padding: 10px 16px;
   height: 61px;
   box-sizing: border-box;
-  background: light-dark(var(--mantine-color-gray-0),
-      var(--mantine-color-dark-7));
-  border-bottom: 1px solid light-dark(var(--mantine-color-gray-3),
-      var(--mantine-color-dark-4));
+  background: var(--timeline-header-bg);
+  border-bottom: var(--timeline-border);
 }
 
 .timeline-list-header-cell {
@@ -73,10 +80,8 @@
 }
 
 .timeline-panel-resize-handle:hover {
-    background: light-dark(
-        var(--mantine-color-blue-1),
-        rgba(255,255,255,.05)
-    );
+  background: light-dark(var(--mantine-color-blue-1),
+      rgba(255, 255, 255, .05));
 }
 
 .timeline-list-row {
@@ -85,8 +90,7 @@
   align-items: center;
   height: 44px;
   padding: 0 16px;
-  border-bottom: 1px solid light-dark(var(--mantine-color-gray-3),
-      var(--mantine-color-dark-4));
+  border-bottom: var(--timeline-border);
   cursor: pointer;
 }
 
@@ -121,20 +125,14 @@
   align-items: center;
   gap: 8px;
   padding: 10px 16px;
-  background: light-dark(var(--mantine-color-gray-0),
-      var(--mantine-color-dark-7));
-
-  border-bottom: 1px solid light-dark(var(--mantine-color-gray-3),
-      var(--mantine-color-dark-4));
+  background: var(--timeline-header-bg);
+  border-bottom: var(--timeline-border);
 }
 
 .timeline-gantt-inner {
   position: relative;
 }
 
-/* Header: mes/semana arriba, días abajo. Altura fija para que siempre
-   coincida con el header de la lista (61px), sin importar cuántas filas
-   (grupo / subgrupo / días) tenga en cada modo de zoom. */
 .timeline-header {
   position: sticky;
   top: 0;
@@ -144,8 +142,7 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  background: light-dark(white,
-      var(--mantine-color-dark-8));
+  background: var(--timeline-sticky-bg);
   box-shadow: 0 1px 0 light-dark(var(--mantine-color-gray-3),
       var(--mantine-color-dark-4));
 }
@@ -161,10 +158,8 @@
   font-weight: 600;
   color: light-dark(var(--mantine-color-gray-7),
       var(--mantine-color-gray-3));
-  border-bottom: 1px solid light-dark(var(--mantine-color-gray-3),
-      var(--mantine-color-dark-4));
-  border-right: 1px solid light-dark(var(--mantine-color-gray-3),
-      var(--mantine-color-dark-4));
+  border-bottom: var(--timeline-border);
+  border-right: var(--timeline-border);
   text-transform: capitalize;
   white-space: nowrap;
   overflow: hidden;
@@ -181,8 +176,8 @@
   justify-content: space-around;
   font-size: 11px;
   padding: 4px 0;
-  border-bottom: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
-  border-right: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+  border-bottom: var(--timeline-border);
+  border-right: var(--timeline-border);
 }
 
 .timeline-header-days {
@@ -196,10 +191,8 @@
   color: light-dark(var(--mantine-color-gray-6),
       var(--mantine-color-gray-4));
   padding: 4px 0;
-  border-bottom: 1px solid light-dark(var(--mantine-color-gray-3),
-      var(--mantine-color-dark-4));
-  border-right: 1px solid light-dark(var(--mantine-color-gray-3),
-      var(--mantine-color-dark-4));
+  border-bottom: var(--timeline-border);
+  border-right: var(--timeline-border);
 }
 
 .timeline-header-periods {
@@ -212,8 +205,8 @@
   font-size: 11px;
   color: light-dark(var(--mantine-color-gray-6), var(--mantine-color-gray-4));
   padding: 4px 0;
-  border-bottom: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
-  border-right: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+  border-bottom: var(--timeline-border);
+  border-right: var(--timeline-border);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -253,8 +246,7 @@
 
 .timeline-grid-col {
   flex-shrink: 0;
-  border-right: 1px solid light-dark(var(--mantine-color-gray-3),
-      var(--mantine-color-dark-4));
+  border-right: var(--timeline-border);
   height: 100%;
 }
 
@@ -293,10 +285,8 @@
 }
 
 .timeline-bar.status-todo {
-    background: light-dark(
-        var(--mantine-color-gray-5),
-        var(--mantine-color-dark-2)
-    );
+  background: light-dark(var(--mantine-color-gray-5),
+      var(--mantine-color-dark-2));
 }
 
 .timeline-bar.status-in_progress {
@@ -308,63 +298,63 @@
 }
 
 .timeline-assignee-column {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-shrink: 0;
-    overflow: hidden;
-    padding-right: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  overflow: hidden;
+  padding-right: 12px;
 }
 
 .timeline-assignee-column .mantine-Text-root {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .timeline-assignee-select {
-    width: 100%;
+  width: 100%;
 }
 
 .timeline-assignee-select .mantine-Input-input {
-    height: 32px;
+  height: 32px;
 }
 
 .timeline-status-column {
-    display: flex;
-    align-items: center;
-    flex-shrink: 0;
-    overflow: hidden;
-    padding-right: 12px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  overflow: hidden;
+  padding-right: 12px;
 }
 
 .timeline-task-name {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    width: 100%;
-    min-width: 0;
-    padding-right: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  min-width: 0;
+  padding-right: 12px;
 }
 
 .timeline-task-name-text {
-    flex: 1;
-    min-width: 0;
+  flex: 1;
+  min-width: 0;
 }
 
 .timeline-group-select {
-    width: 125px;
-    flex-shrink: 0;
+  width: 125px;
+  flex-shrink: 0;
 }
 
 .timeline-group-select .mantine-Input-input {
-    height: 28px;
-    min-height: 28px;
+  height: 28px;
+  min-height: 28px;
 
-    font-size: 12px;
-    font-weight: 600;
+  font-size: 12px;
+  font-weight: 600;
 
-    text-transform: uppercase;
+  text-transform: uppercase;
 
-    border-radius: var(--mantine-radius-sm);
+  border-radius: var(--mantine-radius-sm);
 }

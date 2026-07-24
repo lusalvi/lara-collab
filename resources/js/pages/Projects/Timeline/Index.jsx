@@ -1,8 +1,7 @@
 import Layout from '@/layouts/MainLayout';
-import { redirectTo } from '@/utils/route';
 import { router, usePage } from '@inertiajs/react';
-import { ActionIcon, Button, Group, ScrollArea, Title, Tooltip } from '@mantine/core';
-import { IconArrowLeft, IconLayoutList } from '@tabler/icons-react';
+import { Button, Group, ScrollArea, Title } from '@mantine/core';
+import { IconArrowLeft } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import quarterOfYear from 'dayjs/plugin/quarterOfYear';
@@ -285,7 +284,7 @@ export default function TimelineIndex() {
           leftSection={<IconArrowLeft size={14} />}
           onClick={() => router.get(route('projects.tasks', project.id))}
         >
-          Back to tasks
+          Volver
         </Button>
 
         <Group
@@ -295,25 +294,6 @@ export default function TimelineIndex() {
           mb='lg'
         >
           <Title order={1}>{project.name}</Title>
-
-          <Group>
-            <Tooltip
-              label='Vista de tareas'
-              openDelay={500}
-              withArrow
-            >
-              <ActionIcon
-                variant='default'
-                size='lg'
-                onClick={() => redirectTo('projects.tasks', project.id)}
-              >
-                <IconLayoutList
-                  style={{ width: '60%', height: '60%' }}
-                  stroke={1.5}
-                />
-              </ActionIcon>
-            </Tooltip>
-          </Group>
         </Group>
       </div>
 

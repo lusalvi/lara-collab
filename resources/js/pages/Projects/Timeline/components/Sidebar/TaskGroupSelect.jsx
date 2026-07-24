@@ -1,24 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Select } from '@mantine/core';
 import axios from 'axios';
-
-const DEFAULT_GROUP_COLORS = {
-  backlog: 'gray',
-  'por hacer': 'gray',
-  todo: 'gray',
-
-  'en curso': 'blue',
-  'in progress': 'blue',
-
-  'en revisión': 'yellow',
-  review: 'yellow',
-
-  finalizado: 'green',
-  done: 'green',
-
-  desplegado: 'cyan',
-  deployed: 'cyan',
-};
+import { getGroupSelectColorName } from '../../constants/taskGroupColors';
 
 export default function TaskGroupSelect({ project, task, groups, onTaskChange }) {
   const [saving, setSaving] = useState(false);
@@ -34,8 +17,7 @@ export default function TaskGroupSelect({ project, task, groups, onTaskChange })
 
   const currentGroup = groups.find(g => g.id === task.group_id);
 
-  const currentColor =
-    currentGroup?.color || DEFAULT_GROUP_COLORS[currentGroup?.name?.trim().toLowerCase()] || 'gray';
+  const currentColor = getGroupSelectColorName(currentGroup);
 
   const handleChange = async value => {
     if (!value || Number(value) === task.group_id || saving) return;

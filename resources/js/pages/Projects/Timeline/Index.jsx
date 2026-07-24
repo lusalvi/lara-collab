@@ -19,7 +19,18 @@ import Bars from './components/Bars';
 dayjs.extend(isoWeek);
 dayjs.extend(quarterOfYear);
 
-let currentProject = null;
+
+const MIN_COLUMNS = {
+  activity: 180,
+  assignee: 150,
+  status: 140,
+};
+
+const INITIAL_COLUMNS = {
+  activity: 260,
+  assignee: 180,
+  status: 150,
+};
 
 // --- Configuración de cada modo de zoom -------------------------------
 // unit: la unidad de tiempo que representa UNA columna de la grilla.
@@ -136,7 +147,6 @@ function buildGroupedHeader(columnStarts, format) {
 export default function TimelineIndex() {
   const { project, tasks: initialTasks, taskGroups, usersWithAccessToProject } = usePage().props;
   const [tasks, setTasks] = useState(initialTasks);
-  currentProject = project;
 
   const [zoom, setZoom] = useState('month');
   const config = ZOOM_CONFIG[zoom];
@@ -379,16 +389,5 @@ export default function TimelineIndex() {
   );
 }
 
-TimelineIndex.layout = page => <Layout title={currentProject?.name}>{page}</Layout>;
+TimelineIndex.layout = page => <Layout title={page.props.project?.name}>{page}</Layout>;
 
-const MIN_COLUMNS = {
-  activity: 180,
-  assignee: 150,
-  status: 140,
-};
-
-const INITIAL_COLUMNS = {
-  activity: 260,
-  assignee: 180,
-  status: 150,
-};

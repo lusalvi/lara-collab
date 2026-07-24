@@ -33,11 +33,7 @@ export default function Bars({ tasks, start, config, project }) {
         const durationDays = Math.max(barEnd.diff(barStart, 'day') + 1, 1);
 
         const groupName = task.group?.name?.trim().toLowerCase();
-
-        const barColor =
-          task.group?.color ||
-          DEFAULT_GROUP_COLORS[groupName] ||
-          '#adb5bd';
+        const barColor = task.group?.color || DEFAULT_GROUP_COLORS[groupName] || '#adb5bd';
 
         return (
           <Tooltip
@@ -47,7 +43,7 @@ export default function Bars({ tasks, start, config, project }) {
             withArrow
           >
             <div
-              className="timeline-bar"
+              className='timeline-bar'
               style={{
                 backgroundColor: barColor,
                 top: rowIndex * 44 + 8,

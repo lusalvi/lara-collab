@@ -134,7 +134,7 @@ function buildGroupedHeader(columnStarts, format) {
 }
 
 export default function TimelineIndex() {
-  const { project, tasks: initialTasks, taskGroups, usersWithAccessToProject, } = usePage().props;
+  const { project, tasks: initialTasks, taskGroups, usersWithAccessToProject } = usePage().props;
   const [tasks, setTasks] = useState(initialTasks);
   currentProject = project;
 
@@ -144,6 +144,8 @@ export default function TimelineIndex() {
   const { start, end } = useMemo(() => buildRange(tasks), [tasks]);
 
   const periodColumns = useMemo(() => buildPeriodColumns(start, end, config), [start, end, config]);
+
+  const gridStart = periodColumns[0]?.start ?? start;
 
   const groupedHeader = useMemo(
     () =>
@@ -160,7 +162,7 @@ export default function TimelineIndex() {
   );
 
   const today = dayjs().startOf('day');
-  const todayOffset = today.diff(start, 'day') * config.dayWidth;
+  const todayOffset = today.diff(gridStart, 'day') * config.dayWidth;
 
   const ganttScrollRef = useRef(null);
   const listScrollRef = useRef(null);
@@ -364,7 +366,7 @@ export default function TimelineIndex() {
 
                 <Bars
                   tasks={tasks}
-                  start={start}
+                  start={gridStart}
                   config={config}
                   project={project}
                 />

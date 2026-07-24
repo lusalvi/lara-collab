@@ -1,9 +1,9 @@
 import { router } from '@inertiajs/react';
-import { Avatar, Text } from '@mantine/core';
 import EditableTaskName from './EditableTaskName';
 import TaskGroupSelect from './TaskGroupSelect';
+import TaskAssigneeSelect from './TaskAssigneeSelect';
 
-export default function TaskRow({ project, task, columns, onTaskChange, taskGroups }) {
+export default function TaskRow({ project, task, columns, onTaskChange, taskGroups, users }) {
   return (
     <div
       className='timeline-list-row'
@@ -31,31 +31,12 @@ export default function TaskRow({ project, task, columns, onTaskChange, taskGrou
         className='timeline-assignee-column'
         style={{ width: columns.assignee }}
       >
-        {task.assigned_to_user ? (
-          <>
-            <Avatar
-              src={task.assigned_to_user.avatar}
-              size={24}
-              radius='xl'
-            >
-              {task.assigned_to_user.name?.[0]}
-            </Avatar>
-
-            <Text
-              size='sm'
-              truncate
-            >
-              {task.assigned_to_user.name}
-            </Text>
-          </>
-        ) : (
-          <Text
-            size='xs'
-            c='dimmed'
-          >
-            Sin asignar
-          </Text>
-        )}
+        <TaskAssigneeSelect
+          project={project}
+          task={task}
+          users={users}
+          onTaskChange={onTaskChange}
+        />
       </div>
 
       <div

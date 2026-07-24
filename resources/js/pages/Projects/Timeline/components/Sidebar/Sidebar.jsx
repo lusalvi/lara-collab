@@ -13,6 +13,7 @@ export default function Sidebar({
   startColumnResize,
   onTaskChange,
   taskGroups,
+  users,
 }) {
   return (
     <div
@@ -87,6 +88,7 @@ export default function Sidebar({
             columns={columns}
             onTaskChange={onTaskChange}
             taskGroups={taskGroups}
+            users={users}
           />
         ))}
 

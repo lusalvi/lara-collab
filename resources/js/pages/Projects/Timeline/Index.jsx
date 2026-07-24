@@ -134,7 +134,7 @@ function buildGroupedHeader(columnStarts, format) {
 }
 
 export default function TimelineIndex() {
-  const { project, tasks: initialTasks, taskGroups } = usePage().props;
+  const { project, tasks: initialTasks, taskGroups, usersWithAccessToProject, } = usePage().props;
   const [tasks, setTasks] = useState(initialTasks);
   currentProject = project;
 
@@ -317,6 +317,7 @@ export default function TimelineIndex() {
           ganttScrollRef={ganttScrollRef}
           syncScroll={syncScroll}
           startColumnResize={startColumnResize}
+          users={usersWithAccessToProject}
         />
 
         <div

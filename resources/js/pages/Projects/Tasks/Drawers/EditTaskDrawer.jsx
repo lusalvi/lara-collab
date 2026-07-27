@@ -54,6 +54,7 @@ export function EditTaskDrawer() {
     assigned_to_user_id: '',
     name: '',
     description: '',
+    issue_type: '',
     estimation: 0,
     priority_id: '',
     due_on: '',
@@ -75,6 +76,7 @@ export function EditTaskDrawer() {
         assigned_to_user_id: task?.assigned_to_user_id || '',
         name: task?.name || '',
         description: task?.description || '',
+        issue_type: task?.issue_type || '',
         estimation: task?.estimation || 0,
         priority_id: task?.priority_id || '',
         start_on: task?.start_on
@@ -122,7 +124,7 @@ export function EditTaskDrawer() {
 
   const onBlurUpdate = property => {
     if (data.name.length > 0) {
-        updateTaskProperty(task, property, data[property]);
+      updateTaskProperty(task, property, data[property]);
     }
   };
 
@@ -228,6 +230,22 @@ export function EditTaskDrawer() {
               />
 
               <Select
+                label='Issue type'
+                placeholder='Select issue type'
+                mt='md'
+                allowDeselect={false}
+                value={data.issue_type}
+                onChange={value => updateValue('issue_type', value)}
+                data={[
+                  { value: 'Epica', label: 'Épica' },
+                  { value: 'Historia', label: 'Historia' },
+                  { value: 'Tarea', label: 'Tarea' },
+                  { value: 'Subtarea', label: 'Subtarea' },
+                ]}
+                readOnly={!can('edit task')}
+              />
+
+              <Select
                 label='Assignee'
                 placeholder='Select assignee'
                 searchable
@@ -269,7 +287,6 @@ export function EditTaskDrawer() {
                 onChange={values => updateValue('labels', values)}
                 mt='md'
               />
-
 
               <PriorityDropdown
                 value={data.priority_id}

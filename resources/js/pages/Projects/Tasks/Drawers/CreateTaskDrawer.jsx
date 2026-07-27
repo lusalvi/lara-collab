@@ -23,7 +23,6 @@ import LabelsDropdown from './LabelsDropdown';
 import PriorityDropdown from './PriorityDropdown';
 import classes from './css/TaskDrawer.module.css';
 
-
 export function CreateTaskDrawer() {
   const { create, closeCreateTask } = useTaskDrawerStore();
   const {
@@ -40,6 +39,10 @@ export function CreateTaskDrawer() {
     assigned_to_user_id: '',
     name: '',
     description: '',
+
+    issue_type: create.issue_type || '',
+    parent_task_id: create.parent_task_id,
+
     estimation: '',
     priority_id: null,
     start_on: '',
@@ -82,7 +85,6 @@ export function CreateTaskDrawer() {
     files.splice(index, 1);
     updateValue('attachments', files);
   };
-
 
   return (
     <Drawer
@@ -191,6 +193,22 @@ export function CreateTaskDrawer() {
             error={form.errors.group_id}
           />
 
+          {!create.parent_task_id && (
+            <Select
+              label='Issue type'
+              placeholder='Select issue type'
+              value={form.data.issue_type}
+              onChange={value => updateValue('issue_type', value || '')}
+              data={[
+                { value: 'Epica', label: 'Épica' },
+                { value: 'Historia', label: 'Historia' },
+                { value: 'Tarea', label: 'Tarea' },
+                { value: 'Subtarea', label: 'Subtarea' },
+              ]}
+              error={form.errors.issue_type}
+            />
+          )}
+
           <Select
             label='Assignee'
             placeholder='Select assignee'
@@ -238,7 +256,6 @@ export function CreateTaskDrawer() {
             onChange={value => updateValue('priority_id', value || null)}
             mt='md'
           />
-
 
           {!hasRoles(user, ['client']) && (
             <Checkbox

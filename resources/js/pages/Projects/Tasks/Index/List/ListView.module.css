@@ -1,0 +1,243 @@
+.container {
+  background: white;
+  border: 1px solid var(--mantine-color-gray-3);
+  border-radius: 12px;
+
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+/* =========================
+   FILAS
+========================= */
+
+.row {
+  display: grid;
+  min-width: 1450px;
+  grid-template-columns:
+    48px            /* checkbox */
+    70px            /* número */
+    minmax(320px, 1fr) /* tarea */
+    220px           /* responsable */
+    140px           /* prioridad */
+    160px           /* estado */
+    140px           /* vencimiento */
+    50px;           /* acciones */
+
+  align-items: center;
+
+  min-height: 52px;
+
+  border-bottom: 1px solid var(--mantine-color-gray-2);
+
+transition: background-color .15s ease;}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+.row:hover {
+  background: light-dark(
+    var(--mantine-color-hospitalPrimary-0),
+    rgba(61, 108, 168, 0.12)
+  );
+
+  cursor: pointer;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+
+  background: white;
+
+  min-height: 46px;
+
+  border-bottom: 2px solid var(--mantine-color-gray-2);
+}
+
+.headerText {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--mantine-color-gray-6);
+  letter-spacing: .05em;
+}
+
+/* =========================
+   COLUMNAS
+========================= */
+
+.checkbox,
+.key,
+.summary,
+.assignee,
+.priority,
+.status,
+.due,
+.actions {
+  padding: 0 14px;
+}
+
+.checkbox {
+  display: flex;
+  justify-content: center;
+}
+
+.key {
+  color: var(--mantine-color-gray-6);
+  font-weight: 600;
+}
+
+.summary {
+  font-weight: 500;
+  color: #1d2939;
+
+  overflow: hidden;
+}
+
+.summary p,
+.summary span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.assignee {
+  overflow: hidden;
+}
+
+.status,
+.priority,
+.due {
+  display: flex;
+  align-items: center;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+}
+
+.summaryContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.summaryAction {
+  opacity: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 24px;
+  height: 24px;
+
+  border-radius: 6px;
+
+  cursor: pointer;
+
+  transition:
+    opacity .15s ease,
+    background-color .15s ease,
+    transform .15s ease;
+}
+
+.row:hover .summaryAction {
+  opacity: 1;
+}
+
+.summaryAction:hover {
+  background: var(--mantine-color-gray-1);
+  transform: scale(1.08);
+}
+
+[data-mantine-color-scheme="dark"] .summaryAction:hover {
+  background: var(--mantine-color-dark-5);
+}
+
+.expandButton {
+  width: 28px;
+  height: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 6px;
+
+  transition:
+    background-color .15s ease,
+    transform .15s ease;
+}
+
+.expandButtonActive {
+  cursor: pointer;
+}
+
+.expandButtonActive:hover {
+  background: light-dark(
+    var(--mantine-color-gray-1),
+    var(--mantine-color-dark-5)
+  );
+}
+
+.expandButton svg {
+  transition: transform .15s ease;
+}
+
+.expandButtonActive:hover svg {
+  transform: scale(1.1);
+}
+
+.statusTrigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 2px 6px;
+
+  border-radius: 6px;
+
+  cursor: pointer;
+
+  transition: background-color 0.15s ease;
+}
+
+.statusTrigger:hover {
+  background: light-dark(
+    var(--mantine-color-gray-1),
+    var(--mantine-color-dark-5)
+  );
+}
+
+.statusTrigger svg {
+  color: var(--mantine-color-gray-6);
+}
+
+.columnHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  width: 100%;
+  height: 100%;
+}
+
+.columnHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  width: 100%;
+  height: 100%;
+}

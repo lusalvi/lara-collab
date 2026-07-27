@@ -33,18 +33,29 @@ class Task extends Model implements AuditableContract, Sortable
         'created_by_user_id',
         'assigned_to_user_id',
         'invoice_id',
+
         'name',
         'number',
         'description',
+
+        'issue_type',
+        'parent_task_id',
+
         'start_on',
         'due_on',
+
         'estimation',
+
         'priority_id',
+
         'pricing_type',
         'fixed_price',
+
         'hidden_from_clients',
         'billable',
+
         'order_column',
+
         'assigned_at',
         'completed_at',
     ];
@@ -84,6 +95,8 @@ class Task extends Model implements AuditableContract, Sortable
         'priority:id,label,color,order',
         'attachments',
         'timeLogs.user:id,name',
+        'parent:id,name,number,issue_type',
+        'children:id,name,number,issue_type,parent_task_id',
     ];
 
     public function filters(): array
@@ -123,6 +136,16 @@ class Task extends Model implements AuditableContract, Sortable
     public function taskGroup(): BelongsTo
     {
         return $this->belongsTo(TaskGroup::class, 'group_id');
+    }
+
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(Task::class, 'parent_task_id');
+    }
+
+    public function children(): HasMany
+    {
+        return $this->hasMany(Task::class, 'parent_task_id');
     }
 
     public function createdByUser(): BelongsTo

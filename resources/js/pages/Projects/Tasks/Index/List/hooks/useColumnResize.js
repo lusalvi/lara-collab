@@ -1,0 +1,26 @@
+import { useState } from 'react';
+
+const DEFAULT_WIDTHS = {
+  key: 70,
+  summary: 320,
+  assignee: 220,
+  priority: 140,
+  status: 160,
+  due: 140,
+};
+
+export default function useColumnResize() {
+  const [widths, setWidths] = useState(DEFAULT_WIDTHS);
+
+  const setWidth = (column, width) => {
+    setWidths(prev => ({
+      ...prev,
+      [column]: Math.max(width, 120), // ancho mínimo
+    }));
+  };
+
+  return {
+    widths,
+    setWidth,
+  };
+}

@@ -27,6 +27,8 @@ class StoreTaskRequest extends FormRequest
             'group_id' => ['required', 'exists:task_groups,id'],
             'assigned_to_user_id' => ['nullable', 'exists:users,id'],
             'description' => ['nullable'],
+            'parent_task_id' => ['nullable', 'exists:tasks,id'],
+            'issue_type' => ['required', 'in:Epica,Historia,Tarea,Subtarea'],
             'estimation' => ['nullable'],
             'priority_id' => ['nullable', 'exists:task_priorities,id'],
             'start_on' => ['nullable', 'date', 'before_or_equal:due_on'],

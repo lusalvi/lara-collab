@@ -19,8 +19,8 @@ return new class extends Migration
                 'Tarea',
                 'Subtarea',
             ])
-            ->default('Tarea')
-            ->after('name');
+                ->default('Tarea')
+                ->after('name');
 
             $table->foreignId('parent_task_id')
                 ->nullable()

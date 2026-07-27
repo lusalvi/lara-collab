@@ -28,7 +28,7 @@ class CreateTask
                 'name' => $data['name'],
                 'number' => $project->tasks()->withArchived()->count() + 1,
                 'issue_type' => $data['issue_type'],
-                'parent_task_id' => $data['parent_task_id'] ?? null,                
+                'parent_task_id' => $data['parent_task_id'] ?? null,
                 'description' => $data['description'],
                 'start_on' => $data['start_on'],
                 'due_on' => $data['due_on'],

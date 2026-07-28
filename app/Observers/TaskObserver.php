@@ -68,14 +68,6 @@ class TaskObserver
                     : "on \"{$task->name}\" task by ".auth()->user()->name,
             ]);
         }
-        if ($task->isDirty('estimation')) {
-            $task->activities()->create([
-                'project_id' => $task->project_id,
-                'user_id' => auth()->id(),
-                'title' => 'Estimation was set',
-                'subtitle' => "to {$task->estimation}h on \"{$task->name}\" by ".auth()->user()->name,
-            ]);
-        }
         if ($task->isDirty('completed_at')) {
             $task->activities()->create([
                 'project_id' => $task->project_id,

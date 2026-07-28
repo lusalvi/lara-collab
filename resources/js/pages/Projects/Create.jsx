@@ -10,20 +10,17 @@ import {
   Grid,
   Group,
   MultiSelect,
-  NumberInput,
   Select,
   TextInput,
   Textarea,
   Title,
 } from '@mantine/core';
-import { useEffect, useState } from 'react';
 
-const ProjectCreate = ({ dropdowns: { companies, users, currencies } }) => {
-
+const ProjectCreate = ({ dropdowns: { areas, users } }) => {
   const [form, submit, updateValue] = useForm('post', route('projects.store'), {
     name: '',
     description: '',
-    client_company_id: '',
+    area_id: '',
     users: [],
   });
 
@@ -79,14 +76,14 @@ const ProjectCreate = ({ dropdowns: { companies, users, currencies } }) => {
           />
 
           <Select
-            label='Company requesting work'
-            placeholder='Select company'
+            label='Area'
+            placeholder='Select area'
             required
             mt='md'
-            value={form.data.client_company_id}
-            onChange={value => updateValue('client_company_id', value)}
-            data={companies}
-            error={form.errors.client_company_id}
+            value={form.data.area_id}
+            onChange={value => updateValue('area_id', value)}
+            data={areas}
+            error={form.errors.area_id}
           />
 
           <MultiSelect

@@ -8,20 +8,13 @@ import { useEffect, useState } from "react";
 function ModalForm({ item }) {
   const [requestPending, setRequestPending] = useState(true);
   const [users, setUsers] = useState([]);
-  const [clients, setClients] = useState([]);
 
   const [form, submit, updateValue] = useForm(
     "post",
     route("projects.user_access", item.id),
     {
       users: item.users_with_access
-        .filter((user) => !hasRoles(user, ["admin", "client"]))
-        .map((i) => i.id.toString()),
-      clients: item.users_with_access
-        .filter(
-          (user) =>
-            hasRoles(user, ["client"]) && user.reason !== "company owner",
-        )
+        .filter((user) => !hasRoles(user, ["admin"]))
         .map((i) => i.id.toString()),
     },
   );
@@ -35,10 +28,9 @@ function ModalForm({ item }) {
 
   useEffect(() => {
     axios
-      .get(route("dropdown.values", ["users", "clients"]))
+      .get(route("dropdown.values", ["users"]))
       .then(({ data }) => {
         setUsers([...data.users]);
-        setClients([...data.clients]);
       })
       .catch(() =>
         alert("Something went wrong, failed to load dropdown values"),
@@ -52,33 +44,17 @@ function ModalForm({ item }) {
         <>
           <Skeleton height={10} width={50} mt={8} radius="xl" />
           <Skeleton height={25} mt={10} radius="xl" />
-
-          <Skeleton height={10} width={50} mt={25} radius="xl" />
-          <Skeleton height={25} mt={10} radius="xl" />
         </>
       ) : (
-        <>
-          <MultiSelect
-            label="Users"
-            placeholder="Select users"
-            searchable
-            value={requestPending ? [] : form.data.users}
-            onChange={(values) => updateValue("users", values)}
-            data={users}
-            error={form.errors.users}
-          />
-
-          <MultiSelect
-            label="Clients"
-            placeholder="Select clients"
-            searchable
-            mt="md"
-            value={requestPending ? [] : form.data.clients}
-            onChange={(values) => updateValue("clients", values)}
-            data={clients}
-            error={form.errors.clients}
-          />
-        </>
+        <MultiSelect
+          label="Users"
+          placeholder="Select users"
+          searchable
+          value={requestPending ? [] : form.data.users}
+          onChange={(values) => updateValue("users", values)}
+          data={users}
+          error={form.errors.users}
+        />
       )}
 
       <Flex justify="flex-end" mt="xl">

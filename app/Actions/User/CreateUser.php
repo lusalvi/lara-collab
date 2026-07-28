@@ -17,7 +17,6 @@ class CreateUser
                 'name' => $data['name'],
                 'job_title' => $data['job_title'],
                 'phone' => $data['phone'],
-                'rate' => $data['rate'] * 100,
                 'email' => $data['email'],
                 'password' => Hash::make($data['password']),
             ]);

@@ -13,7 +13,6 @@ use App\Http\Requests\Task\StoreTaskRequest;
 use App\Http\Requests\Task\UpdateTaskRequest;
 use App\Http\Resources\TaskPriorityResource;
 use App\Models\Label;
-use App\Models\OwnerCompany;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\TaskGroup;
@@ -48,7 +47,6 @@ class TaskController extends Controller
                         ->where('group_id', $group->id)
                         ->searchByQueryString()
                         ->filterByQueryString()
-                        ->when($request->user()->hasRole('client'), fn ($query) => $query->where('hidden_from_clients', false))
                         ->when($request->has('archived'), fn ($query) => $query->onlyArchived())
                         ->when(! $request->has('status'), fn ($query) => $query->whereNull('completed_at'))
                         ->withDefault()
@@ -77,9 +75,6 @@ class TaskController extends Controller
             'taskGroups' => $groups,
             'groupedTasks' => $groupedTasks,
             'openedTask' => $task ? $task->loadDefault() : null,
-            'currency' => [
-                'symbol' => OwnerCompany::with('currency')->first()->currency->symbol,
-            ],
         ]);
     }
 

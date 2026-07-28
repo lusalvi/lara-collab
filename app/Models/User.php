@@ -30,7 +30,6 @@ class User extends Authenticatable implements AuditableContract, CanResetPasswor
         'job_title',
         'avatar',
         'phone',
-        'rate',
         'google_id',
     ];
 
@@ -43,7 +42,6 @@ class User extends Authenticatable implements AuditableContract, CanResetPasswor
     protected $sortable = [
         'name' => 'asc',
         'email',
-        'rate',
     ];
 
     protected $hidden = [
@@ -71,11 +69,6 @@ class User extends Authenticatable implements AuditableContract, CanResetPasswor
         return ! $this->isAdmin();
     }
 
-    public function clientCompanies(): BelongsToMany
-    {
-        return $this->belongsToMany(ClientCompany::class, 'client_company', 'client_id', 'client_company_id');
-    }
-
     /**
      * Projects that user can access
      */
@@ -96,19 +89,9 @@ class User extends Authenticatable implements AuditableContract, CanResetPasswor
         return $users->pluck('id')->contains($this->id);
     }
 
-    public static function userDropdownValues($exclude = ['client']): array
+    public static function userDropdownValues(): array
     {
         return self::orderBy('name')
-            ->withoutRole($exclude)
-            ->get(['id', 'name'])
-            ->map(fn ($i) => ['value' => (string) $i->id, 'label' => $i->name])
-            ->toArray();
-    }
-
-    public static function clientDropdownValues(): array
-    {
-        return self::orderBy('name')
-            ->role('client')
             ->get(['id', 'name'])
             ->map(fn ($i) => ['value' => (string) $i->id, 'label' => $i->name])
             ->toArray();

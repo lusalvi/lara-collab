@@ -21,7 +21,6 @@ class UserResource extends JsonResource
             'job_title' => $this->job_title,
             'avatar' => $this->avatar,
             'phone' => $this->phone,
-            'rate' => $this->rate,
             'roles' => $this->roles->map->only('name')->flatten()->toArray(),
         ];
     }

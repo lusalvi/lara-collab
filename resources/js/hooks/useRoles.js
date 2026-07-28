@@ -23,7 +23,7 @@ export default function useRoles() {
     return roleColors[role];
   };
 
-  const getDropdownValues = ({except = []}) => {
+  const getDropdownValues = ({except = []} = {}) => {
     return roles
       .filter(i => !except.includes(i.name))
       .map(role => ({value: role.name, label: upperFirst(role.name)}));

@@ -46,8 +46,7 @@ export default function TableRowActions({
         </ActionIcon>
       )}
       {((can(archivePermission) && !route().params.archived) ||
-        (can(restorePermission) && route().params.archived)) &&
-        item.name !== "client" && (
+        (can(restorePermission) && route().params.archived)) && (
           <Menu
             withArrow
             position="bottom-end"

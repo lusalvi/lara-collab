@@ -28,11 +28,9 @@ class UpdateTaskRequest extends FormRequest
             'assigned_to_user_id' => ['nullable', 'exists:users,id'],
             'description' => ['nullable'],
             'issue_type' => ['sometimes', 'in:Epica,Historia,Tarea,Subtarea'],
-            'estimation' => ['nullable'],
             'priority_id' => ['nullable', 'exists:task_priorities,id'],
             'start_on' => ['nullable'],
             'due_on' => ['nullable'],
-            'hidden_from_clients' => ['boolean'],
             'subscribed_users' => ['array'],
             'labels' => ['array'],
         ];

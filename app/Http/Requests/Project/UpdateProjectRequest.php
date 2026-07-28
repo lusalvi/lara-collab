@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Project;
 
-use App\Enums\PricingType;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -27,9 +26,7 @@ class UpdateProjectRequest extends FormRequest
         return [
             'name' => ['required', 'string', Rule::unique('projects', 'name')->ignore($this->route('project')->id)],
             'description' => 'string|nullable',
-            'default_pricing_type' => ['nullable', 'string', Rule::enum(PricingType::class)],
-            'client_company_id' => 'required|integer|exists:client_companies,id',
-            'rate' => 'numeric|min:0|nullable',
+            'area_id' => 'required|integer|exists:areas,id',
             'users' => 'array',
         ];
     }

@@ -1,12 +1,11 @@
 import Logo from "@/components/Logo";
 import useNavigationStore from "@/hooks/store/useNavigationStore";
 import { usePage } from "@inertiajs/react";
-import { Group, ScrollArea, Text, rem } from "@mantine/core";
+import { Group, ScrollArea, rem } from "@mantine/core";
 import { useEffect } from "react";
 import NavbarLinksGroup from "./NavbarLinksGroup";
 import UserButton from "./UserButton";
 import classes from "./css/NavBarNested.module.css";
-import AppIcon from "@/components/AppIcon";
 
 export default function Sidebar() {
   const { version } = usePage().props;
@@ -50,25 +49,11 @@ export default function Sidebar() {
         ],
       },
       {
-        label: "Clients",
+        label: "Areas",
         icon: "apartment",
-        active: route().current("clients.*"),
-        opened: route().current("clients.*"),
-        visible: can("view client users") || can("view client companies"),
-        links: [
-          {
-            label: "Users",
-            link: route("clients.users.index"),
-            active: route().current("clients.users.*"),
-            visible: can("view client users"),
-          },
-          {
-            label: "Companies",
-            link: route("clients.companies.index"),
-            active: route().current("clients.companies.*"),
-            visible: can("view client companies"),
-          },
-        ],
+        link: route("areas.index"),
+        active: route().current("areas.*"),
+        visible: can("view areas"),
       },
       {
         label: "Users",
@@ -78,52 +63,12 @@ export default function Sidebar() {
         visible: can("view users"),
       },
       {
-        label: "Invoices",
-        icon: "receipt_long",
-        link: route("invoices.index"),
-        active: route().current("invoices.*"),
-        visible: can("view invoices"),
-      },
-      {
-        label: "Reports",
-        icon: "analytics",
-        active: route().current("reports.*"),
-        opened: route().current("reports.*"),
-        visible: can("view logged time sum report") || can("view daily logged time report") || can("view fixed price sum report"),
-        links: [
-          {
-            label: "Logged time sum",
-            link: route("reports.logged-time.sum"),
-            active: route().current("reports.logged-time.sum"),
-            visible: can("view logged time sum report"),
-          },
-          {
-            label: "Daily logged time",
-            link: route("reports.logged-time.daily"),
-            active: route().current("reports.logged-time.daily"),
-            visible: can("view daily logged time report"),
-          },
-          {
-            label: "Fixed price sum",
-            link: route("reports.fixed-price.sum"),
-            active: route().current("reports.fixed-price.sum"),
-            visible: can("view fixed price sum report"),
-          },
-        ],
-      },
-      {
         label: "Settings",
         icon: "settings",
         active: route().current("settings.*"),
         opened: route().current("settings.*"),
-        visible: can("view owner company") || can("view roles") || can("view labels"),
+        visible: can("view roles") || can("view labels"),
         links: [
-          {
-            label: "Company",
-            link: route("settings.company.edit"),
-            active: route().current("settings.company.*"),
-            visible: can("view owner company"),
-          },
           {
             label: "Roles",
             link: route("settings.roles.index"),

@@ -24,10 +24,9 @@ class MyWorkTaskController extends Controller
         return Inertia::render('MyWork/Tasks/Index', [
             'projects' => Project::whereIn('id', $projects->pluck('id'))
                 ->with([
-                    'clientCompany:id,name',
+                    'area:id,name',
                     'tasks' => function ($query) use ($user, $prioritySort) {
-                        $query->when($user->hasRole('client'), fn ($query) => $query->where('hidden_from_clients', false))
-                            ->where('assigned_to_user_id', $user->id)
+                        $query->where('assigned_to_user_id', $user->id)
                             ->whereNull('completed_at')
                             ->withoutGlobalScope('ordered')
                             ->when($prioritySort, function ($query, $direction) {

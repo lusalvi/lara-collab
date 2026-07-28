@@ -18,16 +18,12 @@ class DatabaseSeeder extends Seeder
             PermissionSeeder::class,
             LabelSeeder::class,
             TaskPrioritySeeder::class,
-            CurrencySeeder::class,
-            CountrySeeder::class,
         ]);
 
         if ($this->command->confirm('Seed development data?', false)) {
             $this->call([
                 UserSeeder::class,
-                OwnerCompanySeeder::class,
-                ClientSeeder::class,
-                ClientCompanySeeder::class,
+                AreaSeeder::class,
             ]);
 
             auth()->setUser(User::role('admin')->first());

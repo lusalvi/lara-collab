@@ -64,22 +64,6 @@ const createTaskWebSocketUpdatesSlice = (set, get) => ({
       state.tasks[task.group_id][index].attachments = state.tasks[task.group_id][index].attachments.filter(i => i.id !== attachmentId);
     }));
   },
-  addTimeLogLocally: (timeLog) => {
-    return set(produce(state => {
-      const task = get().findTask(timeLog.task_id);
-      const index = state.tasks[task.group_id].findIndex(i => i.id === task.id);
-
-      state.tasks[task.group_id][index].time_logs = [...state.tasks[task.group_id][index].time_logs, timeLog];
-    }));
-  },
-  removeTimeLogLocally: (taskId, timeLogId) => {
-    return set(produce(state => {
-      const task = get().findTask(taskId);
-      const index = state.tasks[task.group_id].findIndex(i => i.id === taskId);
-
-      state.tasks[task.group_id][index].time_logs = state.tasks[task.group_id][index].time_logs.filter(i => i.id !== timeLogId);
-    }));
-  },
   reorderTaskLocally: (groupId, fromIndex, toIndex) => {
     const result = reorder(get().tasks[groupId], fromIndex, toIndex);
     return set(produce(state => { state.tasks[groupId] = result }));

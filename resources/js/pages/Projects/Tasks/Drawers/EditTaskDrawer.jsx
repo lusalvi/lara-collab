@@ -4,7 +4,6 @@ import useTaskDrawerStore from '@/hooks/store/useTaskDrawerStore';
 import useTasksStore from '@/hooks/store/useTasksStore';
 import useWebSockets from '@/hooks/useWebSockets';
 import { date } from '@/utils/datetime';
-import { hasRoles } from '@/utils/user';
 import { usePage } from '@inertiajs/react';
 import {
   Breadcrumbs,
@@ -12,7 +11,6 @@ import {
   Drawer,
   Group,
   MultiSelect,
-  NumberInput,
   Select,
   Text,
   TextInput,
@@ -24,7 +22,6 @@ import { useEffect, useRef, useState } from 'react';
 import Comments from './Comments';
 import LabelsDropdown from './LabelsDropdown';
 import PriorityDropdown from './PriorityDropdown';
-import Timer from './Timer';
 import classes from './css/TaskDrawer.module.css';
 
 export function EditTaskDrawer() {
@@ -39,7 +36,6 @@ export function EditTaskDrawer() {
     labels,
     priorities,
     openedTask,
-    currency,
     auth: { user },
   } = usePage().props;
 
@@ -55,10 +51,8 @@ export function EditTaskDrawer() {
     name: '',
     description: '',
     issue_type: '',
-    estimation: 0,
     priority_id: '',
     due_on: '',
-    hidden_from_clients: false,
     subscribed_users: [],
     labels: [],
   });
@@ -77,7 +71,6 @@ export function EditTaskDrawer() {
         name: task?.name || '',
         description: task?.description || '',
         issue_type: task?.issue_type || '',
-        estimation: task?.estimation || 0,
         priority_id: task?.priority_id || '',
         start_on: task?.start_on
           ? dayjs(
@@ -89,8 +82,6 @@ export function EditTaskDrawer() {
               typeof task.due_on === 'string' ? task.due_on.split('T')[0] : task.due_on
             ).toDate()
           : '',
-        hidden_from_clients:
-          task?.hidden_from_clients !== undefined ? task.hidden_from_clients : false,
         subscribed_users: (task?.subscribed_users || []).map(i => i.id.toString()),
         labels: (task?.labels || []).map(i => i.id),
       });
@@ -124,7 +115,7 @@ export function EditTaskDrawer() {
 
   const onBlurUpdate = property => {
     if (data.name.length > 0) {
-      updateTaskProperty(task, property, data[property]);
+        updateTaskProperty(task, property, data[property]);
     }
   };
 
@@ -295,18 +286,6 @@ export function EditTaskDrawer() {
                 }}
                 mt='md'
               />
-
-              {!hasRoles(user, ['client']) && (
-                <Checkbox
-                  label='Hidden from clients'
-                  mt='md'
-                  checked={data.hidden_from_clients}
-                  onChange={event =>
-                    updateValue('hidden_from_clients', event.currentTarget.checked)
-                  }
-                  disabled={!can('edit task')}
-                />
-              )}
 
               <MultiSelect
                 label='Subscribers'

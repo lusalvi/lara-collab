@@ -1,6 +1,5 @@
 import createTaskAttachmentsSlice from '@/hooks/store/tasks/TaskAttachmentsSlice';
 import createTaskCommentsSlice from '@/hooks/store/tasks/TaskCommentsSlice';
-import createTaskTimeLogsSlice from '@/hooks/store/tasks/TaskTimeLogsSlice';
 import createTaskWebSocketUpdatesSlice from '@/hooks/store/tasks/TaskWebSocketUpdatesSlice';
 import { move, reorder } from '@/utils/reorder';
 import axios from 'axios';
@@ -9,7 +8,6 @@ import { create } from 'zustand';
 
 const useTasksStore = create((set, get) => ({
   ...createTaskAttachmentsSlice(set, get),
-  ...createTaskTimeLogsSlice(set, get),
   ...createTaskCommentsSlice(set, get),
   ...createTaskWebSocketUpdatesSlice(set, get),
 

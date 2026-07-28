@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Models\ClientCompany;
+use App\Models\Area;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\TaskGroup;
@@ -28,7 +28,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Route::model('company', ClientCompany::class);
+        Route::model('area', Area::class);
 
         Route::model('project', Project::class, function ($value) {
             return Project::where('id', $value)

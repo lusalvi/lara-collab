@@ -13,7 +13,6 @@ class UpdateUser
             'name' => $data['name'],
             'job_title' => $data['job_title'],
             'phone' => $data['phone'],
-            'rate' => $data['rate'] * 100,
             'email' => $data['email'],
         ];
 

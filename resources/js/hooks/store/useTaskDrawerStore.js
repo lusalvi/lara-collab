@@ -8,6 +8,7 @@ const useTaskDrawerStore = create((set, get) => ({
     group_id: null,
     issue_type: '',
     parent_task_id: null,
+    parent_issue_type: null,
   },
   edit: {
     opened: false,
@@ -17,13 +18,23 @@ const useTaskDrawerStore = create((set, get) => ({
     group_id = null,
     issue_type = '',
     parent_task_id = null,
+    parent_issue_type = null,
   } = {}) => {
+
+    console.log('OPEN CREATE TASK', {
+      group_id,
+      issue_type,
+      parent_task_id,
+      parent_issue_type,
+    });
+
     return set(
       produce(state => {
         state.create.opened = true;
         state.create.group_id = group_id;
         state.create.issue_type = issue_type;
         state.create.parent_task_id = parent_task_id;
+        state.create.parent_issue_type = parent_issue_type;
       })
     );
   },
@@ -34,6 +45,7 @@ const useTaskDrawerStore = create((set, get) => ({
         state.create.group_id = null;
         state.create.issue_type = '';
         state.create.parent_task_id = null;
+        state.create.parent_issue_type = null;
       })
     );
   },

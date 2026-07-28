@@ -1,5 +1,4 @@
-import { Badge, Checkbox, Group, Text } from '@mantine/core';
-
+import { Badge, Checkbox, Group, Text, ActionIcon } from '@mantine/core';
 import IssueTypeIcon from '@/components/IssueTypeIcon';
 
 import classes from './ListView.module.css';
@@ -10,7 +9,6 @@ import TaskActions from './Components/TaskActions';
 import TaskStatusDropdown from './Components/TaskStatusDropdown';
 import { IconChevronDown, IconChevronRight, IconPlus } from '@tabler/icons-react';
 import useTaskDrawerStore from '@/hooks/store/useTaskDrawerStore';
-
 export default function TaskRow({ task, hasChildren, collapsed, onToggle }) {
   const { openEditTask, openCreateTask } = useTaskDrawerStore();
 
@@ -68,22 +66,27 @@ export default function TaskRow({ task, hasChildren, collapsed, onToggle }) {
             <Text lineClamp={1}>{task.name}</Text>
           </Group>
 
-          <div
-            className={classes.summaryAction}
-            onClick={e => {
-              e.stopPropagation();
+          {task.issue_type !== 'Subtarea' && (
+            <div
+              className={classes.summaryAction}
+              onClick={e => {
+                e.stopPropagation();
 
-              openCreateTask({
-                issue_type: 'Subtarea',
-                parent_task_id: task.id,
-              });
-            }}
-          >
-            <IconPlus
-              size={16}
-              stroke={2}
-            />
-          </div>
+                openCreateTask({
+                  group_id: task.group_id,
+                  parent_task_id: task.id,
+                  parent_issue_type: task.issue_type,
+                });
+              }}
+            >
+              <ActionIcon
+                variant='subtle'
+                size='sm'
+              >
+                <IconPlus size={16} />
+              </ActionIcon>
+            </div>
+          )}
         </div>
       </div>
 

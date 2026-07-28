@@ -62,8 +62,20 @@ export function CreateTaskDrawer() {
   );
 
   useEffect(() => {
-    updateValue({ ...initial });
-  }, [create.opened]);
+    console.log('SETTING VALUES');
+
+    updateValue('group_id', create.group_id ? create.group_id.toString() : '');
+    updateValue('parent_task_id', create.parent_task_id);
+    updateValue('issue_type', create.issue_type || '');
+
+    console.log('STORE', create);
+  }, [create]);
+
+  useEffect(() => {
+    if (create.parent_issue_type === 'Tarea') {
+      updateValue('issue_type', 'Subtarea');
+    }
+  }, [create.parent_issue_type]);
 
   const closeDrawer = (force = false) => {
     if (force || (JSON.stringify(form.data) === JSON.stringify(initial) && !form.processing)) {
@@ -80,12 +92,35 @@ export function CreateTaskDrawer() {
     }
   };
 
+  const issueTypeOptions = {
+    Epica: [
+      { value: 'Historia', label: 'Historia' },
+      { value: 'Tarea', label: 'Tarea' },
+      { value: 'Subtarea', label: 'Subtarea' },
+    ],
+    Historia: [
+      { value: 'Tarea', label: 'Tarea' },
+      { value: 'Subtarea', label: 'Subtarea' },
+    ],
+    Tarea: [{ value: 'Subtarea', label: 'Subtarea' }],
+  };
+
+  const availableIssueTypes = create.parent_issue_type
+    ? (issueTypeOptions[create.parent_issue_type] ?? [])
+    : [
+        { value: 'Epica', label: 'Épica' },
+        { value: 'Historia', label: 'Historia' },
+        { value: 'Tarea', label: 'Tarea' },
+        { value: 'Subtarea', label: 'Subtarea' },
+      ];
+
   const removeAttachment = index => {
     const files = [...form.data.attachments];
     files.splice(index, 1);
     updateValue('attachments', files);
   };
-
+  console.log('CREATE', create);
+  console.log('FORM', form.data);
   return (
     <Drawer
       opened={create.opened}
@@ -193,21 +228,15 @@ export function CreateTaskDrawer() {
             error={form.errors.group_id}
           />
 
-          {!create.parent_task_id && (
-            <Select
-              label='Issue type'
-              placeholder='Select issue type'
-              value={form.data.issue_type}
-              onChange={value => updateValue('issue_type', value || '')}
-              data={[
-                { value: 'Epica', label: 'Épica' },
-                { value: 'Historia', label: 'Historia' },
-                { value: 'Tarea', label: 'Tarea' },
-                { value: 'Subtarea', label: 'Subtarea' },
-              ]}
-              error={form.errors.issue_type}
-            />
-          )}
+          <Select
+            label='Issue type'
+            placeholder='Select issue type'
+            value={form.data.issue_type}
+            onChange={value => updateValue('issue_type', value || '')}
+            data={availableIssueTypes}
+            disabled={create.parent_issue_type === 'Tarea'}
+            error={form.errors.issue_type}
+          />
 
           <Select
             label='Assignee'

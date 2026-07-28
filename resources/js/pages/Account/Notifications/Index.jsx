@@ -1,23 +1,42 @@
 import EmptyWithIcon from "@/components/EmptyWithIcon";
 import Notification from "@/components/Notification";
+import { openConfirmModal } from "@/components/ConfirmModal";
 import useNotificationsStore from "@/hooks/store/useNotificationsStore";
 import ContainerBox from "@/layouts/ContainerBox";
 import Layout from "@/layouts/MainLayout";
 import { day, diffForHumans } from "@/utils/datetime";
 import { redirectToUrl } from "@/utils/route";
-import { usePage } from "@inertiajs/react";
-import { Center, Grid, Group, Stack, Text, Title, UnstyledButton } from "@mantine/core";
-import { IconMessage } from "@tabler/icons-react";
+import { router, usePage } from "@inertiajs/react";
+import { ActionIcon, Center, Grid, Group, Stack, Text, Title, UnstyledButton } from "@mantine/core";
+import { IconMessage, IconTrash } from "@tabler/icons-react";
 import classes from "./css/Index.module.css";
 
 const NotificationsIndex = () => {
   const { groups } = usePage().props;
-  const { markAsRead } = useNotificationsStore();
+  const { markAsRead, deleteRead } = useNotificationsStore();
   const dates = Object.keys(groups);
+  const hasReadNotifications = Object.values(groups)
+    .flat()
+    .some((item) => item.read_at !== null);
 
   const open = (notification) => {
     if (notification.read_at === null) markAsRead(notification);
     redirectToUrl(notification.link);
+  };
+
+  const deleteAllRead = () => {
+    openConfirmModal({
+      type: "danger",
+      title: "¿Eliminar notificaciones?",
+      content: "Se eliminarán todas las notificaciones leídas. Esta acción no se puede deshacer.",
+      confirmLabel: "Eliminar",
+      cancelLabel: "Cancelar",
+      confirmProps: { color: "red" },
+      onConfirm: async () => {
+        await deleteRead();
+        router.reload({ only: ["groups"] });
+      },
+    });
   };
 
   return (
@@ -26,7 +45,19 @@ const NotificationsIndex = () => {
         <Grid.Col span="auto">
           <Title order={1}>Notificaciones</Title>
         </Grid.Col>
-        <Grid.Col span="content"></Grid.Col>
+        <Grid.Col span="content">
+          {hasReadNotifications && (
+            <ActionIcon
+              variant="subtle"
+              color="gray"
+              size="lg"
+              onClick={deleteAllRead}
+              aria-label="Eliminar notificaciones vistas"
+            >
+              <IconTrash size={18} />
+            </ActionIcon>
+          )}
+        </Grid.Col>
       </Grid>
 
       <ContainerBox maw={550}>

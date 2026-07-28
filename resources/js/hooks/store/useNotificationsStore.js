@@ -49,6 +49,18 @@ const useNotificationsStore = create((set) => ({
       console.warn("Failed to set notifications as read", e);
     }
   },
+  deleteRead: async () => {
+    try {
+      await axios.delete(route("notifications.destroy.read"));
+
+      return set(produce(state => {
+        state.notifications = state.notifications.filter(i => i.read_at === null);
+      }));
+    } catch (e) {
+      console.warn("Failed to delete read notifications", e);
+    }
+  },
+
 }));
 
 export default useNotificationsStore;

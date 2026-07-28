@@ -18,7 +18,7 @@ class DashboardController extends Controller
         return Inertia::render('Dashboard/Index', [
             'projects' => Project::whereIn('id', $projectIds)
                 ->with([
-                    'clientCompany:id,name',
+                    'area:id,name',
                 ])
                 ->withCount([
                     'tasks AS all_tasks_count',

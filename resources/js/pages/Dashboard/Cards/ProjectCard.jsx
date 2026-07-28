@@ -38,7 +38,7 @@ export function ProjectCard({ project }) {
             </Title>
           </Group>
           <Text fz="xs" fw={700} c="dimmed" mb={4}>
-            {project.client_company.name}
+            {project.area.name}
           </Text>
           <div>
             <Tooltip label="Completed tasks" openDelay={500} withArrow>

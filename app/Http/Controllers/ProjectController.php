@@ -5,8 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Project\StoreProjectRequest;
 use App\Http\Requests\Project\UpdateProjectRequest;
 use App\Http\Resources\Project\ProjectResource;
-use App\Models\ClientCompany;
-use App\Models\Currency;
+use App\Models\Area;
 use App\Models\Project;
 use App\Models\User;
 use App\Services\ProjectService;
@@ -26,13 +25,11 @@ class ProjectController extends Controller
             'items' => ProjectResource::collection(
                 Project::searchByQueryString()
                     ->when($request->user()->isNotAdmin(), function ($query) {
-                        $query->whereHas('clientCompany.clients', fn ($query) => $query->where('users.id', auth()->id()))
-                            ->orWhereHas('users', fn ($query) => $query->where('id', auth()->id()));
+                        $query->whereHas('users', fn ($query) => $query->where('id', auth()->id()));
                     })
                     ->when($request->has('archived'), fn ($query) => $query->onlyArchived())
                     ->with([
-                        'clientCompany:id,name',
-                        'clientCompany.clients:id,name,avatar',
+                        'area:id,name',
                         'users:id,name,avatar',
                     ])
                     ->withCount([
@@ -52,9 +49,8 @@ class ProjectController extends Controller
     {
         return Inertia::render('Projects/Create', [
             'dropdowns' => [
-                'companies' => ClientCompany::dropdownValues(),
+                'areas' => Area::dropdownValues(),
                 'users' => User::userDropdownValues(),
-                'currencies' => Currency::dropdownValues(['with' => ['clientCompanies:id,currency_id']]),
             ],
         ]);
     }
@@ -84,9 +80,8 @@ class ProjectController extends Controller
         return Inertia::render('Projects/Edit', [
             'item' => $project,
             'dropdowns' => [
-                'companies' => ClientCompany::dropdownValues(),
+                'areas' => Area::dropdownValues(),
                 'users' => User::userDropdownValues(),
-                'currencies' => Currency::dropdownValues(['with' => ['clientCompanies:id,currency_id']]),
             ],
         ]);
     }
@@ -133,12 +128,7 @@ class ProjectController extends Controller
     {
         $this->authorize('editUserAccess', $project);
 
-        $userIds = array_merge(
-            $request->get('users', []),
-            $request->get('clients', [])
-        );
-
-        (new ProjectService($project))->updateUserAccess($userIds);
+        (new ProjectService($project))->updateUserAccess($request->get('users', []));
 
         return redirect()->back();
     }

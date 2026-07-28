@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Models\ClientCompany;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Support\Collection;
@@ -11,22 +10,17 @@ class PermissionService
 {
     public static $permissionsByRole = [
         'admin' => [
-            'User' => ['view users', 'view user rate', 'create user', 'edit user', 'archive user', 'restore user'],
+            'User' => ['view users', 'create user', 'edit user', 'archive user', 'restore user'],
             'Label' => ['view labels', 'create label', 'edit label', 'archive label', 'restore label'],
             'Task Priority' => ['view task priority', 'create task priority', 'edit task priority', 'delete task priority', 'restore task priority'],
             'Role' => ['view roles', 'create role', 'edit role', 'archive role', 'restore role'],
-            'Owner Company' => ['view owner company', 'edit owner company'],
-            'Client User' => ['view client users', 'create client user', 'edit client user', 'archive client user', 'restore client user'],
-            'Client Company' => ['view client companies', 'create client company', 'edit client company', 'archive client company', 'restore client company'],
+            'Area' => ['view areas', 'create area', 'edit area', 'archive area', 'restore area'],
             'Project' => ['view projects', 'view project', 'create project', 'edit project', 'archive project', 'restore project', 'edit project user access'],
             'TaskGroups' => ['create task group', 'edit task group', 'archive task group', 'restore task group', 'reorder task group'],
             'Notes' => ['view notes', 'create note', 'edit note', 'delete note'],
             'Tasks' => [
-                'view tasks', 'create task', 'edit task', 'archive task', 'restore task', 'reorder task', 'complete task', 'add time log', 'delete time log',
-                'view time logs', 'view comments',
+                'view tasks', 'create task', 'edit task', 'archive task', 'restore task', 'reorder task', 'complete task', 'view comments',
             ],
-            'Invoices' => ['view invoices', 'create invoice', 'edit invoice', 'archive invoice', 'restore invoice', 'change invoice status', 'download invoice', 'print invoice'],
-            'Reports' => ['view logged time sum report', 'view daily logged time report', 'view fixed price sum report'],
             'Activities' => ['view activities'],
         ],
         'manager' => [
@@ -35,39 +29,28 @@ class PermissionService
             'TaskGroups' => ['create task group', 'edit task group', 'archive task group', 'restore task group', 'reorder task group'],
             'Notes' => ['view notes', 'create note', 'edit note', 'delete note'],
             'Tasks' => [
-                'view tasks', 'create task', 'edit task', 'archive task', 'restore task', 'reorder task', 'complete task', 'add time log', 'delete time log',
-                'view time logs', 'view comments',
+                'view tasks', 'create task', 'edit task', 'archive task', 'restore task', 'reorder task', 'complete task', 'view comments',
             ],
-            'Reports' => ['view logged time sum report', 'view daily logged time report', 'view fixed price sum report'],
         ],
         'developer' => [
             'Project' => ['view projects', 'view project'],
             'Notes' => ['view notes', 'create note', 'edit note'],
             'Tasks' => [
-                'view tasks', 'create task', 'edit task', 'restore task', 'reorder task', 'complete task', 'add time log', 'delete time log',
-                'view time logs', 'view comments',
+                'view tasks', 'create task', 'edit task', 'restore task', 'reorder task', 'complete task', 'view comments',
             ],
         ],
         'qa engineer' => [
             'Project' => ['view projects', 'view project'],
             'Notes' => ['view notes', 'create note', 'edit note'],
             'Tasks' => [
-                'view tasks', 'create task', 'edit task', 'add time log', 'delete time log', 'view time logs', 'view comments',
+                'view tasks', 'create task', 'edit task', 'view comments',
             ],
         ],
         'designer' => [
             'Project' => ['view projects', 'view project'],
             'Notes' => ['view notes', 'create note', 'edit note'],
             'Tasks' => [
-                'view tasks', 'create task', 'edit task', 'restore task', 'reorder task', 'complete task', 'add time log', 'delete time log',
-                'view time logs', 'view comments',
-            ],
-        ],
-        'client' => [
-            'Project' => ['view projects', 'view project'],
-            'Notes' => ['view notes'],
-            'Tasks' => [
-                'view tasks', 'create task', 'view time logs', 'view comments',
+                'view tasks', 'create task', 'edit task', 'restore task', 'reorder task', 'complete task', 'view comments',
             ],
         ],
     ];
@@ -90,12 +73,6 @@ class PermissionService
             ->get(['id', 'name', 'avatar'])
             ->map(fn ($user) => [...$user->toArray(), 'reason' => 'admin']);
 
-        $owners = $project
-            ->clientCompany
-            ->clients
-            ->load('roles:id,name')
-            ->map(fn ($user) => [...$user->toArray(), 'reason' => 'company owner']);
-
         $givenAccess = $project
             ->users
             ->load('roles:id,name')
@@ -103,7 +80,6 @@ class PermissionService
 
         return self::$usersWithAccessToProject[$project->id] = collect([
             ...$admins,
-            ...$owners,
             ...$givenAccess,
         ])
             ->unique('id')
@@ -121,16 +97,8 @@ class PermissionService
         if ($user->hasRole('admin')) {
             return Project::all();
         }
-        $projects = collect($user->projects->toArray());
-        $user->load('clientCompanies.projects');
 
-        return self::$projectsThatUserCanAccess = $projects
-            ->merge(
-                $user
-                    ->clientCompanies
-                    ->map(fn (ClientCompany $company) => $company->projects->toArray())
-                    ->collapse()
-            )
+        return self::$projectsThatUserCanAccess = collect($user->projects->toArray())
             ->unique('id')
             ->sortBy('name')
             ->values();

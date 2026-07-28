@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::table('tasks', function (Blueprint $table) {
             $table->unsignedTinyInteger('priority')
                 ->nullable()
-                ->after('estimation');
+                ->after('due_on');
         });
     }
 

@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('avatar')->nullable();
             $table->string('phone')->nullable();
             $table->string('job_title')->nullable();
-            $table->unsignedInteger('rate')->nullable();
             $table->string('google_id')->nullable();
             $table->rememberToken();
             $table->timestamps();

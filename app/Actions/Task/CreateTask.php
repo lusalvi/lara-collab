@@ -2,7 +2,6 @@
 
 namespace App\Actions\Task;
 
-use App\Enums\PricingType;
 use App\Events\Task\AttachmentsUploaded;
 use App\Events\Task\TaskCreated;
 use App\Models\Project;
@@ -32,12 +31,7 @@ class CreateTask
                 'description' => $data['description'],
                 'start_on' => $data['start_on'],
                 'due_on' => $data['due_on'],
-                'estimation' => $data['estimation'],
                 'priority_id' => $data['priority_id'] ?? null,
-                'pricing_type' => $project->default_pricing_type ?? PricingType::HOURLY,
-                'fixed_price' => null,
-                'hidden_from_clients' => $data['hidden_from_clients'],
-                'billable' => true,
                 'completed_at' => null,
             ]);
 

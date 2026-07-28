@@ -3,7 +3,7 @@ import { Table, Text } from "@mantine/core";
 
 export default function TableRow({ item }) {
   const isLocked = (role) => {
-    return ["admin", "client"].includes(role);
+    return role === "admin";
   };
 
   return (

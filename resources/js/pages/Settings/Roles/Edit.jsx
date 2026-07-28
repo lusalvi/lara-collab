@@ -60,18 +60,16 @@ const RoleEdit = () => {
 
       <ContainerBox maw={700}>
         <form onSubmit={submit}>
-          {form.data.name !== "client" && (
-            <TextInput
-              label="Name"
-              placeholder="Role name"
-              required
-              value={form.data.name}
-              onChange={(e) => updateValue("name", e.target.value)}
-              error={form.errors.name}
-            />
-          )}
+          <TextInput
+            label="Name"
+            placeholder="Role name"
+            required
+            value={form.data.name}
+            onChange={(e) => updateValue("name", e.target.value)}
+            error={form.errors.name}
+          />
 
-          <Title order={3} mt={form.data.name !== "client" ? "xl" : ""}>
+          <Title order={3} mt="xl">
             Permissions
           </Title>
 

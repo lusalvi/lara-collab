@@ -9,7 +9,7 @@ export default function useWebSockets() {
   const { addNotification } = useNotificationsStore();
   const {
     addTaskLocally, updateTaskLocally, removeTaskLocally, restoreTaskLocally, addCommentLocally, addAttachmentsLocally,
-    removeAttachmentLocally, addTimeLogLocally, removeTimeLogLocally, reorderTaskLocally, moveTaskLocally,
+    removeAttachmentLocally, reorderTaskLocally, moveTaskLocally,
   } = useTasksStore();
   const {
     addTaskGroupLocally, updateTaskGroupLocally, removeTaskGroupLocally, restoreTaskGroupLocally, reorderTaskGroupLocally,
@@ -40,8 +40,6 @@ export default function useWebSockets() {
       .listen('Task\\CommentCreated', (e) => addCommentLocally(e.comment))
       .listen('Task\\AttachmentsUploaded', (e) => addAttachmentsLocally(e.attachments))
       .listen('Task\\AttachmentDeleted', (e) => removeAttachmentLocally(e.taskId, e.attachmentId))
-      .listen('Task\\TimeLogCreated', (e) => addTimeLogLocally(e.timeLog))
-      .listen('Task\\TimeLogDeleted', (e) => removeTimeLogLocally(e.taskId, e.timeLogId))
       .listen('Task\\TaskOrderChanged', (e) => reorderTaskLocally(e.groupId, e.fromIndex, e.toIndex))
       .listen('Task\\TaskGroupChanged', (e) => moveTaskLocally(e.fromGroupId, e.toGroupId, e.fromIndex, e.toIndex))
       .listen('TaskGroup\\TaskGroupCreated', (e) => addTaskGroupLocally(e.taskGroup))

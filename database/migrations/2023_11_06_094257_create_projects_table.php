@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('client_company_id');
+            $table->unsignedBigInteger('area_id');
             $table->string('name');
             $table->text('description')->nullable();
             $table->timestamps();
             $table->archivedAt();
 
-            $table->foreign('client_company_id')->references('id')->on('client_companies');
+            $table->foreign('area_id')->references('id')->on('areas');
         });
     }
 

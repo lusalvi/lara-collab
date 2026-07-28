@@ -16,7 +16,6 @@ import {
   Grid,
   Group,
   MultiSelect,
-  NumberInput,
   PasswordInput,
   Text,
   TextInput,
@@ -33,7 +32,6 @@ const UserEdit = () => {
     job_title: item.job_title,
     name: item.name,
     phone: item.phone || "",
-    rate: item.rate / 100,
     email: item.email,
     password: "",
     password_confirmation: "",
@@ -116,31 +114,18 @@ const UserEdit = () => {
             mt="md"
             value={form.data.roles}
             onChange={(values) => updateValue("roles", values)}
-            data={getDropdownValues({ except: ["client"] })}
+            data={getDropdownValues()}
             error={form.errors.roles}
           />
 
-          <Group grow mt="md">
-            <TextInput
-              label="Phone"
-              placeholder="Users phone number"
-              value={form.data.phone}
-              onChange={(e) => updateValue("phone", e.target.value)}
-              error={form.errors.phone}
-            />
-
-            <NumberInput
-              label="Hourly rate"
-              allowNegative={false}
-              clampBehavior="strict"
-              decimalScale={2}
-              fixedDecimalScale={true}
-              prefix="$"
-              value={form.data.rate}
-              onChange={(value) => updateValue("rate", value)}
-              error={form.errors.rate}
-            />
-          </Group>
+          <TextInput
+            label="Phone"
+            placeholder="Users phone number"
+            mt="md"
+            value={form.data.phone}
+            onChange={(e) => updateValue("phone", e.target.value)}
+            error={form.errors.phone}
+          />
 
           <Divider mt="xl" mb="md" label="Login credentials" labelPosition="center" />
 

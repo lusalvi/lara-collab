@@ -2,27 +2,21 @@
 
 use App\Http\Controllers\Account\NotificationController;
 use App\Http\Controllers\Account\ProfileController;
-use App\Http\Controllers\Client\ClientCompanyController;
-use App\Http\Controllers\Client\ClientUserController;
+use App\Http\Controllers\Area\AreaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DropdownValuesController;
-use App\Http\Controllers\Invoice\InvoiceTasksController;
-use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\MyWork\ActivityController;
 use App\Http\Controllers\MyWork\MyWorkTaskController;
 use App\Http\Controllers\Note\NoteController;
 use App\Http\Controllers\ProjectCalendarController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectTimelineController;
-use App\Http\Controllers\ReportController;
 use App\Http\Controllers\Settings\LabelController;
-use App\Http\Controllers\Settings\OwnerCompanyController;
 use App\Http\Controllers\Settings\RoleController;
 use App\Http\Controllers\Settings\TaskPriorityController;
 use App\Http\Controllers\Task\AttachmentController;
 use App\Http\Controllers\Task\CommentController;
 use App\Http\Controllers\Task\GroupController;
-use App\Http\Controllers\Task\TimeLogController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -79,14 +73,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::delete('attachments/{attachment}', [AttachmentController::class, 'destroy'])->name('attachments.destroy');
         })->scopeBindings();
 
-        // TIME LOGS
-        Route::group(['prefix' => '{project}/tasks/{task}', 'as' => 'tasks.'], function () {
-            Route::post('time-log', [TimeLogController::class, 'store'])->name('time-logs.store');
-            Route::delete('time-log/{timeLog}', [TimeLogController::class, 'destroy'])->name('time-logs.destroy');
-            Route::post('time-log/timer/start', [TimeLogController::class, 'startTimer'])->name('time-logs.timer.start');
-            Route::post('time-log/{timeLog}/timer/stop', [TimeLogController::class, 'stopTimer'])->name('time-logs.timer.stop');
-        })->scopeBindings();
-
         // COMMENTS
         Route::group(['prefix' => '{project}/tasks/{task}', 'as' => 'tasks.'], function () {
             Route::get('comment', [CommentController::class, 'index'])->name('comments');
@@ -100,41 +86,16 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('activity', [ActivityController::class, 'index'])->name('activity.index');
     });
 
-    // Clients
-    Route::group(['prefix' => 'clients', 'as' => 'clients.'], function () {
-        Route::resource('users', ClientUserController::class)->except(['show']);
-        Route::post('users/{userId}/restore', [ClientUserController::class, 'restore'])->name('users.restore');
-
-        Route::resource('companies', ClientCompanyController::class)->except(['show']);
-        Route::post('companies/{companyId}/restore', [ClientCompanyController::class, 'restore'])->name('companies.restore');
-    });
+    // Areas
+    Route::resource('areas', AreaController::class)->except(['show']);
+    Route::post('areas/{areaId}/restore', [AreaController::class, 'restore'])->name('areas.restore');
 
     // Users
     Route::resource('users', UserController::class)->except(['show']);
     Route::post('users/{userId}/restore', [UserController::class, 'restore'])->name('users.restore');
 
-    // Invoices
-    Route::resource('invoices', InvoiceController::class)->except(['show']);
-    Route::group(['prefix' => 'invoices', 'as' => 'invoices.'], function () {
-        Route::get('tasks', [InvoiceTasksController::class, 'index'])->name('tasks');
-        Route::put('{invoice}/status', [InvoiceController::class, 'setStatus'])->name('status');
-        Route::post('{invoice}/restore', [InvoiceController::class, 'restore'])->name('restore');
-        Route::get('{invoice}/download', [InvoiceController::class, 'download'])->name('download');
-        Route::get('{invoice}/pdf', [InvoiceController::class, 'pdf'])->name('pdf');
-    });
-
-    // Reports
-    Route::group(['prefix' => 'reports', 'as' => 'reports.'], function () {
-        Route::get('logged-time/sum', [ReportController::class, 'loggedTimeSum'])->name('logged-time.sum');
-        Route::get('logged-time/daily', [ReportController::class, 'dailyLoggedTime'])->name('logged-time.daily');
-        Route::get('fixed-price/sum', [ReportController::class, 'fixedPriceSum'])->name('fixed-price.sum');
-    });
-
     // Settings
     Route::group(['prefix' => 'settings', 'as' => 'settings.'], function () {
-        Route::get('company', [OwnerCompanyController::class, 'edit'])->name('company.edit');
-        Route::put('company', [OwnerCompanyController::class, 'update'])->name('company.update');
-
         Route::resource('roles', RoleController::class)->except(['show']);
         Route::post('roles/{roleId}/restore', [RoleController::class, 'restore'])->name('roles.restore');
 

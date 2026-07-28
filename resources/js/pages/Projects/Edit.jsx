@@ -11,23 +11,20 @@ import {
   Grid,
   Group,
   MultiSelect,
-  NumberInput,
   Select,
   TextInput,
   Textarea,
   Title,
 } from '@mantine/core';
-import { useEffect, useState } from 'react';
 
-const ProjectEdit = ({ dropdowns: { companies, users, currencies } }) => {
+const ProjectEdit = ({ dropdowns: { areas, users } }) => {
   const { item } = usePage().props;
 
   const [form, submit, updateValue] = useForm('post', route('projects.update', item.id), {
     _method: 'put',
     name: item.name,
     description: item.description || '',
-    client_company_id: item.client_company_id || '',
-    rate: item.rate / 100 || 0,
+    area_id: item.area_id || '',
     users: item.users.map(i => i.id.toString()),
   });
 
@@ -83,14 +80,14 @@ const ProjectEdit = ({ dropdowns: { companies, users, currencies } }) => {
           />
 
           <Select
-            label='Company requesting work'
-            placeholder='Select company'
+            label='Area'
+            placeholder='Select area'
             required
             mt='md'
-            value={form.data.client_company_id?.toString()}
-            onChange={value => updateValue('client_company_id', value)}
-            data={companies}
-            error={form.errors.client_company_id}
+            value={form.data.area_id?.toString()}
+            onChange={value => updateValue('area_id', value)}
+            data={areas}
+            error={form.errors.area_id}
           />
 
           <MultiSelect

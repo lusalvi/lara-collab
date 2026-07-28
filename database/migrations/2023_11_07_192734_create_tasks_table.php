@@ -17,14 +17,10 @@ return new class extends Migration
             $table->foreignId('group_id');
             $table->foreignId('created_by_user_id')->nullable();
             $table->foreignId('assigned_to_user_id')->nullable();
-            $table->foreignId('invoice_id')->nullable();
             $table->string('name');
             $table->unsignedInteger('number');
             $table->text('description')->nullable();
             $table->date('due_on')->nullable();
-            $table->decimal('estimation', 6, 2)->unsigned()->nullable();
-            $table->boolean('hidden_from_clients')->default(false);
-            $table->boolean('billable')->default(true);
             $table->unsignedInteger('order_column');
             $table->timestamps();
             $table->timestamp('assigned_at')->nullable();

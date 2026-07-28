@@ -22,8 +22,7 @@ class UserFactory extends Factory
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'phone' => fake()->phoneNumber(),
-            'rate' => fake()->numberBetween(10, 50) * 100,
-            'job_title' => fake()->randomElement(['Frontend Developer', 'Backend Developer', 'Fullstack Developer', 'Designer', 'Manager', 'Client']),
+            'job_title' => fake()->randomElement(['Frontend Developer', 'Backend Developer', 'Fullstack Developer', 'QA Engineer', 'Designer', 'Manager']),
             'avatar' => null,
             'password' => bcrypt('password'), // password
             'remember_token' => Str::random(10),

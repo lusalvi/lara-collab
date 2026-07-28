@@ -19,10 +19,6 @@ class DropdownValuesController extends Controller
             return $collection->put('users', User::userDropdownValues());
         });
 
-        $dropdowns->when($request->has('clients'), function (Collection $collection) {
-            return $collection->put('clients', User::clientDropdownValues());
-        });
-
         $dropdowns->when($request->has('mentionProjectUsers'), function (Collection $collection) use ($request) {
             $project = Project::findOrFail($request->projectId);
             $users = PermissionService::usersWithAccessToProject($project);

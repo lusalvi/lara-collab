@@ -13,7 +13,6 @@ class UserSeeder extends Seeder
         'Fullstack Developer' => 'developer',
         'QA Engineer' => 'qa engineer',
         'Designer' => 'designer',
-        'Client' => 'client',
         'Manager' => 'manager',
         'Owner' => 'admin',
     ];
@@ -23,11 +22,7 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $rolesExceptClient = collect(RoleSeeder::$roles)
-            ->filter(fn ($i) => $i !== 'client')
-            ->toArray();
-
-        foreach ($rolesExceptClient as $role) {
+        foreach (RoleSeeder::$roles as $role) {
             User::factory()
                 ->create(['email' => "$role@mail.com", 'job_title' => $this->getJobTitle($role)])
                 ->assignRole($role);

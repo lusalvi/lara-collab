@@ -39,10 +39,7 @@ class TasksSeeder extends Seeder
                             null,
                             null,
                         ]),
-                        'estimation' => 0,
                         'priority' => null,
-                        'hidden_from_clients' => false,
-                        'billable' => true,
                         'completed_at' => fake()->randomElement([now(), null, null, null]),
                     ]);
 

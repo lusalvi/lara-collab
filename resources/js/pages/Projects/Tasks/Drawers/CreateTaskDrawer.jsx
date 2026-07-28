@@ -3,15 +3,12 @@ import Dropzone from '@/components/Dropzone';
 import RichTextEditor from '@/components/RichTextEditor';
 import useTaskDrawerStore from '@/hooks/store/useTaskDrawerStore';
 import useForm from '@/hooks/useForm';
-import { hasRoles } from '@/utils/user';
 import { usePage } from '@inertiajs/react';
 import {
   Button,
-  Checkbox,
   Drawer,
   Flex,
   MultiSelect,
-  NumberInput,
   Select,
   Text,
   TextInput,
@@ -30,7 +27,6 @@ export function CreateTaskDrawer() {
     taskGroups,
     labels,
     project,
-    currency,
     auth: { user },
   } = usePage().props;
 
@@ -43,11 +39,9 @@ export function CreateTaskDrawer() {
     issue_type: create.issue_type || '',
     parent_task_id: create.parent_task_id,
 
-    estimation: '',
     priority_id: null,
     start_on: '',
     due_on: '',
-    hidden_from_clients: false,
     subscribed_users: [user.id.toString()],
     labels: [],
     attachments: [],
@@ -256,15 +250,6 @@ export function CreateTaskDrawer() {
             onChange={value => updateValue('priority_id', value || null)}
             mt='md'
           />
-
-          {!hasRoles(user, ['client']) && (
-            <Checkbox
-              label='Hidden from clients'
-              mt='md'
-              checked={form.data.hidden_from_clients}
-              onChange={event => updateValue('hidden_from_clients', event.currentTarget.checked)}
-            />
-          )}
         </div>
       </form>
     </Drawer>

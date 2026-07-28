@@ -25,7 +25,7 @@ export default function ProjectCard({ item }) {
         </Group>
 
         <Text fz="sm" fw={500}>
-          {item.client_company?.name}
+          {item.area?.name}
         </Text>
 
         {item.description?.length > 0 && (

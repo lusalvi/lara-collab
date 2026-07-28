@@ -11,4 +11,3 @@ class CreateArea
         return Area::create($data);
     }
 }
-

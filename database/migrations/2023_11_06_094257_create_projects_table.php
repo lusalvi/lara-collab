@@ -19,7 +19,6 @@ return new class extends Migration
             $table->timestamps();
             $table->archivedAt();
 
-
             $table->foreign('area_id')->references('id')->on('areas');
         });
     }

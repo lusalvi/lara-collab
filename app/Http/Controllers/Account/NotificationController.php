@@ -43,6 +43,7 @@ class NotificationController extends Controller
 
         return response()->json();
     }
+
     public function destroyRead()
     {
         auth()->user()

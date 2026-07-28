@@ -116,6 +116,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('notifications', [NotificationController::class, 'index'])->name('notifications');
     Route::put('notifications/{notification}/read', [NotificationController::class, 'read'])->name('notifications.read');
     Route::put('notifications/read/all', [NotificationController::class, 'readAll'])->name('notifications.read.all');
+    Route::delete('notifications/read', [NotificationController::class, 'destroyRead'])->name('notifications.destroy.read');
 
     Route::get('dropdown/values', DropdownValuesController::class)->name('dropdown.values');
 });

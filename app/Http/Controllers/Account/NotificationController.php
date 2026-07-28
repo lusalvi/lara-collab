@@ -25,8 +25,10 @@ class NotificationController extends Controller
 
     public function read(DatabaseNotification $notification)
     {
-        if ($notification->notifiable_type !== auth()->user()->getMorphClass()
-            || $notification->notifiable_id !== auth()->id()) {
+        if (
+            $notification->notifiable_type !== auth()->user()->getMorphClass()
+            || $notification->notifiable_id !== auth()->id()
+        ) {
             abort(403);
         }
 
@@ -38,6 +40,14 @@ class NotificationController extends Controller
     public function readAll()
     {
         auth()->user()->unreadNotifications()->update(['read_at' => now()]);
+
+        return response()->json();
+    }
+    public function destroyRead()
+    {
+        auth()->user()
+            ->readNotifications()
+            ->delete();
 
         return response()->json();
     }

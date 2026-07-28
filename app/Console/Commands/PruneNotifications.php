@@ -19,26 +19,24 @@ class PruneNotifications extends Command
      *
      * @var string
      */
-    protected $description = 'This command will remove outdated notifications for every user.';
+    protected $description = 'This command will remove read notifications that were read more than 15 days ago. Unread
+    notifications are never removed';
+
+
+    protected const DAYS_TO_KEEP_AFTER_READ = 15;
 
     /**
      * Execute the console command.
      */
     public function handle()
     {
-        $skip = 50;
 
         User::all()
-            ->each(function (User $user) use ($skip) {
-                $count = $user->notifications()->count();
-
-                if ($count > $skip) {
-                    $user->notifications()
-                        ->latest()
-                        ->skip($skip)
-                        ->take($count - $skip)
-                        ->delete();
-                }
+            ->each(function (User $user) {
+                $user->notifications()
+                    ->whereNotNull('read_at')
+                    ->where('read_at','<=',now()->subDays(self::DAYS_TO_KEEP_AFTER_READ))
+                    ->delete();
             });
     }
 }

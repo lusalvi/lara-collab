@@ -25,6 +25,12 @@ import classes from './css/TaskDrawer.module.css';
 
 export function CreateTaskDrawer() {
   const { create, closeCreateTask } = useTaskDrawerStore();
+  console.log(
+    '[RENDER] create.parent_task_id =',
+    create.parent_task_id,
+    '| opened =',
+    create.opened
+  );
   const {
     usersWithAccessToProject,
     taskGroups,
@@ -62,20 +68,16 @@ export function CreateTaskDrawer() {
   );
 
   useEffect(() => {
-    console.log('SETTING VALUES');
+    const resolvedIssueType =
+      create.parent_issue_type === 'Tarea' ? 'Subtarea' : create.issue_type || '';
+
+    console.log('[DEBUG] create desde el store:', create);
+    console.log('[DEBUG] parent_task_id a setear:', create.parent_task_id);
 
     updateValue('group_id', create.group_id ? create.group_id.toString() : '');
     updateValue('parent_task_id', create.parent_task_id);
-    updateValue('issue_type', create.issue_type || '');
-
-    console.log('STORE', create);
+    updateValue('issue_type', resolvedIssueType);
   }, [create]);
-
-  useEffect(() => {
-    if (create.parent_issue_type === 'Tarea') {
-      updateValue('issue_type', 'Subtarea');
-    }
-  }, [create.parent_issue_type]);
 
   const closeDrawer = (force = false) => {
     if (force || (JSON.stringify(form.data) === JSON.stringify(initial) && !form.processing)) {
@@ -145,12 +147,17 @@ export function CreateTaskDrawer() {
       }}
     >
       <form
-        onSubmit={event =>
+        onSubmit={event => {
           submit(event, {
+            transform: data => ({
+              ...data,
+              parent_task_id: create.parent_task_id,
+              issue_type: create.parent_issue_type === 'Tarea' ? 'Subtarea' : data.issue_type,
+            }),
             onSuccess: () => closeDrawer(true),
             forceFormData: true,
-          })
-        }
+          });
+        }}
         className={classes.inner}
       >
         <div className={classes.content}>

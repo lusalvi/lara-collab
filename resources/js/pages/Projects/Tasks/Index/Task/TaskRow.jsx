@@ -11,9 +11,9 @@ import TaskActions from "../TaskActions";
 import classes from "./css/TaskRow.module.css";
 
 export default function TaskRow({ task, index }) {
+  
   const { complete } = useTasksStore();
   const { openEditTask } = useTaskDrawerStore();
-
   return (
     <Draggable draggableId={"task-" + task.id} index={index}>
       {(provided, snapshot) => (

@@ -20,14 +20,6 @@ const useTaskDrawerStore = create((set, get) => ({
     parent_task_id = null,
     parent_issue_type = null,
   } = {}) => {
-
-    console.log('OPEN CREATE TASK', {
-      group_id,
-      issue_type,
-      parent_task_id,
-      parent_issue_type,
-    });
-
     return set(
       produce(state => {
         state.create.opened = true;

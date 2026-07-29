@@ -73,6 +73,7 @@ allTasks
         <TaskRow
           key={task.id}
           task={task}
+          depth={task.depth}
           hasChildren={parentIds.has(task.id)}
           collapsed={collapsed.has(task.id)}
           onToggle={() => toggleCollapsed(task.id)}

@@ -9,7 +9,7 @@ import TaskActions from './Components/TaskActions';
 import TaskStatusDropdown from './Components/TaskStatusDropdown';
 import { IconChevronDown, IconChevronRight, IconPlus } from '@tabler/icons-react';
 import useTaskDrawerStore from '@/hooks/store/useTaskDrawerStore';
-export default function TaskRow({ task, hasChildren, collapsed, onToggle }) {
+export default function TaskRow({ task, depth = 0, hasChildren, collapsed, onToggle }) {
   const { openEditTask, openCreateTask } = useTaskDrawerStore();
 
   return (
@@ -33,7 +33,7 @@ export default function TaskRow({ task, hasChildren, collapsed, onToggle }) {
           <Group
             gap='xs'
             wrap='nowrap'
-            ml={task.parent_task_id ? 28 : 0}
+            ml={depth * 24}
           >
             <div
               className={`${classes.expandButton} ${hasChildren ? classes.expandButtonActive : ''}`}

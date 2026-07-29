@@ -76,7 +76,6 @@ export default function TaskCard({ task, index }) {
                   />
                 ))}
               </Group>
-
               {task.assigned_to_user && (
                 <Tooltip
                   label={task.assigned_to_user.name}
@@ -98,7 +97,7 @@ export default function TaskCard({ task, index }) {
                   </Link>
                 </Tooltip>
               )}
-              {['Historia', 'Tarea'].includes(task.issue_type) && (
+              {task.issue_type !== 'Subtarea' && (
                 <ActionIcon
                   variant='subtle'
                   size='sm'
@@ -107,14 +106,14 @@ export default function TaskCard({ task, index }) {
 
                     openCreateTask({
                       group_id: task.group_id,
-                      issue_type: 'Subtarea',
                       parent_task_id: task.id,
+                      parent_issue_type: task.issue_type,
                     });
                   }}
                 >
                   <IconPlus size={16} />
                 </ActionIcon>
-              )}
+              )}{' '}
               {(can('archive task') || can('restore task')) && (
                 <TaskActions
                   task={task}

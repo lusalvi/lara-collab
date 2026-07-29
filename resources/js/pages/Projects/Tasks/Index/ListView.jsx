@@ -20,21 +20,37 @@ const ListView = ({ groups, tasks, usingFilters }) => {
     allTasks.filter(task => task.parent_task_id).map(task => task.parent_task_id)
   );
 
-  const orderedTasks = [];
+const orderedTasks = [];
 
+const addChildren = (parentId, depth = 1) => {
   allTasks
-    .filter(task => !task.parent_task_id)
+    .filter(task => task.parent_task_id === parentId)
     .sort((a, b) => a.number - b.number)
-    .forEach(parent => {
-      orderedTasks.push(parent);
+    .forEach(child => {
+      orderedTasks.push({
+        ...child,
+        depth,
+      });
 
-      if (!collapsed.has(parent.id)) {
-        allTasks
-          .filter(task => task.parent_task_id === parent.id)
-          .sort((a, b) => a.number - b.number)
-          .forEach(child => orderedTasks.push(child));
+      if (!collapsed.has(child.id)) {
+        addChildren(child.id, depth + 1);
       }
     });
+};
+
+allTasks
+  .filter(task => !task.parent_task_id)
+  .sort((a, b) => a.number - b.number)
+  .forEach(parent => {
+    orderedTasks.push({
+      ...parent,
+      depth: 0,
+    });
+
+    if (!collapsed.has(parent.id)) {
+      addChildren(parent.id);
+    }
+  });
 
   const toggleCollapsed = taskId => {
     setCollapsed(prev => {
@@ -52,11 +68,12 @@ const ListView = ({ groups, tasks, usingFilters }) => {
 
   return (
     <div className={classes.container}>
-    <HeaderRow />
+      <HeaderRow />
       {orderedTasks.map(task => (
         <TaskRow
           key={task.id}
           task={task}
+          depth={task.depth}
           hasChildren={parentIds.has(task.id)}
           collapsed={collapsed.has(task.id)}
           onToggle={() => toggleCollapsed(task.id)}

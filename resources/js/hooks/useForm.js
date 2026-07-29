@@ -10,6 +10,12 @@ export default function useForm(method, url, data) {
   const submit = (e, props) => {
     e.preventDefault();
 
+    const { transform, ...restProps } = props || {};
+
+    if (transform) {
+      form.transform(transform);
+    }
+
     form.submit({
       preserveScroll: false,
       onError: () => {
@@ -18,7 +24,7 @@ export default function useForm(method, url, data) {
         });
       },
 
-      ...props,
+      ...restProps,
     });
   };
 

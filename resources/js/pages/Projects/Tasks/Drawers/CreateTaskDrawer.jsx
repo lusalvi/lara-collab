@@ -22,6 +22,12 @@ import classes from './css/TaskDrawer.module.css';
 
 export function CreateTaskDrawer() {
   const { create, closeCreateTask } = useTaskDrawerStore();
+  console.log(
+    '[RENDER] create.parent_task_id =',
+    create.parent_task_id,
+    '| opened =',
+    create.opened
+  );
   const {
     usersWithAccessToProject,
     taskGroups,
@@ -56,8 +62,16 @@ export function CreateTaskDrawer() {
   );
 
   useEffect(() => {
-    updateValue({ ...initial });
-  }, [create.opened]);
+    const resolvedIssueType =
+      create.parent_issue_type === 'Tarea' ? 'Subtarea' : create.issue_type || '';
+
+    console.log('[DEBUG] create desde el store:', create);
+    console.log('[DEBUG] parent_task_id a setear:', create.parent_task_id);
+
+    updateValue('group_id', create.group_id ? create.group_id.toString() : '');
+    updateValue('parent_task_id', create.parent_task_id);
+    updateValue('issue_type', resolvedIssueType);
+  }, [create]);
 
   const closeDrawer = (force = false) => {
     if (force || (JSON.stringify(form.data) === JSON.stringify(initial) && !form.processing)) {
@@ -74,12 +88,35 @@ export function CreateTaskDrawer() {
     }
   };
 
+  const issueTypeOptions = {
+    Epica: [
+      { value: 'Historia', label: 'Historia' },
+      { value: 'Tarea', label: 'Tarea' },
+      { value: 'Subtarea', label: 'Subtarea' },
+    ],
+    Historia: [
+      { value: 'Tarea', label: 'Tarea' },
+      { value: 'Subtarea', label: 'Subtarea' },
+    ],
+    Tarea: [{ value: 'Subtarea', label: 'Subtarea' }],
+  };
+
+  const availableIssueTypes = create.parent_issue_type
+    ? (issueTypeOptions[create.parent_issue_type] ?? [])
+    : [
+        { value: 'Epica', label: 'Épica' },
+        { value: 'Historia', label: 'Historia' },
+        { value: 'Tarea', label: 'Tarea' },
+        { value: 'Subtarea', label: 'Subtarea' },
+      ];
+
   const removeAttachment = index => {
     const files = [...form.data.attachments];
     files.splice(index, 1);
     updateValue('attachments', files);
   };
-
+  console.log('CREATE', create);
+  console.log('FORM', form.data);
   return (
     <Drawer
       opened={create.opened}
@@ -104,12 +141,17 @@ export function CreateTaskDrawer() {
       }}
     >
       <form
-        onSubmit={event =>
+        onSubmit={event => {
           submit(event, {
+            transform: data => ({
+              ...data,
+              parent_task_id: create.parent_task_id,
+              issue_type: create.parent_issue_type === 'Tarea' ? 'Subtarea' : data.issue_type,
+            }),
             onSuccess: () => closeDrawer(true),
             forceFormData: true,
-          })
-        }
+          });
+        }}
         className={classes.inner}
       >
         <div className={classes.content}>
@@ -187,21 +229,15 @@ export function CreateTaskDrawer() {
             error={form.errors.group_id}
           />
 
-          {!create.parent_task_id && (
-            <Select
-              label='Issue type'
-              placeholder='Select issue type'
-              value={form.data.issue_type}
-              onChange={value => updateValue('issue_type', value || '')}
-              data={[
-                { value: 'Epica', label: 'Épica' },
-                { value: 'Historia', label: 'Historia' },
-                { value: 'Tarea', label: 'Tarea' },
-                { value: 'Subtarea', label: 'Subtarea' },
-              ]}
-              error={form.errors.issue_type}
-            />
-          )}
+          <Select
+            label='Issue type'
+            placeholder='Select issue type'
+            value={form.data.issue_type}
+            onChange={value => updateValue('issue_type', value || '')}
+            data={availableIssueTypes}
+            disabled={create.parent_issue_type === 'Tarea'}
+            error={form.errors.issue_type}
+          />
 
           <Select
             label='Assignee'

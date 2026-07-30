@@ -189,7 +189,7 @@ class TaskController extends Controller
     {
         $this->authorize('delete', [$task, $project]);
 
-        $task->archive();
+        $task->archiveWithChildren();
         TaskDeleted::dispatch($task->id, $task->project_id);
 
         return redirect()->back()->success('Task archived', 'The task was successfully archived.');
@@ -200,7 +200,7 @@ class TaskController extends Controller
 
         $this->authorize('restore', [$task, $project]);
 
-        $task->unArchive();
+        $task->restoreWithChildren();
         TaskRestored::dispatch($task);
 
         return redirect()->back()->success('Task restored', 'The restoring of the Task was completed successfully.');

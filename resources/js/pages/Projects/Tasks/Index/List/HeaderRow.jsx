@@ -1,10 +1,11 @@
 import { Checkbox } from '@mantine/core';
 
 import ColumnHeader from './Components/ColumnHeader';
+import ResizeHandle from './Components/ResizeHandle';
 
 import classes from './ListView.module.css';
 
-export default function HeaderRow() {
+export default function HeaderRow({ widths, setWidth }) {
   return (
     <div className={`${classes.row} ${classes.header}`}>
       <div className={classes.dragHandle}></div>
@@ -21,7 +22,13 @@ export default function HeaderRow() {
       <ColumnHeader
         className={classes.summary}
         title="Tarea"
-      />
+      >
+        <ResizeHandle
+          column="summary"
+          width={widths.summary}
+          onResize={setWidth}
+        />
+      </ColumnHeader>
 
       <ColumnHeader
         className={classes.assignee}

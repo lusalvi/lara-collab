@@ -46,10 +46,10 @@ export default function useTaskDragAndDrop(orderedTasks, allTasks) {
     const newParentId = targetTask.parent_task_id || null;
 
     if (!newParentId) {
-      // Va a nivel raíz: siempre válido (cualquier tipo puede ser raíz).
-      return true;
+      // Solo las Subtareas deben tener un padre.
+      return draggedTask.issue_type !== 'Subtarea';
     }
-
+    
     const newParent = findTask(newParentId);
     if (!newParent) return false;
 

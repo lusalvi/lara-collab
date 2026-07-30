@@ -12,6 +12,40 @@ const useTasksStore = create((set, get) => ({
   ...createTaskWebSocketUpdatesSlice(set, get),
 
   tasks: {},
+  selectedTaskIds: [],
+  toggleTaskSelection: (taskId) => {
+    return set(produce(state => {
+      const index = state.selectedTaskIds.indexOf(taskId);
+
+      if (index === -1) {
+        state.selectedTaskIds.push(taskId);
+      } else {
+        state.selectedTaskIds.splice(index, 1);
+      }
+    }));
+  },
+
+  clearTaskSelection: () => {
+    return set(produce(state => {
+      state.selectedTaskIds = [];
+    }));
+  },
+  
+  isTaskSelected: (taskId) => {
+    return get().selectedTaskIds.includes(taskId);
+  },
+
+  selectAllTasks: () => {
+    const ids = [];
+
+    Object.values(get().tasks).forEach(group => {
+      group.forEach(task => ids.push(task.id));
+    });
+
+    return set({
+      selectedTaskIds: ids,
+    });
+  },
   setTasks: (tasks) => set(() => ({ tasks: { ...tasks } })),
   addTask: (task) => {
     return set(produce(state => {

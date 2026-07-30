@@ -27,7 +27,7 @@ export default function TaskStatusDropdown({ task }) {
         {groups.map(group => (
           <Menu.Item
             key={group.id}
-            onClick={() => updateTaskProperty(task, 'group_id', group.id)}
+            onClick={() => updateTaskProperty(task, 'group_id', group.id, group)}
           >
             {group.name}
           </Menu.Item>

@@ -4,6 +4,7 @@ namespace App\Actions\Task;
 
 use App\Events\Task\TaskUpdated;
 use App\Models\Task;
+use App\Models\TaskGroup;
 
 class UpdateTask
 {
@@ -12,6 +13,14 @@ class UpdateTask
         $updateField = key($data);
 
         if (! in_array($updateField, ['subscribed_users', 'labels'])) {
+            if ($updateField === 'group_id') {
+                $toGroup = TaskGroup::find($data['group_id']);
+
+                $data['completed_at'] = ($toGroup && $toGroup->name === 'Finalizado')
+                    ? now()
+                    : null;
+            }
+
             $task->update($data);
 
             if ($updateField === 'group_id') {

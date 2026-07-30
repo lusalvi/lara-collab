@@ -133,7 +133,13 @@ export default function TaskRow({ task, depth = 0, hasChildren, collapsed, onTog
 
             <IssueTypeIcon type={task.issue_type} />
 
-            <Text lineClamp={1}>{task.name}</Text>
+            <Text
+              lineClamp={1}
+              td={task.completed_at ? 'line-through' : undefined}
+              c={task.completed_at ? 'dimmed' : undefined}
+            >
+              {task.name}
+            </Text>
           </Group>
 
           {task.issue_type !== 'Subtarea' && (

@@ -1,7 +1,11 @@
 import { useState } from 'react';
+import { DndContext, DragOverlay } from '@dnd-kit/core';
 
 import HeaderRow from './List/HeaderRow';
 import TaskRow from './List/TaskRow';
+import IssueTypeIcon from '@/components/IssueTypeIcon';
+import { Text } from '@mantine/core';
+import useTaskDragAndDrop from './List/hooks/useTaskDragAndDrop';
 import classes from './List/ListView.module.css';
 
 const ListView = ({ groups, tasks, usingFilters }) => {
@@ -20,37 +24,37 @@ const ListView = ({ groups, tasks, usingFilters }) => {
     allTasks.filter(task => task.parent_task_id).map(task => task.parent_task_id)
   );
 
-const orderedTasks = [];
+  const orderedTasks = [];
 
-const addChildren = (parentId, depth = 1) => {
+  const addChildren = (parentId, depth = 1) => {
+    allTasks
+      .filter(task => task.parent_task_id === parentId)
+      .sort((a, b) => a.number - b.number)
+      .forEach(child => {
+        orderedTasks.push({
+          ...child,
+          depth,
+        });
+
+        if (!collapsed.has(child.id)) {
+          addChildren(child.id, depth + 1);
+        }
+      });
+  };
+
   allTasks
-    .filter(task => task.parent_task_id === parentId)
+    .filter(task => !task.parent_task_id)
     .sort((a, b) => a.number - b.number)
-    .forEach(child => {
+    .forEach(parent => {
       orderedTasks.push({
-        ...child,
-        depth,
+        ...parent,
+        depth: 0,
       });
 
-      if (!collapsed.has(child.id)) {
-        addChildren(child.id, depth + 1);
+      if (!collapsed.has(parent.id)) {
+        addChildren(parent.id);
       }
     });
-};
-
-allTasks
-  .filter(task => !task.parent_task_id)
-  .sort((a, b) => a.number - b.number)
-  .forEach(parent => {
-    orderedTasks.push({
-      ...parent,
-      depth: 0,
-    });
-
-    if (!collapsed.has(parent.id)) {
-      addChildren(parent.id);
-    }
-  });
 
   const toggleCollapsed = taskId => {
     setCollapsed(prev => {
@@ -66,20 +70,40 @@ allTasks
     });
   };
 
+  const dnd = useTaskDragAndDrop(orderedTasks, allTasks);
+
   return (
-    <div className={classes.container}>
-      <HeaderRow />
-      {orderedTasks.map(task => (
-        <TaskRow
-          key={task.id}
-          task={task}
-          depth={task.depth}
-          hasChildren={parentIds.has(task.id)}
-          collapsed={collapsed.has(task.id)}
-          onToggle={() => toggleCollapsed(task.id)}
-        />
-      ))}
-    </div>
+    <DndContext
+      sensors={dnd.sensors}
+      onDragStart={dnd.handleDragStart}
+      onDragOver={dnd.handleDragOver}
+      onDragEnd={dnd.handleDragEnd}
+      onDragCancel={dnd.handleDragCancel}
+    >
+      <div className={classes.container}>
+        <HeaderRow />
+        {orderedTasks.map(task => (
+          <TaskRow
+            key={task.id}
+            task={task}
+            depth={task.depth}
+            hasChildren={parentIds.has(task.id)}
+            collapsed={collapsed.has(task.id)}
+            onToggle={() => toggleCollapsed(task.id)}
+            dragState={dnd}
+          />
+        ))}
+      </div>
+
+      <DragOverlay>
+        {dnd.activeTask ? (
+          <div className={classes.dragOverlay}>
+            <IssueTypeIcon type={dnd.activeTask.issue_type} />
+            <Text lineClamp={1}>{dnd.activeTask.name}</Text>
+          </div>
+        ) : null}
+      </DragOverlay>
+    </DndContext>
   );
 };
 

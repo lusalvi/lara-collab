@@ -57,6 +57,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('{project}/tasks/{task}/complete', [TaskController::class, 'complete'])->name('tasks.complete')->scopeBindings();
         Route::post('{project}/tasks/reorder', [TaskController::class, 'reorder'])->name('tasks.reorder');
         Route::post('{project}/tasks/move', [TaskController::class, 'move'])->name('tasks.move');
+        Route::post('{project}/tasks/reparent', [TaskController::class, 'reparent'])->name('tasks.reparent');
 
         // NOTES
         Route::get('{project}/notes', [NoteController::class, 'index'])->name('notes');

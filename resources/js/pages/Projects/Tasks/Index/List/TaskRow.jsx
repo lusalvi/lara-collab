@@ -1,4 +1,5 @@
 import { Badge, Checkbox, Group, Text, ActionIcon } from '@mantine/core';
+import { useDraggable, useDroppable } from '@dnd-kit/core';
 import IssueTypeIcon from '@/components/IssueTypeIcon';
 
 import classes from './ListView.module.css';
@@ -7,16 +8,69 @@ import TaskAssignee from './Components/TaskAssignee';
 import TaskDueDate from './Components/TaskDueDate';
 import TaskActions from './Components/TaskActions';
 import TaskStatusDropdown from './Components/TaskStatusDropdown';
-import { IconChevronDown, IconChevronRight, IconPlus } from '@tabler/icons-react';
+import { IconChevronDown, IconChevronRight, IconGripVertical, IconPlus } from '@tabler/icons-react';
 import useTaskDrawerStore from '@/hooks/store/useTaskDrawerStore';
-export default function TaskRow({ task, depth = 0, hasChildren, collapsed, onToggle }) {
-  const { openEditTask, openCreateTask } = useTaskDrawerStore();
+
+function DropZone({ id, zone, isValid, className, children }) {
+  const { setNodeRef, isOver } = useDroppable({
+    id: `${id}-${zone}`,
+    data: { taskId: id, zone },
+  });
+
+  const stateClass = isOver ? (isValid ? classes.dropValid : classes.dropInvalid) : '';
 
   return (
     <div
-      className={classes.row}
+      ref={setNodeRef}
+      className={`${className} ${stateClass}`}
+    >
+      {children}
+    </div>
+  );
+}
+
+export default function TaskRow({ task, depth = 0, hasChildren, collapsed, onToggle, dragState }) {
+  const { openEditTask, openCreateTask } = useTaskDrawerStore();
+
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
+    id: task.id,
+    data: { task },
+  });
+
+  const isBeingDragged = dragState?.activeTask?.id === task.id;
+
+  const overZone =
+    dragState?.overState?.id === `${task.id}-before`
+      ? 'before'
+      : dragState?.overState?.id === `${task.id}-inside`
+        ? 'inside'
+        : dragState?.overState?.id === `${task.id}-after`
+          ? 'after'
+          : null;
+
+  const isValidForZone = zone =>
+    overZone === zone &&
+    dragState?.activeTask &&
+    dragState.isValidDropTarget(dragState.activeTask, task, zone);
+
+  return (
+    <div
+      ref={setNodeRef}
+      className={`${classes.row} ${isBeingDragged ? classes.rowDragging : ''}`}
       onClick={() => openEditTask(task)}
     >
+      <div
+        className={classes.dragHandle}
+        {...attributes}
+        {...listeners}
+        onClick={e => e.stopPropagation()}
+      >
+        <IconGripVertical
+          size={14}
+          color='var(--mantine-color-gray-5)'
+        />
+      </div>
+
       <div className={classes.checkbox}>
         <Checkbox
           size='xs'
@@ -29,7 +83,19 @@ export default function TaskRow({ task, depth = 0, hasChildren, collapsed, onTog
       </div>
 
       <div className={`${classes.summary} ${task.parent_task_id ? classes.subtask : ''}`}>
-        <div className={classes.summaryContent}>
+        <DropZone
+          id={task.id}
+          zone='before'
+          isValid={isValidForZone('before')}
+          className={classes.dropZoneBefore}
+        />
+
+        <DropZone
+          id={task.id}
+          zone='inside'
+          isValid={isValidForZone('inside')}
+          className={classes.summaryContent}
+        >
           <Group
             gap='xs'
             wrap='nowrap'
@@ -87,7 +153,14 @@ export default function TaskRow({ task, depth = 0, hasChildren, collapsed, onTog
               </ActionIcon>
             </div>
           )}
-        </div>
+        </DropZone>
+
+        <DropZone
+          id={task.id}
+          zone='after'
+          isValid={isValidForZone('after')}
+          className={classes.dropZoneAfter}
+        />
       </div>
 
       <div

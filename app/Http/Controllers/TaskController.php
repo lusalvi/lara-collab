@@ -130,6 +130,49 @@ class TaskController extends Controller
         return response()->json();
     }
 
+    public function reparent(Request $request, Project $project): JsonResponse
+    {
+        $this->authorize('reorder', [Task::class, $project]);
+
+        $request->validate([
+            'task_id' => ['required', 'exists:tasks,id'],
+            'parent_task_id' => ['nullable', 'exists:tasks,id'],
+            'ids' => ['required', 'array'],
+            'ids.*' => ['integer', 'exists:tasks,id'],
+        ]);
+
+        $task = Task::findOrFail($request->task_id);
+
+        if ($request->parent_task_id) {
+            if ((int) $request->parent_task_id === $task->id) {
+                return response()->json(['message' => 'A task cannot be its own parent.'], 422);
+            }
+
+            $newParent = Task::findOrFail($request->parent_task_id);
+
+            if (! $newParent->canHaveChildOfType($task->issue_type)) {
+                return response()->json([
+                    'message' => "A {$newParent->issue_type} cannot have a {$task->issue_type} as a child.",
+                ], 422);
+            }
+
+            // Evita crear un ciclo: el nuevo padre no puede ser un descendiente de la tarea que se mueve.
+            $ancestor = $newParent;
+            while ($ancestor) {
+                if ($ancestor->id === $task->id) {
+                    return response()->json(['message' => 'Cannot move a task inside its own descendant.'], 422);
+                }
+                $ancestor = $ancestor->parent;
+            }
+        }
+
+        $task->update(['parent_task_id' => $request->parent_task_id]);
+
+        Task::setNewOrder($request->ids);
+
+        return response()->json();
+    }
+
     public function complete(Request $request, Project $project, Task $task): JsonResponse
     {
         $this->authorize('complete', [Task::class, $project]);

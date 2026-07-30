@@ -14,6 +14,7 @@
   display: grid;
   min-width: 1450px;
   grid-template-columns:
+    24px            /* drag handle */
     48px            /* checkbox */
     70px            /* número */
     minmax(320px, 1fr) /* tarea */
@@ -240,4 +241,98 @@ transition: background-color .15s ease;}
 
   width: 100%;
   height: 100%;
+}
+/* =========================
+   DRAG & DROP
+========================= */
+
+.dragHandle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: grab;
+
+  opacity: 0;
+  transition: opacity .15s ease;
+
+  touch-action: none;
+}
+
+.row:hover .dragHandle {
+  opacity: 1;
+}
+
+.dragHandle:active {
+  cursor: grabbing;
+}
+
+.rowDragging {
+  opacity: 0.4;
+}
+
+.summary {
+  position: relative;
+}
+
+.dropZoneBefore,
+.dropZoneAfter {
+  position: absolute;
+  left: 0;
+  right: 0;
+
+  height: 10px;
+
+  z-index: 5;
+
+  border-radius: 3px;
+}
+
+.dropZoneBefore {
+  top: -5px;
+}
+
+.dropZoneAfter {
+  bottom: -5px;
+}
+
+.dropValid {
+  background: light-dark(
+    var(--mantine-color-hospitalPrimary-2, var(--mantine-color-blue-2)),
+    var(--mantine-color-blue-8)
+  );
+}
+
+.dropInvalid {
+  background: var(--mantine-color-red-2);
+  cursor: not-allowed;
+}
+
+.summaryContent.dropValid {
+  outline: 2px solid var(--mantine-color-blue-4);
+  outline-offset: -2px;
+  border-radius: 6px;
+  background: light-dark(var(--mantine-color-blue-0), var(--mantine-color-dark-5));
+}
+
+.summaryContent.dropInvalid {
+  outline: 2px solid var(--mantine-color-red-4);
+  outline-offset: -2px;
+  border-radius: 6px;
+  cursor: not-allowed;
+}
+
+.dragOverlay {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 8px 14px;
+
+  background: white;
+  border: 1px solid var(--mantine-color-gray-3);
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+
+  min-width: 240px;
 }

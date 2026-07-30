@@ -119,6 +119,25 @@ const useTasksStore = create((set, get) => ({
       state.tasks[destinationGroupId] = result[destinationGroupId];
     }));
   },
+  reparentTask: ({ taskId, newParentId, groupId, ids }) => {
+    const data = {
+      task_id: taskId,
+      parent_task_id: newParentId,
+      ids,
+    };
+
+    axios
+      .post(route("projects.tasks.reparent", [route().params.project]), data, { progress: false })
+      .catch(() => alert("Failed to save task move action"));
+
+    return set(produce(state => {
+      const index = state.tasks[groupId].findIndex((i) => i.id === taskId);
+
+      if (index !== -1) {
+        state.tasks[groupId][index].parent_task_id = newParentId;
+      }
+    }));
+  },
 }));
 
 export default useTasksStore;

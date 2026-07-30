@@ -26,6 +26,19 @@ class Task extends Model implements AuditableContract, Sortable
 {
     use Archivable, Auditable, HasFactory, HasFilters, IsSearchable, SortableTrait;
 
+    // Qué issue_type puede tener un hijo directo, según el issue_type del padre.
+    public const ALLOWED_CHILD_TYPES = [
+        'Epica' => ['Historia', 'Tarea'],
+        'Historia' => ['Subtarea'],
+        'Tarea' => ['Subtarea'],
+        'Subtarea' => [],
+    ];
+
+    public function canHaveChildOfType(string $issueType): bool
+    {
+        return in_array($issueType, self::ALLOWED_CHILD_TYPES[$this->issue_type] ?? [], true);
+    }
+
     protected $fillable = [
         'project_id',
         'group_id',

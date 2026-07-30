@@ -3,6 +3,7 @@ import Dropzone from '@/components/Dropzone';
 import RichTextEditor from '@/components/RichTextEditor';
 import useTaskDrawerStore from '@/hooks/store/useTaskDrawerStore';
 import useForm from '@/hooks/useForm';
+import { ALLOWED_CHILD_TYPES } from '@/utils/taskHierarchy';
 import { usePage } from '@inertiajs/react';
 import {
   Button,
@@ -22,12 +23,6 @@ import classes from './css/TaskDrawer.module.css';
 
 export function CreateTaskDrawer() {
   const { create, closeCreateTask } = useTaskDrawerStore();
-  console.log(
-    '[RENDER] create.parent_task_id =',
-    create.parent_task_id,
-    '| opened =',
-    create.opened
-  );
   const {
     usersWithAccessToProject,
     taskGroups,
@@ -35,6 +30,13 @@ export function CreateTaskDrawer() {
     project,
     auth: { user },
   } = usePage().props;
+
+  // Si el padre solo admite un único tipo de hijo, se fuerza automáticamente
+  // (ej: Historia y Tarea solo pueden tener Subtarea).
+  const forcedChildType = (() => {
+    const options = ALLOWED_CHILD_TYPES[create.parent_issue_type] ?? [];
+    return options.length === 1 ? options[0] : null;
+  })();
 
   const initial = {
     group_id: create.group_id ? create.group_id.toString() : '',
@@ -62,11 +64,7 @@ export function CreateTaskDrawer() {
   );
 
   useEffect(() => {
-    const resolvedIssueType =
-      create.parent_issue_type === 'Tarea' ? 'Subtarea' : create.issue_type || '';
-
-    console.log('[DEBUG] create desde el store:', create);
-    console.log('[DEBUG] parent_task_id a setear:', create.parent_task_id);
+    const resolvedIssueType = forcedChildType || create.issue_type || '';
 
     updateValue('group_id', create.group_id ? create.group_id.toString() : '');
     updateValue('parent_task_id', create.parent_task_id);
@@ -88,35 +86,31 @@ export function CreateTaskDrawer() {
     }
   };
 
-  const issueTypeOptions = {
-    Epica: [
-      { value: 'Historia', label: 'Historia' },
-      { value: 'Tarea', label: 'Tarea' },
-      { value: 'Subtarea', label: 'Subtarea' },
-    ],
-    Historia: [
-      { value: 'Tarea', label: 'Tarea' },
-      { value: 'Subtarea', label: 'Subtarea' },
-    ],
-    Tarea: [{ value: 'Subtarea', label: 'Subtarea' }],
+  const ISSUE_TYPE_LABELS = {
+    Epica: 'Épica',
+    Historia: 'Historia',
+    Tarea: 'Tarea',
+    Subtarea: 'Subtarea',
   };
 
   const availableIssueTypes = create.parent_issue_type
-    ? (issueTypeOptions[create.parent_issue_type] ?? [])
-    : [
-        { value: 'Epica', label: 'Épica' },
-        { value: 'Historia', label: 'Historia' },
-        { value: 'Tarea', label: 'Tarea' },
-        { value: 'Subtarea', label: 'Subtarea' },
-      ];
+    ? (ALLOWED_CHILD_TYPES[create.parent_issue_type] ?? []).map(type => ({
+        value: type,
+        label: ISSUE_TYPE_LABELS[type],
+      }))
+    : Object.keys(ISSUE_TYPE_LABELS)
+        .filter(type => type !== 'Subtarea')
+        .map(type => ({
+          value: type,
+          label: ISSUE_TYPE_LABELS[type],
+        }));
 
   const removeAttachment = index => {
     const files = [...form.data.attachments];
     files.splice(index, 1);
     updateValue('attachments', files);
   };
-  console.log('CREATE', create);
-  console.log('FORM', form.data);
+
   return (
     <Drawer
       opened={create.opened}
@@ -146,7 +140,7 @@ export function CreateTaskDrawer() {
             transform: data => ({
               ...data,
               parent_task_id: create.parent_task_id,
-              issue_type: create.parent_issue_type === 'Tarea' ? 'Subtarea' : data.issue_type,
+              issue_type: forcedChildType || data.issue_type,
             }),
             onSuccess: () => closeDrawer(true),
             forceFormData: true,
@@ -232,10 +226,11 @@ export function CreateTaskDrawer() {
           <Select
             label='Issue type'
             placeholder='Select issue type'
+            mt='md'
             value={form.data.issue_type}
             onChange={value => updateValue('issue_type', value || '')}
             data={availableIssueTypes}
-            disabled={create.parent_issue_type === 'Tarea'}
+            disabled={Boolean(forcedChildType)}
             error={form.errors.issue_type}
           />
 

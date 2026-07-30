@@ -7,6 +7,8 @@ import classes from './ListView.module.css';
 export default function HeaderRow() {
   return (
     <div className={`${classes.row} ${classes.header}`}>
+      <div className={classes.dragHandle}></div>
+
       <div className={classes.checkbox}>
         <Checkbox size="xs" />
       </div>

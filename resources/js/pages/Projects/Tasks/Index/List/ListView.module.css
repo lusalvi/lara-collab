@@ -12,17 +12,18 @@
 
 .row {
   display: grid;
-  min-width: 1450px;
+  width: max-content;
+  min-width: 100%;
   grid-template-columns:
-    24px            /* drag handle */
-    48px            /* checkbox */
-    70px            /* número */
-    minmax(320px, 1fr) /* tarea */
-    220px           /* responsable */
-    140px           /* prioridad */
-    160px           /* estado */
-    140px           /* vencimiento */
-    50px;           /* acciones */
+    24px                                  /* drag handle */
+    48px                                  /* checkbox */
+    var(--col-key-width, 70px)            /* número */
+    minmax(var(--col-summary-width, 450px), var(--col-summary-width, 450px)) /* tarea */
+    var(--col-assignee-width, 220px)      /* responsable */
+    var(--col-priority-width, 140px)      /* prioridad */
+    var(--col-status-width, 160px)        /* estado */
+    var(--col-due-width, 140px)           /* vencimiento */
+    50px;                                 /* acciones */
 
   align-items: center;
 
@@ -31,10 +32,6 @@
   border-bottom: 1px solid var(--mantine-color-gray-2);
 
 transition: background-color .15s ease;}
-
-.row:last-child {
-  border-bottom: none;
-}
 
 .row:hover {
   background: light-dark(
@@ -335,4 +332,45 @@ transition: background-color .15s ease;}
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 
   min-width: 240px;
+}
+
+/* =========================
+   RESIZE DE COLUMNAS
+========================= */
+
+.resizeHandle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+
+  width: 6px;
+
+  cursor: col-resize;
+
+  z-index: 10;
+
+  touch-action: none;
+}
+
+.resizeHandle::after {
+  content: '';
+
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  left: 2px;
+
+  width: 2px;
+
+  border-radius: 2px;
+
+  background: transparent;
+
+  transition: background-color .15s ease;
+}
+
+.resizeHandle:hover::after,
+.resizeHandleActive::after {
+  background: var(--mantine-color-hospitalPrimary-4, var(--mantine-color-blue-4));
 }

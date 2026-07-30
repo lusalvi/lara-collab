@@ -138,6 +138,24 @@ class Task extends Model implements AuditableContract, Sortable
         return $this->hasMany(Task::class, 'parent_task_id');
     }
 
+    public function archiveWithChildren(): void
+    {
+        foreach ($this->children()->withArchived()->get() as $child) {
+            $child->archiveWithChildren();
+        }
+
+        $this->archive();
+    }
+
+    public function restoreWithChildren(): void
+    {
+        $this->unArchive();
+
+        foreach ($this->children()->withArchived()->get() as $child) {
+            $child->restoreWithChildren();
+        }
+    }
+
     public function createdByUser(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by_user_id');

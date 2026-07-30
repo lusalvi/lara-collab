@@ -10,6 +10,7 @@ import TaskActions from './Components/TaskActions';
 import TaskStatusDropdown from './Components/TaskStatusDropdown';
 import { IconChevronDown, IconChevronRight, IconGripVertical, IconPlus } from '@tabler/icons-react';
 import useTaskDrawerStore from '@/hooks/store/useTaskDrawerStore';
+import useTasksStore from '@/hooks/store/useTasksStore';
 
 function DropZone({ id, zone, isValid, className, children }) {
   const { setNodeRef, isOver } = useDroppable({
@@ -31,6 +32,7 @@ function DropZone({ id, zone, isValid, className, children }) {
 
 export default function TaskRow({ task, depth = 0, hasChildren, collapsed, onToggle, dragState }) {
   const { openEditTask, openCreateTask } = useTaskDrawerStore();
+  const { selectedTaskIds, toggleTaskSelection } = useTasksStore();
 
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id: task.id,
@@ -74,6 +76,8 @@ export default function TaskRow({ task, depth = 0, hasChildren, collapsed, onTog
       <div className={classes.checkbox}>
         <Checkbox
           size='xs'
+          checked={selectedTaskIds.includes(task.id)}
+          onChange={() => toggleTaskSelection(task.id)}
           onClick={e => e.stopPropagation()}
         />
       </div>

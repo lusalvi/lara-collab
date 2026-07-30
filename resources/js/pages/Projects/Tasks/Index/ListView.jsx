@@ -6,10 +6,13 @@ import TaskRow from './List/TaskRow';
 import IssueTypeIcon from '@/components/IssueTypeIcon';
 import { Text } from '@mantine/core';
 import useTaskDragAndDrop from './List/hooks/useTaskDragAndDrop';
+import useColumnResize from './List/hooks/useColumnResize';
 import classes from './List/ListView.module.css';
 
 const ListView = ({ groups, tasks, usingFilters }) => {
   const [collapsed, setCollapsed] = useState(new Set());
+  const { widths, setWidth } = useColumnResize();
+
   const allTasks = Object.entries(tasks).flatMap(([groupId, groupTasks]) => {
     const group = groups.find(g => g.id == groupId);
 
@@ -72,6 +75,15 @@ const ListView = ({ groups, tasks, usingFilters }) => {
 
   const dnd = useTaskDragAndDrop(orderedTasks, allTasks);
 
+  const columnStyleVars = {
+    '--col-key-width': `${widths.key}px`,
+    '--col-summary-width': `${widths.summary}px`,
+    '--col-assignee-width': `${widths.assignee}px`,
+    '--col-priority-width': `${widths.priority}px`,
+    '--col-status-width': `${widths.status}px`,
+    '--col-due-width': `${widths.due}px`,
+  };
+
   return (
     <DndContext
       sensors={dnd.sensors}
@@ -80,8 +92,14 @@ const ListView = ({ groups, tasks, usingFilters }) => {
       onDragEnd={dnd.handleDragEnd}
       onDragCancel={dnd.handleDragCancel}
     >
-      <div className={classes.container}>
-        <HeaderRow />
+      <div
+        className={classes.container}
+        style={columnStyleVars}
+      >
+        <HeaderRow
+          widths={widths}
+          setWidth={setWidth}
+        />
         {orderedTasks.map(task => (
           <TaskRow
             key={task.id}

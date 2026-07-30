@@ -32,12 +32,12 @@ class TaskController extends Controller
 
         $groups = $project
             ->taskGroups()
-            ->when($request->has('archived'), fn ($query) => $query->onlyArchived())
+            ->when($request->has('archived'), fn($query) => $query->onlyArchived())
             ->get();
 
         $groupedTasks = $project
             ->taskGroups()
-            ->with(['project' => fn ($query) => $query->withArchived()])
+            ->with(['project' => fn($query) => $query->withArchived()])
             ->get()
             ->mapWithKeys(function (TaskGroup $group) use ($request, $project) {
                 $prioritySort = data_get($request->input('sort', []), 'priority');
@@ -47,10 +47,10 @@ class TaskController extends Controller
                         ->where('group_id', $group->id)
                         ->searchByQueryString()
                         ->filterByQueryString()
-                        ->when($request->has('archived'), fn ($query) => $query->onlyArchived())
-                        ->when(! $request->has('status'), fn ($query) => $query->whereNull('completed_at'))
+                        ->when($request->has('archived'), fn($query) => $query->onlyArchived())
+                        ->when(! $request->has('status'), fn($query) => $query->whereNull('completed_at'))
                         ->withDefault()
-                        ->when($project->isArchived(), fn ($query) => $query->with(['project' => fn ($query) => $query->withArchived()]))
+                        ->when($project->isArchived(), fn($query) => $query->with(['project' => fn($query) => $query->withArchived()]))
                         ->when($prioritySort, function ($query, $direction) {
                             $direction = $direction === 'asc' ? 'asc' : 'desc';
 
@@ -189,7 +189,7 @@ class TaskController extends Controller
     {
         $this->authorize('delete', [$task, $project]);
 
-        $task->archive();
+        $task->archiveWithChildren();
         TaskDeleted::dispatch($task->id, $task->project_id);
 
         return redirect()->back()->success('Task archived', 'The task was successfully archived.');
@@ -200,7 +200,7 @@ class TaskController extends Controller
 
         $this->authorize('restore', [$task, $project]);
 
-        $task->unArchive();
+        $task->restoreWithChildren();
         TaskRestored::dispatch($task);
 
         return redirect()->back()->success('Task restored', 'The restoring of the Task was completed successfully.');

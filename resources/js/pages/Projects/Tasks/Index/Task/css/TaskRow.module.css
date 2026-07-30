@@ -80,7 +80,3 @@
     transition: 0.3s ease opacity;
     margin-top: 7px;
 }
-
-.completed {
-    opacity: 0.35;
-}

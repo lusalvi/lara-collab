@@ -48,7 +48,6 @@ class TaskController extends Controller
                         ->searchByQueryString()
                         ->filterByQueryString()
                         ->when($request->has('archived'), fn ($query) => $query->onlyArchived())
-                        ->when(! $request->has('status'), fn ($query) => $query->whereNull('completed_at'))
                         ->withDefault()
                         ->when($project->isArchived(), fn ($query) => $query->with(['project' => fn ($query) => $query->withArchived()]))
                         ->when($prioritySort, function ($query, $direction) {
@@ -117,7 +116,13 @@ class TaskController extends Controller
         $this->authorize('reorder', [Task::class, $project]);
 
         Task::setNewOrder($request->ids);
-        Task::whereIn('id', $request->ids)->update(['group_id' => $request->to_group_id]);
+        $toGroup = TaskGroup::find($request->to_group_id);
+        $isCompletedGroup = $toGroup && $toGroup->name === 'Finalizado';
+
+        Task::whereIn('id', $request->ids)->update([
+            'group_id' => $request->to_group_id,
+            'completed_at' => $isCompletedGroup ? now() : null,
+        ]);
 
         TaskGroupChanged::dispatch(
             $project->id,

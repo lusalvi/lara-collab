@@ -49,7 +49,3 @@
     top: rem(5px);
     right: rem(5px);
 }
-
-.completed {
-    opacity: 0.35;
-}

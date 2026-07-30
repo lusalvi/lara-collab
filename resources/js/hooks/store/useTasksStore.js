@@ -79,15 +79,16 @@ const useTasksStore = create((set, get) => ({
         const index = state.tasks[task.group_id].findIndex((i) => i.id === task.id);
 
         if (property === 'group_id' && task.group_id !== value) {
+          const isCompletedGroup = options?.name === 'Finalizado';
           const result = move(state.tasks, task.group_id, value, index, 0);
 
           state.tasks[task.group_id] = result[task.group_id];
           state.tasks[value] = result[value];
 
           state.tasks[value][0][property] = value;
+          state.tasks[value][0].completed_at = isCompletedGroup ? new Date().toISOString() : null;
         } else {
           state.tasks[task.group_id][index][property] = value;
-          // For properties with related objects (e.g., priority_id has priority object)
           if (options) {
             const relatedProperty = property.replace('_id', '');
             state.tasks[task.group_id][index][relatedProperty] = options;

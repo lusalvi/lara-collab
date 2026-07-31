@@ -11,19 +11,25 @@ import {
   ScrollArea,
   Stack,
   Text,
+  ThemeIcon,
   Title,
   Tooltip,
 } from "@mantine/core";
-import { IconRocket } from "@tabler/icons-react";
+import { IconCalendarDue, IconRocket } from "@tabler/icons-react";
 import classes from "./css/OverdueTasks.module.css";
 import translateGroupName from "@/utils/translateGroupName";
 
 export default function OverdueTasks({ tasks }) {
   return (
     <Card bg="none">
-      <Title order={3} ml={15}>
-        Overdue tasks
-      </Title>
+      <Group gap={10} wrap="nowrap" className={classes.highlight}>
+        <ThemeIcon size={28} radius="md" variant="light" color="red">
+          <IconCalendarDue size={16} />
+        </ThemeIcon>
+        <Title order={4} fz={15}>
+          Tareas vencidas
+        </Title>
+      </Group>
 
       <Divider my={14} />
 

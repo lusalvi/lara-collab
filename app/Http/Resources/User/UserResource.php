@@ -23,7 +23,7 @@ class UserResource extends JsonResource
             'phone' => $this->phone,
             'roles' => $this->roles->map->only('name')->flatten()->toArray(),
             'area_id' => $this->area_id,
-            'area' => $this->whenLoaded('area', fn() => ['id' => $this->area->id, 'name' => $this->area->name]),
+            'area' => $this->whenLoaded('area', fn () => ['id' => $this->area->id, 'name' => $this->area->name]),
         ];
     }
 }

@@ -33,7 +33,7 @@ class UserSeeder extends Seeder
 
         $rolesExceptSuperadmin = array_filter(
             RoleSeeder::$roles,
-            fn($r) => $r !== 'superadmin'
+            fn ($r) => $r !== 'superadmin'
         );
 
         foreach ($rolesExceptSuperadmin as $role) {
@@ -48,7 +48,7 @@ class UserSeeder extends Seeder
 
         User::factory(20)
             ->create(['area_id' => $area->id])
-            ->each(fn(User $user) => $user->assignRole($this->jobTitleToRole[$user->job_title]));
+            ->each(fn (User $user) => $user->assignRole($this->jobTitleToRole[$user->job_title]));
     }
 
     private function getJobTitle(string $role): string
@@ -58,6 +58,7 @@ class UserSeeder extends Seeder
                 return $title;
             }
         }
+
         return 'Employee';
     }
 }

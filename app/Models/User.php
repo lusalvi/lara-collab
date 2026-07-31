@@ -53,7 +53,7 @@ class User extends Authenticatable implements AuditableContract, CanResetPasswor
 
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'password'          => 'hashed',
+        'password' => 'hashed',
     ];
 
     // ─── Relaciones ───────────────────────────────────────────────────────────

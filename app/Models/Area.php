@@ -31,6 +31,7 @@ class Area extends Model implements AuditableContract
     {
         return $this->hasMany(Project::class);
     }
+
     public function users(): HasMany
     {
         return $this->hasMany(User::class);

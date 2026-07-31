@@ -18,7 +18,7 @@ class PermissionSeeder extends Seeder
     {
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
-        $insertPermissions = fn($role) => collect(PermissionService::$permissionsByRole[$role])
+        $insertPermissions = fn ($role) => collect(PermissionService::$permissionsByRole[$role])
             ->flatten()
             ->map(function ($name) {
                 $permission = DB::table('permissions')->where('name', $name)->first();
@@ -26,12 +26,12 @@ class PermissionSeeder extends Seeder
                 return $permission
                     ? $permission->id
                     : DB::table('permissions')
-                    ->insertGetId([
-                        'name' => $name,
-                        'guard_name' => 'web',
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ]);
+                        ->insertGetId([
+                            'name' => $name,
+                            'guard_name' => 'web',
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ]);
             })
             ->toArray();
 

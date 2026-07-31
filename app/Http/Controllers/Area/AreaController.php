@@ -9,6 +9,7 @@ use App\Http\Requests\Area\StoreAreaRequest;
 use App\Http\Requests\Area\UpdateAreaRequest;
 use App\Http\Resources\Area\AreaResource;
 use App\Models\Area;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -22,7 +23,7 @@ class AreaController extends Controller
 
     public function index(Request $request): Response
     {
-        /** @var \App\Models\User $authUser */
+        /** @var User $authUser */
         $authUser = $request->user();
 
         return Inertia::render('Areas/Index', [

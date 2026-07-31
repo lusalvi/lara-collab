@@ -36,7 +36,9 @@ class StoreUserRequest extends FormRequest
                 'min:1',
                 function ($attribute, $value, $fail) {
                     $authUser = auth()->user();
-                    if ($authUser->isSuperAdmin()) return; 
+                    if ($authUser->isSuperAdmin()) {
+                        return;
+                    }
 
                     $forbidden = ['superadmin', 'admin'];
                     foreach ($value as $role) {
@@ -47,7 +49,7 @@ class StoreUserRequest extends FormRequest
                 },
             ],
             'avatar' => [File::image(), 'nullable'],
-            'area_id'  => 'required|exists:areas,id',
+            'area_id' => 'required|exists:areas,id',
         ];
     }
 }

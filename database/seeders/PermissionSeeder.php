@@ -36,6 +36,7 @@ class PermissionSeeder extends Seeder
             ->toArray();
 
         $permissionIdsByRole = [
+            'superadmin' => $insertPermissions('superadmin'),
             'admin' => $insertPermissions('admin'),
             'manager' => $insertPermissions('manager'),
             'developer' => $insertPermissions('developer'),

@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Area;
 use App\Models\Role;
 use App\Models\User;
 use App\Services\NotificationService;
@@ -53,12 +54,29 @@ class HandleInertiaRequests extends Middleware
                         'job_title' => $user->job_title,
                         'roles' => $user->getRoleNames(),
                         'permissions' => $user->getAllPermissions()->pluck('name'),
+                        'area_id' => $user->area_id,
+                        'is_super_admin' => $user->isSuperAdmin(),
                     ];
                 },
                 'notifications' => NotificationService::getLatest(6),
             ],
             'shared' => [
                 'roles' => fn () => Role::orderBy('name')->get(['id', 'name'])->toArray(),
+                'areas' => function () {
+                    if (! auth()->check()) {
+                        return [];
+                    }
+                    $user = auth()->user();
+                    if ($user->isSuperAdmin()) {
+                        return Area::orderBy('name')->get(['id', 'name'])->toArray();
+                    }
+                    // Admin de área: solo ve la suya
+                    if ($user->area_id) {
+                        return Area::where('id', $user->area_id)->get(['id', 'name'])->toArray();
+                    }
+
+                    return [];
+                },
             ],
             'flash' => session()->get('flash'),
             'version' => config('app.version'),

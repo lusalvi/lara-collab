@@ -13,10 +13,14 @@ class DropdownValuesController extends Controller
 {
     public function __invoke(Request $request): JsonResponse
     {
+        /** @var User $authUser */
+        $authUser = $request->user();
         $dropdowns = collect();
 
-        $dropdowns->when($request->has('users'), function (Collection $collection) {
-            return $collection->put('users', User::userDropdownValues());
+        $dropdowns->when($request->has('users'), function (Collection $collection) use ($authUser) {
+            $areaId = $authUser->isSuperAdmin() ? null : $authUser->area_id;
+
+            return $collection->put('users', User::userDropdownValues($areaId));
         });
 
         $dropdowns->when($request->has('mentionProjectUsers'), function (Collection $collection) use ($request) {

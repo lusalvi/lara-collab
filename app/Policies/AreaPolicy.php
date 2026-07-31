@@ -8,42 +8,43 @@ use App\Models\User;
 class AreaPolicy
 {
     /**
-     * Determine whether the user can view any models.
+     * El superadmin puede ver todas las áreas.
+     * El admin de área puede ver su propia área (para navegar).
      */
     public function viewAny(User $user): bool
     {
-        return $user->hasPermissionTo('view areas');
+        return $user->isSuperAdmin() || $user->isAdmin();
     }
 
     /**
-     * Determine whether the user can create models.
+     * Solo el superadmin crea áreas.
      */
     public function create(User $user): bool
     {
-        return $user->hasPermissionTo('create area');
+        return $user->isSuperAdmin();
     }
 
     /**
-     * Determine whether the user can update the model.
+     * Solo el superadmin edita áreas.
      */
-    public function update(User $user, Area $model): bool
+    public function update(User $user, Area $area): bool
     {
-        return $user->hasPermissionTo('edit area');
+        return $user->isSuperAdmin();
     }
 
     /**
-     * Determine whether the user can delete the model.
+     * Solo el superadmin archiva áreas.
      */
-    public function delete(User $user, Area $model): bool
+    public function delete(User $user, Area $area): bool
     {
-        return $user->hasPermissionTo('archive area');
+        return $user->isSuperAdmin();
     }
 
     /**
-     * Determine whether the user can restore the model.
+     * Solo el superadmin restaura áreas.
      */
-    public function restore(User $user, Area $model): bool
+    public function restore(User $user, Area $area): bool
     {
-        return $user->hasPermissionTo('restore area');
+        return $user->isSuperAdmin();
     }
 }

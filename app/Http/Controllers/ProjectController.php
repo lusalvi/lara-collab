@@ -21,21 +21,29 @@ class ProjectController extends Controller
 
     public function index(Request $request)
     {
+        /** @var User $authUser */
+        $authUser = $request->user();
+
         return Inertia::render('Projects/Index', [
             'items' => ProjectResource::collection(
                 Project::searchByQueryString()
-                    ->when($request->user()->isNotAdmin(), function ($query) {
-                        $query->whereHas('users', fn ($query) => $query->where('id', auth()->id()));
-                    })
+                    // Superadmin ve todos; admin de área ve los de su área; resto solo los asignados
+                    ->when($authUser->isSuperAdmin(), fn ($q) => $q) // sin filtro
+                    ->when(
+                        $authUser->isAdmin() && ! $authUser->isSuperAdmin(),
+                        fn ($q) => $q->where('area_id', $authUser->area_id)
+                    )
+                    ->when(
+                        $authUser->isNotAdmin(),
+                        fn ($q) => $q->whereHas('users', fn ($q2) => $q2->where('id', $authUser->id))
+                            ->where('area_id', $authUser->area_id)
+                    )
                     ->when($request->has('archived'), fn ($query) => $query->onlyArchived())
-                    ->with([
-                        'area:id,name',
-                        'users:id,name,avatar',
-                    ])
+                    ->with(['area:id,name', 'users:id,name,avatar'])
                     ->withCount([
                         'tasks AS all_tasks_count',
-                        'tasks AS completed_tasks_count' => fn ($query) => $query->whereNotNull('completed_at'),
-                        'tasks AS overdue_tasks_count' => fn ($query) => $query->whereNull('completed_at')->whereDate('due_on', '<', now()),
+                        'tasks AS completed_tasks_count' => fn ($q) => $q->whereNotNull('completed_at'),
+                        'tasks AS overdue_tasks_count' => fn ($q) => $q->whereNull('completed_at')->whereDate('due_on', '<', now()),
                     ])
                     ->withExists('favoritedByAuthUser AS favorite')
                     ->orderBy('favorite', 'desc')
@@ -47,10 +55,37 @@ class ProjectController extends Controller
 
     public function create()
     {
+        /** @var User $authUser */
+        $authUser = auth()->user();
+
         return Inertia::render('Projects/Create', [
             'dropdowns' => [
-                'areas' => Area::dropdownValues(),
-                'users' => User::userDropdownValues(),
+                // Superadmin ve todas las áreas; admin solo ve la suya
+                'areas' => $authUser->isSuperAdmin()
+                    ? Area::dropdownValues()
+                    : Area::where('id', $authUser->area_id)->get(['id', 'name'])
+                        ->map(fn ($i) => ['value' => (string) $i->id, 'label' => $i->name])
+                        ->toArray(),
+                // Solo usuarios del mismo área
+                'users' => User::userDropdownValues($authUser->isSuperAdmin() ? null : $authUser->area_id),
+            ],
+        ]);
+    }
+
+    public function edit(Project $project)
+    {
+        /** @var User $authUser */
+        $authUser = auth()->user();
+
+        return Inertia::render('Projects/Edit', [
+            'item' => $project,
+            'dropdowns' => [
+                'areas' => $authUser->isSuperAdmin()
+                    ? Area::dropdownValues()
+                    : Area::where('id', $authUser->area_id)->get(['id', 'name'])
+                        ->map(fn ($i) => ['value' => (string) $i->id, 'label' => $i->name])
+                        ->toArray(),
+                'users' => User::userDropdownValues($authUser->isSuperAdmin() ? null : $authUser->area_id),
             ],
         ]);
     }
@@ -73,17 +108,6 @@ class ProjectController extends Controller
         ]);
 
         return redirect()->route('projects.index')->success('Project created', 'A new project was successfully created.');
-    }
-
-    public function edit(Project $project)
-    {
-        return Inertia::render('Projects/Edit', [
-            'item' => $project,
-            'dropdowns' => [
-                'areas' => Area::dropdownValues(),
-                'users' => User::userDropdownValues(),
-            ],
-        ]);
     }
 
     public function update(UpdateProjectRequest $request, Project $project)

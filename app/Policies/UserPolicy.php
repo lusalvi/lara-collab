@@ -6,43 +6,63 @@ use App\Models\User;
 
 class UserPolicy
 {
-    /**
-     * Determine whether the user can view any models.
-     */
     public function viewAny(User $user): bool
     {
         return $user->hasPermissionTo('view users');
     }
 
-    /**
-     * Determine whether the user can create models.
-     */
     public function create(User $user): bool
     {
         return $user->hasPermissionTo('create user');
     }
 
     /**
-     * Determine whether the user can update the model.
+     * Solo puede editar usuarios de su misma área (o el superadmin).
      */
     public function update(User $user, User $model): bool
     {
-        return $user->hasPermissionTo('edit user');
+        if (! $user->hasPermissionTo('edit user')) {
+            return false;
+        }
+
+        // El superadmin puede editar a cualquiera
+        if ($user->isSuperAdmin()) {
+            return true;
+        }
+
+        // El admin de área solo puede editar usuarios de su área
+        return $user->area_id === $model->area_id;
     }
 
     /**
-     * Determine whether the user can delete the model.
+     * Solo puede archivar usuarios de su misma área (o el superadmin).
      */
     public function delete(User $user, User $model): bool
     {
-        return $user->hasPermissionTo('archive user');
+        if (! $user->hasPermissionTo('archive user')) {
+            return false;
+        }
+
+        if ($user->isSuperAdmin()) {
+            return true;
+        }
+
+        return $user->area_id === $model->area_id;
     }
 
     /**
-     * Determine whether the user can restore the model.
+     * Solo puede restaurar usuarios de su misma área (o el superadmin).
      */
     public function restore(User $user, User $model): bool
     {
-        return $user->hasPermissionTo('restore user');
+        if (! $user->hasPermissionTo('restore user')) {
+            return false;
+        }
+
+        if ($user->isSuperAdmin()) {
+            return true;
+        }
+
+        return $user->area_id === $model->area_id;
     }
 }

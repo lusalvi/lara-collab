@@ -10,7 +10,7 @@ class PermissionService
 {
     public static $permissionsByRole = [
 
-        // ─── SUPERADMIN: gestión global ───────────────────────────────────────
+        // ─── SUPERADMIN ───────────────────────────────────────
         'superadmin' => [
             'Area' => ['view areas', 'create area', 'edit area', 'archive area', 'restore area'],
             'User' => ['view users', 'create user', 'edit user', 'archive user', 'restore user'],
@@ -24,12 +24,11 @@ class PermissionService
             'Activities' => ['view activities'],
         ],
 
-        // ─── ADMIN DE ÁREA: igual que antes pero SIN gestión de áreas ─────────
+        // ─── ADMIN DE ÁREA ─────────
         'admin' => [
             'User' => ['view users', 'create user', 'edit user', 'archive user', 'restore user'],
             'Label' => ['view labels', 'create label', 'edit label', 'archive label', 'restore label'],
             'Task Priority' => ['view task priority', 'create task priority', 'edit task priority', 'delete task priority', 'restore task priority'],
-            'Role' => ['view roles', 'create role', 'edit role', 'archive role', 'restore role'],
             'Project' => ['view projects', 'view project', 'create project', 'edit project', 'archive project', 'restore project', 'edit project user access'],
             'TaskGroups' => ['create task group', 'edit task group', 'archive task group', 'restore task group', 'reorder task group'],
             'Notes' => ['view notes', 'create note', 'edit note', 'delete note'],
@@ -37,7 +36,7 @@ class PermissionService
             'Activities' => ['view activities'],
         ],
 
-        // ─── RESTO DE ROLES: sin cambios ─────────────────────────────────────
+        // ─── RESTO DE ROLES ─────────────────────────────────────
         'manager' => [
             'User' => ['view users'],
             'Project' => ['view projects', 'view project', 'create project', 'edit project', 'archive project', 'restore project', 'edit project user access'],
@@ -64,7 +63,9 @@ class PermissionService
 
     public static function allPermissionsGrouped(): array
     {
-        return self::$permissionsByRole['superadmin'];
+        $role = auth()->user()?->isSuperAdmin() ? 'superadmin' : 'admin';
+
+        return self::$permissionsByRole[$role];
     }
 
     // ─── Helpers de rol ───────────────────────────────────────────────────────

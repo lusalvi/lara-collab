@@ -16,7 +16,6 @@ export default function useRoles() {
   const getColor = (role) => roleColors[role];
 
   const getDropdownValues = ({ except = [] } = {}) => {
-    // El admin de área no puede asignar superadmin ni admin
     const autoExclude = auth.user.is_super_admin
       ? []
       : ['superadmin', 'admin'];

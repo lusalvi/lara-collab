@@ -14,6 +14,16 @@ import TableRow from "./TableRow";
 const RolesIndex = () => {
   const { items } = usePage().props;
 
+  const protectedRoles = ['superadmin', 'admin'];
+  const sortedData = [...items.data].sort((a, b) => {
+    const aIndex = protectedRoles.indexOf(a.name);
+    const bIndex = protectedRoles.indexOf(b.name);
+    if (aIndex !== -1 && bIndex !== -1) return aIndex - bIndex;
+    if (aIndex !== -1) return -1;
+    if (bIndex !== -1) return 1; 
+    return a.name.localeCompare(b.name);
+  });
+
   const columns = prepareColumns([
     { label: "Name", column: "name" },
     { label: "Permissions count", sortable: false },
@@ -24,8 +34,8 @@ const RolesIndex = () => {
     },
   ]);
 
-  const rows = items.data.length ? (
-    items.data.map((item) => <TableRow item={item} key={item.id} />)
+  const rows = sortedData.length ? (
+    sortedData.map((item) => <TableRow item={item} key={item.id} />)
   ) : (
     <TableRowEmpty colSpan={columns.length} />
   );

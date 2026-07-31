@@ -1,0 +1,17 @@
+.stat {
+    min-width: 0;
+}
+
+.statCard {
+    transition: 0.3s ease border-color, 0.3s ease box-shadow;
+}
+
+.statCardActive {
+    border-color: var(--mantine-color-hospitalPrimary-6) !important;
+}
+
+.chevron {
+    transition: 0.3s ease transform;
+    color: light-dark(var(--mantine-color-gray-5), var(--mantine-color-dark-2));
+    flex-shrink: 0;
+}

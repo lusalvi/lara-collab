@@ -11,6 +11,7 @@ import {
   ScrollArea,
   Stack,
   Text,
+  ThemeIcon,
   Title,
   Tooltip,
 } from "@mantine/core";
@@ -20,9 +21,14 @@ import classes from "./css/RecentComments.module.css";
 export default function RecentComments({ comments }) {
   return (
     <Card bg="none">
-      <Title order={3} ml={15}>
-        Recent comments
-      </Title>
+      <Group gap={10} wrap="nowrap" className={classes.highlight}>
+        <ThemeIcon size={28} radius="md" variant="light" color="hospitalSecondary">
+          <IconMessage size={16} />
+        </ThemeIcon>
+        <Title order={4} fz={15}>
+          Comentarios recientes
+        </Title>
+      </Group>
 
       <Divider my={14} />
 

@@ -11,19 +11,25 @@ import {
   ScrollArea,
   Stack,
   Text,
+  ThemeIcon,
   Title,
   Tooltip,
 } from "@mantine/core";
-import { IconSearch } from "@tabler/icons-react";
+import { IconSearch, IconClipboardList } from "@tabler/icons-react";
 import classes from "./css/RecentlyAssignedTasks.module.css";
 import translateGroupName from "@/utils/translateGroupName";
 
 export default function RecentlyAssignedTasks({ tasks }) {
   return (
     <Card bg="none">
-      <Title order={3} ml={15}>
-        Recently assigned tasks
-      </Title>
+      <Group gap={10} wrap="nowrap" className={classes.highlight}>
+        <ThemeIcon size={28} radius="md" variant="light" color="hospitalPrimary">
+          <IconClipboardList size={16} />
+        </ThemeIcon>
+        <Title order={4} fz={15}>
+          Tareas asignadas
+        </Title>
+      </Group>
 
       <Divider my={14} />
 

@@ -18,6 +18,8 @@ import {
 } from '@mantine/core';
 
 const ProjectEdit = ({ dropdowns: { areas, users } }) => {
+  const { item, auth } = usePage().props;
+  const isSuperAdmin = auth.user.is_super_admin;
   const { item } = usePage().props;
 
   const [form, submit, updateValue] = useForm('post', route('projects.update', item.id), {
@@ -87,6 +89,7 @@ const ProjectEdit = ({ dropdowns: { areas, users } }) => {
             value={form.data.area_id?.toString()}
             onChange={value => updateValue('area_id', value)}
             data={areas}
+            disabled={!isSuperAdmin}
             error={form.errors.area_id}
           />
 

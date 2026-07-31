@@ -22,10 +22,15 @@ class AreaController extends Controller
 
     public function index(Request $request): Response
     {
+        /** @var \App\Models\User $authUser */
+        $authUser = $request->user();
+
         return Inertia::render('Areas/Index', [
             'items' => AreaResource::collection(
                 Area::searchByQueryString()
                     ->sortByQueryString()
+                    // Admin de área solo ve su propio área; superadmin ve todas
+                    ->when(! $authUser->isSuperAdmin() && $authUser->area_id, fn ($q) => $q->where('id', $authUser->area_id))
                     ->when($request->has('archived'), fn ($query) => $query->onlyArchived())
                     ->paginate(12)
             ),

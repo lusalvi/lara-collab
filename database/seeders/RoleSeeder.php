@@ -8,6 +8,7 @@ use Illuminate\Database\Seeder;
 class RoleSeeder extends Seeder
 {
     public static $roles = [
+        'superadmin',   
         'developer',
         'qa engineer',
         'designer',

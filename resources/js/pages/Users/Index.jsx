@@ -12,12 +12,19 @@ import { IconPlus } from "@tabler/icons-react";
 import TableRow from "./TableRow";
 
 const UsersIndex = () => {
-  const { items } = usePage().props;
+  const { items, auth } = usePage().props;
+  const isSuperAdmin = auth.user.is_super_admin;
 
   const columns = prepareColumns([
     { label: "User", column: "name" },
     { label: "Role", sortable: false },
     { label: "Email", column: "email" },
+    {
+    label: "Area",
+    column: "area_id",
+    sortable: true,
+    visible: isSuperAdmin,
+  },
     {
       label: "Actions",
       sortable: false,

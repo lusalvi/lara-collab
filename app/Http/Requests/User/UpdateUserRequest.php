@@ -30,8 +30,24 @@ class UpdateUserRequest extends FormRequest
             'phone' => 'string|nullable',
             'email' => ['required', 'email:rfc,dns', Rule::unique('users')->ignore($this->route('user')->id)],
             'password' => 'nullable|min:8|confirmed',
-            'roles' => 'required|array|min:1',
+            'roles' => [
+                'required',
+                'array',
+                'min:1',
+                function ($attribute, $value, $fail) {
+                    $authUser = auth()->user();
+                    if ($authUser->isSuperAdmin()) return; 
+
+                    $forbidden = ['superadmin', 'admin'];
+                    foreach ($value as $role) {
+                        if (in_array($role, $forbidden)) {
+                            $fail("No tenés permisos para asignar el rol '$role'.");
+                        }
+                    }
+                },
+            ],
             'avatar' => [File::image(), 'nullable'],
+            'area_id' => 'required|exists:areas,id', 
         ];
     }
 }

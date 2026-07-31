@@ -14,6 +14,7 @@ class UpdateUser
             'job_title' => $data['job_title'],
             'phone' => $data['phone'],
             'email' => $data['email'],
+            'area_id'   => $data['area_id'],
         ];
 
         $user->syncRoles($data['roles']);

@@ -4,6 +4,7 @@ import useForm from '@/hooks/useForm';
 import ContainerBox from '@/layouts/ContainerBox';
 import Layout from '@/layouts/MainLayout';
 import { redirectTo } from '@/utils/route';
+import { usePage } from '@inertiajs/react';
 import {
   Anchor,
   Breadcrumbs,
@@ -17,10 +18,13 @@ import {
 } from '@mantine/core';
 
 const ProjectCreate = ({ dropdowns: { areas, users } }) => {
+  const { auth } = usePage().props;
+  const isSuperAdmin = auth.user.is_super_admin;
+
   const [form, submit, updateValue] = useForm('post', route('projects.store'), {
     name: '',
     description: '',
-    area_id: '',
+    area_id: isSuperAdmin ? '' : String(auth.user.area_id ?? ''),
     users: [],
   });
 
@@ -83,6 +87,7 @@ const ProjectCreate = ({ dropdowns: { areas, users } }) => {
             value={form.data.area_id}
             onChange={value => updateValue('area_id', value)}
             data={areas}
+            disabled={!isSuperAdmin}
             error={form.errors.area_id}
           />
 

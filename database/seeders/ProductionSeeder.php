@@ -17,10 +17,11 @@ class ProductionSeeder extends Seeder
             'email' => config('auth.admin.email'),
             'name' => config('auth.admin.name'),
             'phone' => '',
-            'job_title' => 'Owner',
+            'job_title' => 'Superadministrador',
             'avatar' => null,
             'password' => bcrypt(config('auth.admin.password')),
             'remember_token' => null,
-        ])->assignRole(Role::firstWhere('name', 'admin'));
+            'area_id' => null,
+        ])->assignRole(Role::firstWhere('name', 'superadmin'));
     }
 }

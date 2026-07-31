@@ -46,19 +46,33 @@ class HandleInertiaRequests extends Middleware
                     $user = auth()->user();
 
                     return [
-                        'id' => $user->id,
-                        'name' => $user->name,
-                        'email' => $user->email,
-                        'avatar' => $user->avatar,
-                        'job_title' => $user->job_title,
-                        'roles' => $user->getRoleNames(),
-                        'permissions' => $user->getAllPermissions()->pluck('name'),
+                        'id'             => $user->id,
+                        'name'           => $user->name,
+                        'email'          => $user->email,
+                        'avatar'         => $user->avatar,
+                        'job_title'      => $user->job_title,
+                        'roles'          => $user->getRoleNames(),
+                        'permissions'    => $user->getAllPermissions()->pluck('name'),
+                        'area_id'        => $user->area_id,
+                        'is_super_admin' => $user->isSuperAdmin(),
                     ];
                 },
                 'notifications' => NotificationService::getLatest(6),
             ],
             'shared' => [
-                'roles' => fn () => Role::orderBy('name')->get(['id', 'name'])->toArray(),
+                'roles' => fn() => Role::orderBy('name')->get(['id', 'name'])->toArray(),
+                'areas' => function () {
+                    if (! auth()->check()) return [];
+                    $user = auth()->user();
+                    if ($user->isSuperAdmin()) {
+                        return \App\Models\Area::orderBy('name')->get(['id', 'name'])->toArray();
+                    }
+                    // Admin de área: solo ve la suya
+                    if ($user->area_id) {
+                        return \App\Models\Area::where('id', $user->area_id)->get(['id', 'name'])->toArray();
+                    }
+                    return [];
+                },
             ],
             'flash' => session()->get('flash'),
             'version' => config('app.version'),

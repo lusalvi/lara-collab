@@ -3,7 +3,7 @@ import { Table, Text } from "@mantine/core";
 
 export default function TableRow({ item }) {
   const isLocked = (role) => {
-    return role === "admin";
+    return role === "admin" || role === "superadmin";
   };
 
   return (
@@ -17,7 +17,7 @@ export default function TableRow({ item }) {
         <Text fz="sm">{item.permissions_count}</Text>
       </Table.Td>
       {(can("edit role") || can("archive role") || can("restore role")) &&
-        item.name !== "admin" && (
+       !isLocked(item.name) && (
           <Table.Td w={100}>
             <TableRowActions
               item={item}

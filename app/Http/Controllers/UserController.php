@@ -21,11 +21,15 @@ class UserController extends Controller
 
     public function index(Request $request): Response
     {
+        /** @var User $authUser */
+        $authUser = $request->user();
+
         return Inertia::render('Users/Index', [
             'items' => UserResource::collection(
                 User::searchByQueryString()
                     ->sortByQueryString()
-                    ->with('roles:id,name')
+                    ->with(['roles:id,name', 'area:id,name'])
+                    ->when(! $authUser->isSuperAdmin(), fn ($q) => $q->where('area_id', $authUser->area_id))
                     ->when($request->has('archived'), fn ($query) => $query->onlyArchived())
                     ->paginate(12)
             ),

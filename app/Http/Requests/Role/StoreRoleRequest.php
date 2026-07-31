@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Role;
 
-use Illuminate\Contracts\Validation\ValidationRule;
+use App\Services\PermissionService;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -26,6 +26,19 @@ class StoreRoleRequest extends FormRequest
         return [
             'name' => ['required', 'string', Rule::unique('roles')],
             'permissions' => ['required', 'array'],
+            'permissions.*' => [
+                'string',
+                Rule::in($this->allowedPermissions()),
+            ],
         ];
+    }
+
+    private function allowedPermissions(): array
+    {
+        $role = auth()->user()->isSuperAdmin() ? 'superadmin' : 'admin';
+
+        return collect(PermissionService::$permissionsByRole[$role])
+            ->flatten()
+            ->toArray();
     }
 }

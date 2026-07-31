@@ -26,7 +26,7 @@ class RoleController extends Controller
             'items' => RoleResource::collection(
                 Role::searchByQueryString()
                     ->sortByQueryString()
-                    ->when($request->has('archived'), fn ($query) => $query->onlyArchived())
+                    ->when($request->has('archived'), fn($query) => $query->onlyArchived())
                     ->withCount('permissions')
                     ->paginate(12),
             ),

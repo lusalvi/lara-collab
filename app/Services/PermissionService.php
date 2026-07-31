@@ -64,6 +64,7 @@ class PermissionService
     public static function allPermissionsGrouped(): array
     {
         $role = auth()->user()?->isSuperAdmin() ? 'superadmin' : 'admin';
+
         return self::$permissionsByRole[$role];
     }
 
@@ -94,19 +95,19 @@ class PermissionService
             ->where('area_id', $project->area_id)
             ->with('roles:id,name')
             ->get(['id', 'name', 'avatar'])
-            ->map(fn($u) => [...$u->toArray(), 'reason' => 'area admin']);
+            ->map(fn ($u) => [...$u->toArray(), 'reason' => 'area admin']);
 
         // El superadmin siempre tiene acceso
         $superAdmins = User::role('superadmin')
             ->with('roles:id,name')
             ->get(['id', 'name', 'avatar'])
-            ->map(fn($u) => [...$u->toArray(), 'reason' => 'superadmin']);
+            ->map(fn ($u) => [...$u->toArray(), 'reason' => 'superadmin']);
 
         // Acceso explícito dado al proyecto
         $givenAccess = $project
             ->users
             ->load('roles:id,name')
-            ->map(fn($u) => [...$u->toArray(), 'reason' => 'given access']);
+            ->map(fn ($u) => [...$u->toArray(), 'reason' => 'given access']);
 
         return self::$usersWithAccessToProject[$project->id] = collect([
             ...$superAdmins,

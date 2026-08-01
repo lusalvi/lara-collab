@@ -119,7 +119,7 @@ class Task extends Model implements AuditableContract, Sortable
     }
 
     /* Tareas por vencer */
-     public function scopeDueSoonPendingNotification(Builder $query): Builder
+    public function scopeDueSoonPendingNotification(Builder $query): Builder
     {
         return $query
             ->whereDate('due_on', now()->addDay()->toDateString())
@@ -127,7 +127,8 @@ class Task extends Model implements AuditableContract, Sortable
             ->whereNull('due_soon_notified_at')
             ->whereNotNull('assigned_to_user_id');
     }
-    /* Tareas vencidas  */
+
+    /* Tareas vencidas */
     public function scopeOverduePendingNotification(Builder $query): Builder
     {
         return $query

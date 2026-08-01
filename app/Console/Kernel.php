@@ -16,6 +16,12 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('project:prune-activities')->dailyAt('03:00');
         $schedule->command('user:prune-notifications')->dailyAt('03:05');
+
+        /* Tareas vencidas: se detecta a penas cambia el dia, se notifica una sola vez */
+        $schedule->command('task:notify-overdue')->dailyAt('00:10');
+        /* Tareas que vencen al dia siguiente:se avisa una sola vez, un dia antes */
+        $schedule->command('task:notify-due-soon')->dailyAt('09:00');
+
     }
 
     /**

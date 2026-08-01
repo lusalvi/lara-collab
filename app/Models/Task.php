@@ -58,6 +58,9 @@ class Task extends Model implements AuditableContract, Sortable
 
         'assigned_at',
         'completed_at',
+
+        'due_soon_notified_at',
+        'overdue_notified_at',
     ];
 
     protected $searchable = [
@@ -69,6 +72,8 @@ class Task extends Model implements AuditableContract, Sortable
         'start_on' => 'date',
         'due_on' => 'date',
         'completed_at' => 'datetime',
+        'due_soon_notified_at' => 'datetime',
+        'overdue_notified_at' => 'datetime',
         'priority' => 'integer',
     ];
 
@@ -111,6 +116,26 @@ class Task extends Model implements AuditableContract, Sortable
     public function scopeWithDefault(Builder $query)
     {
         $query->with($this->defaultWith);
+    }
+
+    /* Tareas por vencer */
+    public function scopeDueSoonPendingNotification(Builder $query): Builder
+    {
+        return $query
+            ->whereDate('due_on', now()->addDay()->toDateString())
+            ->whereNull('completed_at')
+            ->whereNull('due_soon_notified_at')
+            ->whereNotNull('assigned_to_user_id');
+    }
+
+    /* Tareas vencidas */
+    public function scopeOverduePendingNotification(Builder $query): Builder
+    {
+        return $query
+            ->whereDate('due_on', '<', now()->toDateString())
+            ->whereNull('completed_at')
+            ->whereNull('overdue_notified_at')
+            ->whereNotNull('assigned_to_user_id');
     }
 
     public function loadDefault()

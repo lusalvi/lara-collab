@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasArchivedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -10,7 +11,6 @@ use Lacodix\LaravelModelFilter\Traits\IsSortable;
 use LaravelArchivable\Archivable;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
-use App\Models\Concerns\HasArchivedBy;
 
 class Area extends Model implements AuditableContract
 {

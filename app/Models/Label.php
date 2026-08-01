@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasArchivedBy;
 use Illuminate\Database\Eloquent\Model;
 use Lacodix\LaravelModelFilter\Traits\IsSearchable;
 use Lacodix\LaravelModelFilter\Traits\IsSortable;
 use LaravelArchivable\Archivable;
-use App\Models\Concerns\HasArchivedBy;
 
 class Label extends Model
 {

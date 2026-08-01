@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasArchivedBy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -13,7 +14,6 @@ use LaravelArchivable\Archivable;
 use Overtrue\LaravelFavorite\Traits\Favoriteable;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
-use App\Models\Concerns\HasArchivedBy;
 
 class Project extends Model implements AuditableContract
 {

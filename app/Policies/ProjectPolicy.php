@@ -63,6 +63,14 @@ class ProjectPolicy
             return false;
         }
 
+        if ($project->wasArchivedBySuperAdmin() && ! $user->isSuperAdmin()) {
+            return false;
+        }
+
+        if ($user->isSuperAdmin()) {
+            return true;
+        }
+
         if (! $user->belongsToArea($project->area_id)) {
             return false;
         }

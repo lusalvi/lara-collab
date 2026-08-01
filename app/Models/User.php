@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasArchivedBy;
 use App\Services\PermissionService;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
@@ -22,7 +23,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements AuditableContract, CanResetPasswordContract
 {
-    use Archivable, Auditable, CanResetPassword, Favoriter, HasApiTokens, HasFactory, HasRoles, IsSearchable, IsSortable, Notifiable;
+    use Archivable, Auditable, CanResetPassword, Favoriter, HasApiTokens, HasArchivedBy, HasFactory, HasRoles, IsSearchable, IsSortable, Notifiable;
 
     protected $fillable = [
         'name',
@@ -33,6 +34,7 @@ class User extends Authenticatable implements AuditableContract, CanResetPasswor
         'phone',
         'google_id',
         'area_id',
+        'archived_by_id',
     ];
 
     protected $searchable = [

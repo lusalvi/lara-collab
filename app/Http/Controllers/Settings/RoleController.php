@@ -26,7 +26,7 @@ class RoleController extends Controller
             'items' => RoleResource::collection(
                 Role::searchByQueryString()
                     ->sortByQueryString()
-                    ->when($request->has('archived'), fn ($query) => $query->onlyArchived())
+                    ->when($request->has('archived'), fn ($query) => $query->onlyArchived()->with('archivedBy'))
                     ->withCount('permissions')
                     ->paginate(12),
             ),
@@ -71,6 +71,7 @@ class RoleController extends Controller
         if ($usersWithRole) {
             return redirect()->route('settings.roles.index')->warning('Action stopped', 'You cannot archive a role that is currently assigned to users.');
         }
+        $role->update(['archived_by_id' => auth()->id()]);
         $role->archive();
 
         return redirect()->back()->success('Role archived', 'The role was successfully archived.');
@@ -83,6 +84,7 @@ class RoleController extends Controller
         $this->authorize('restore', $role);
 
         $role->unArchive();
+        $role->update(['archived_by_id' => null]);
 
         return redirect()->back()->success('Role restored', 'The restoring of the role was completed successfully.');
     }

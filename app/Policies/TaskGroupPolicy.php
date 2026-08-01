@@ -37,6 +37,10 @@ class TaskGroupPolicy
      */
     public function restore(User $user, TaskGroup $taskGroup, Project $project): bool
     {
+        if ($taskGroup->wasArchivedBySuperAdmin() && ! $user->isSuperAdmin()) {
+            return false;
+        }
+
         return $user->hasPermissionTo('restore task group') && $user->hasProjectAccess($project);
     }
 

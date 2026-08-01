@@ -19,6 +19,7 @@ class RoleResource extends JsonResource
             'name' => $this->name,
             'permissions_count' => $this->permissions_count,
             'permissions' => $this->permissions->pluck('name'),
+            'can_restore' => $this->archived_at ? $request->user()?->can('restore', $this->resource) : null,
         ];
     }
 }

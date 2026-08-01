@@ -32,19 +32,19 @@ class RouteServiceProvider extends ServiceProvider
 
         Route::model('project', Project::class, function ($value) {
             return Project::where('id', $value)
-                ->when(auth()->user()->isAdmin(), fn ($query) => $query->withArchived())
+                ->when(auth()->user()->isAdmin() || auth()->user()->isSuperAdmin(), fn ($query) => $query->withArchived())
                 ->firstOrFail();
         });
 
         Route::model('taskGroup', TaskGroup::class, function ($value) {
             return TaskGroup::where('id', $value)
-                ->when(auth()->user()->isAdmin(), fn ($query) => $query->withArchived())
+                ->when(auth()->user()->isAdmin() || auth()->user()->isSuperAdmin(), fn ($query) => $query->withArchived())
                 ->firstOrFail();
         });
 
         Route::model('task', Task::class, function ($value) {
             return Task::where('id', $value)
-                ->when(auth()->user()->isAdmin(), fn ($query) => $query->withArchived())
+                ->when(auth()->user()->isAdmin() || auth()->user()->isSuperAdmin(), fn ($query) => $query->withArchived())
                 ->firstOrFail();
         });
 

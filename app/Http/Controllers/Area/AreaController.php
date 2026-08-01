@@ -66,6 +66,7 @@ class AreaController extends Controller
 
     public function destroy(Area $area)
     {
+        $area->update(['archived_by_id' => auth()->id()]);
         $area->archive();
 
         return redirect()->back()->success('Area archived', 'The area was successfully archived.');
@@ -78,6 +79,7 @@ class AreaController extends Controller
         $this->authorize('restore', $area);
 
         $area->unArchive();
+        $area->update(['archived_by_id' => null]);
 
         return redirect()->back()->success('Area restored', 'The restoring of the area was completed successfully.');
     }

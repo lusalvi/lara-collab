@@ -13,15 +13,17 @@ use LaravelArchivable\Archivable;
 use Overtrue\LaravelFavorite\Traits\Favoriteable;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
+use App\Models\Concerns\HasArchivedBy;
 
 class Project extends Model implements AuditableContract
 {
-    use Archivable, Auditable, Favoriteable, IsSearchable, IsSortable;
+    use Archivable, Auditable, Favoriteable, HasArchivedBy, IsSearchable, IsSortable;
 
     protected $fillable = [
         'name',
         'description',
         'area_id',
+        'archived_by_id',
     ];
 
     protected $searchable = [

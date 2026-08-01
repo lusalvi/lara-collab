@@ -63,6 +63,10 @@ class ProjectPolicy
             return false;
         }
 
+        if ($project->wasArchivedBySuperAdmin() && ! $user->isSuperAdmin()) {
+            return false;
+        }
+
         if ($user->isSuperAdmin()) {
             return true;
         }

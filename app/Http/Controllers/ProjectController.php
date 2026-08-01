@@ -123,6 +123,7 @@ class ProjectController extends Controller
 
     public function destroy(Project $project)
     {
+        $project->update(['archived_by_id' => auth()->id()]);
         $project->archive();
 
         return redirect()->back()->success('Project archived', 'The project was successfully archived.');
@@ -135,6 +136,7 @@ class ProjectController extends Controller
         $this->authorize('restore', $project);
 
         $project->unArchive();
+        $project->update(['archived_by_id' => null]);
 
         return redirect()->back()->success('Project restored', 'The restoring of the project was completed successfully.');
     }

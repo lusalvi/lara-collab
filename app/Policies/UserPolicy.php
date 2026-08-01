@@ -59,6 +59,10 @@ class UserPolicy
             return false;
         }
 
+        if ($model->wasArchivedBySuperAdmin() && ! $user->isSuperAdmin()) {
+            return false;
+        }
+
         if ($user->isSuperAdmin()) {
             return true;
         }

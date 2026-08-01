@@ -56,6 +56,7 @@ class LabelController extends Controller
 
     public function destroy(Label $label)
     {
+        $label->update(['archived_by_id' => auth()->id()]);
         $label->archive();
 
         return redirect()->back()->success('Label archived', 'The label was successfully archived.');
@@ -68,6 +69,7 @@ class LabelController extends Controller
         $this->authorize('restore', $label);
 
         $label->unArchive();
+        $label->update(['archived_by_id' => null]);
 
         return redirect()->back()->success('Label restored', 'The restoring of the label was completed successfully.');
     }

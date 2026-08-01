@@ -10,13 +10,15 @@ use Lacodix\LaravelModelFilter\Traits\IsSortable;
 use LaravelArchivable\Archivable;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
+use App\Models\Concerns\HasArchivedBy;
 
 class Area extends Model implements AuditableContract
 {
-    use Archivable, Auditable, HasFactory, IsSearchable, IsSortable;
+    use Archivable, Auditable, HasArchivedBy, HasFactory, IsSearchable, IsSortable;
 
     protected $fillable = [
         'name',
+        'archived_by_id',
     ];
 
     protected $searchable = [

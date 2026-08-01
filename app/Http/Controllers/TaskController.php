@@ -194,7 +194,7 @@ class TaskController extends Controller
     {
         $this->authorize('delete', [$task, $project]);
 
-        $task->archiveWithChildren();
+        $task->archiveWithChildren(auth()->id());
         TaskDeleted::dispatch($task->id, $task->project_id);
 
         return redirect()->back()->success('Task archived', 'The task was successfully archived.');

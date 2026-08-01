@@ -44,6 +44,10 @@ class LabelPolicy
      */
     public function restore(User $user, Label $label): bool
     {
-        return $user->hasPermissionTo('restore label');
+        if (! $user->hasPermissionTo('restore label')) {
+            return false;
+        }
+
+        return ! ($label->wasArchivedBySuperAdmin() && ! $user->isSuperAdmin());
     }
 }

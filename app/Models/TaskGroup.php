@@ -12,14 +12,15 @@ use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
+use App\Models\Concerns\HasArchivedBy;
 
 class TaskGroup extends Model implements AuditableContract, Sortable
 {
-    use Archivable, Auditable, HasFactory, SortableTrait;
+    use Archivable, Auditable, HasArchivedBy, HasFactory, SortableTrait;
 
     public $timestamps = false;
 
-    protected $fillable = ['name', 'color', 'project_id', 'order_column'];
+    protected $fillable = ['name', 'color', 'project_id', 'order_column', 'archived_by_id'];
 
     protected static function booted(): void
     {

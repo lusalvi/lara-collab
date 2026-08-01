@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasArchivedBy;
 use App\Models\Filters\IsNullFilter;
 use App\Models\Filters\TaskCompletedFilter;
 use App\Models\Filters\TaskOverdueFilter;
@@ -24,7 +25,7 @@ use Spatie\EloquentSortable\SortableTrait;
 
 class Task extends Model implements AuditableContract, Sortable
 {
-    use Archivable, Auditable, HasFactory, HasFilters, IsSearchable, SortableTrait;
+    use Archivable, Auditable, HasArchivedBy, HasFactory, HasFilters, IsSearchable, SortableTrait;
 
     // Qué issue_type puede tener un hijo directo, según el issue_type del padre.
     public const ALLOWED_CHILD_TYPES = [
@@ -61,6 +62,8 @@ class Task extends Model implements AuditableContract, Sortable
 
         'due_soon_notified_at',
         'overdue_notified_at',
+
+        'archived_by_id',
     ];
 
     protected $searchable = [
@@ -163,10 +166,15 @@ class Task extends Model implements AuditableContract, Sortable
         return $this->hasMany(Task::class, 'parent_task_id');
     }
 
-    public function archiveWithChildren(): void
+    public function archiveWithChildren(?int $archivedById = null): void
     {
         foreach ($this->children()->withArchived()->get() as $child) {
-            $child->archiveWithChildren();
+            $child->archiveWithChildren($archivedById);
+        }
+
+        if ($archivedById) {
+            $this->archived_by_id = $archivedById;
+            $this->save();
         }
 
         $this->archive();
@@ -175,6 +183,7 @@ class Task extends Model implements AuditableContract, Sortable
     public function restoreWithChildren(): void
     {
         $this->unArchive();
+        $this->update(['archived_by_id' => null]);
 
         foreach ($this->children()->withArchived()->get() as $child) {
             $child->restoreWithChildren();

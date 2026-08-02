@@ -226,6 +226,7 @@ export function CreateTaskDrawer() {
           <Select
             label='Issue type'
             placeholder='Select issue type'
+            required
             mt='md'
             value={form.data.issue_type}
             onChange={value => updateValue('issue_type', value || '')}

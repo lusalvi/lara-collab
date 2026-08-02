@@ -1,11 +1,13 @@
 import { ScrollArea, Text } from '@mantine/core';
 import TaskRow from './TaskRow';
 
-
 export default function Sidebar({
   project,
   tasks,
   columns,
+  parentIds,
+  collapsed,
+  onToggle,
   listWidth,
   listScrollRef,
   ganttScrollRef,
@@ -89,6 +91,9 @@ export default function Sidebar({
             onTaskChange={onTaskChange}
             taskGroups={taskGroups}
             users={users}
+            hasChildren={parentIds.has(task.id)}
+            collapsed={collapsed.has(task.id)}
+            onToggle={() => onToggle(task.id)}
           />
         ))}
 

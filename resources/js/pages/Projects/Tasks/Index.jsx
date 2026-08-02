@@ -15,6 +15,7 @@ import FiltersDrawer from './Index/FiltersDrawer';
 import Header from './Index/Header';
 import BoardView from './Index/BoardView';
 import ListView from './Index/ListView';
+import BulkActionsBar from './Index/BulkActionsBar';
 
 let currentProject = null;
 
@@ -23,7 +24,7 @@ const TasksIndex = () => {
   currentProject = project;
 
   const { groups, setGroups, reorderGroup } = useTaskGroupsStore();
-  const { tasks, setTasks, addTask, reorderTask, moveTask } = useTasksStore();
+  const { tasks, setTasks, addTask, reorderTask, moveTask, selectedTaskIds } = useTasksStore();
   const { hasFilters } = useTaskFiltersStore();
   const { initProjectWebSocket } = useWebSockets();
   const { tasksView } = usePreferences();
@@ -70,6 +71,8 @@ const TasksIndex = () => {
       >
         {!route().params.archived ? (
           <Grid.Col span={12}>
+            {selectedTaskIds.length > 0 && <BulkActionsBar />}
+            
             {groups.length ? (
               <>
                 {tasksView === 'kanban' ? (

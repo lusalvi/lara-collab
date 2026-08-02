@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Select } from '@mantine/core';
 import axios from 'axios';
-import { getGroupSelectColorName } from '../../constants/taskGroupColors';
+import { getGroupSelectColorName } from '../../../../../utils/taskGroupColors';
 
 export default function TaskGroupSelect({ project, task, groups, onTaskChange }) {
   const [saving, setSaving] = useState(false);

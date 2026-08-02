@@ -4,13 +4,15 @@ import IssueTypeIcon from '@/components/IssueTypeIcon';
 
 import classes from './ListView.module.css';
 
-import TaskAssignee from './Components/TaskAssignee';
+import TaskAssigneeDropdown from './Components/TaskAssigneeDropdown';
 import TaskDueDate from './Components/TaskDueDate';
 import TaskActions from './Components/TaskActions';
 import TaskStatusDropdown from './Components/TaskStatusDropdown';
+import TaskCreator from './Components/TaskCreator';
 import { IconChevronDown, IconChevronRight, IconGripVertical, IconPlus } from '@tabler/icons-react';
 import useTaskDrawerStore from '@/hooks/store/useTaskDrawerStore';
 import useTasksStore from '@/hooks/store/useTasksStore';
+import { isOverdue } from '@/utils/task';
 
 function DropZone({ id, zone, isValid, className, children }) {
   const { setNodeRef, isOver } = useDroppable({
@@ -30,7 +32,15 @@ function DropZone({ id, zone, isValid, className, children }) {
   );
 }
 
-export default function TaskRow({ task, depth = 0, hasChildren, collapsed, onToggle, dragState }) {
+export default function TaskRow({
+  task,
+  users,
+  depth = 0,
+  hasChildren,
+  collapsed,
+  onToggle,
+  dragState,
+}) {
   const { openEditTask, openCreateTask } = useTaskDrawerStore();
   const { selectedTaskIds, toggleTaskSelection } = useTasksStore();
 
@@ -134,9 +144,11 @@ export default function TaskRow({ task, depth = 0, hasChildren, collapsed, onTog
             <IssueTypeIcon type={task.issue_type} />
 
             <Text
+              size='sm'
+              fw={400}
               lineClamp={1}
               td={task.completed_at ? 'line-through' : undefined}
-              c={task.completed_at ? 'dimmed' : undefined}
+              c={task.completed_at ? 'dimmed' : isOverdue(task) ? 'red.7' : undefined}
             >
               {task.name}
             </Text>
@@ -173,11 +185,16 @@ export default function TaskRow({ task, depth = 0, hasChildren, collapsed, onTog
         />
       </div>
 
+      <TaskCreator user={task.created_by_user} />
+
       <div
         className={classes.assignee}
         onClick={e => e.stopPropagation()}
       >
-        <TaskAssignee user={task.assigned_to_user} />
+        <TaskAssigneeDropdown
+          task={task}
+          users={users}
+        />
       </div>
 
       <div className={classes.priority}>

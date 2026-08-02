@@ -210,4 +210,30 @@ class TaskController extends Controller
 
         return redirect()->back()->success('Task restored', 'The restoring of the Task was completed successfully.');
     }
+
+    public function bulkArchive(Request $request, Project $project): JsonResponse
+    {
+        $request->validate([
+            'ids' => ['required', 'array'],
+            'ids.*' => ['integer', 'exists:tasks,id'],
+        ]);
+
+        // Obtener las tareas a archivar
+        $tasksToArchive = Task::whereIn('id', $request->ids)
+            ->where('project_id', $project->id)
+            ->get();
+
+        // Verificar autorización - la política espera Task Y Project
+        if ($tasksToArchive->isNotEmpty()) {
+            $this->authorize('delete', [$tasksToArchive->first(), $project]);
+        }
+
+        // Archivar cada tarea
+        $tasksToArchive->each(function ($task) {
+            $task->archiveWithChildren();
+            TaskDeleted::dispatch($task->id, $task->project_id);
+        });
+
+        return response()->json(['message' => 'Tasks archived successfully']);
+    }
 }

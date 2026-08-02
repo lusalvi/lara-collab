@@ -2,8 +2,20 @@ import { router } from '@inertiajs/react';
 import EditableTaskName from './EditableTaskName';
 import TaskGroupSelect from './TaskGroupSelect';
 import TaskAssigneeSelect from './TaskAssigneeSelect';
+import { IconChevronRight, IconChevronDown } from '@tabler/icons-react';
+import IssueTypeIcon from '@/components/IssueTypeIcon';
 
-export default function TaskRow({ project, task, columns, onTaskChange, taskGroups, users }) {
+export default function TaskRow({
+  project,
+  task,
+  columns,
+  hasChildren,
+  collapsed,
+  onToggle,
+  onTaskChange,
+  taskGroups,
+  users,
+}) {
   return (
     <div
       className='timeline-list-row'
@@ -20,11 +32,47 @@ export default function TaskRow({ project, task, columns, onTaskChange, taskGrou
         className='timeline-list-row-name'
         style={{ width: columns.activity, minWidth: 0 }}
       >
-        <EditableTaskName
-          project={project}
-          task={task}
-          onTaskChange={onTaskChange}
-        />
+        <div
+          className='timeline-task-name'
+          style={{
+            paddingLeft: `${task.depth * 24}px`,
+          }}
+        >
+          <div
+            style={{
+              width: 18,
+              display: 'flex',
+              justifyContent: 'center',
+              cursor: hasChildren ? 'pointer' : 'default',
+              flexShrink: 0,
+            }}
+            onClick={e => {
+              e.stopPropagation();
+
+              if (hasChildren) {
+                onToggle();
+              }
+            }}
+          >
+            {hasChildren ? (
+              collapsed ? (
+                <IconChevronRight size={14} />
+              ) : (
+                <IconChevronDown size={14} />
+              )
+            ) : (
+              <div style={{ width: 14 }} />
+            )}
+          </div>
+
+          <IssueTypeIcon type={task.issue_type} />
+
+          <EditableTaskName
+            project={project}
+            task={task}
+            onTaskChange={onTaskChange}
+          />
+        </div>
       </div>
 
       <div

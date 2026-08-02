@@ -8,8 +8,10 @@ import { Text } from '@mantine/core';
 import useTaskDragAndDrop from './List/hooks/useTaskDragAndDrop';
 import useColumnResize from './List/hooks/useColumnResize';
 import classes from './List/ListView.module.css';
+import { usePage } from '@inertiajs/react';
 
 const ListView = ({ groups, tasks, usingFilters }) => {
+  const { usersWithAccessToProject } = usePage().props;
   const [collapsed, setCollapsed] = useState(new Set());
   const { widths, setWidth } = useColumnResize();
 
@@ -78,6 +80,7 @@ const ListView = ({ groups, tasks, usingFilters }) => {
   const columnStyleVars = {
     '--col-key-width': `${widths.key}px`,
     '--col-summary-width': `${widths.summary}px`,
+    '--col-creator-width': `${widths.creator}px`,
     '--col-assignee-width': `${widths.assignee}px`,
     '--col-priority-width': `${widths.priority}px`,
     '--col-status-width': `${widths.status}px`,
@@ -99,11 +102,13 @@ const ListView = ({ groups, tasks, usingFilters }) => {
         <HeaderRow
           widths={widths}
           setWidth={setWidth}
+          allTasks={allTasks}
         />
         {orderedTasks.map(task => (
           <TaskRow
             key={task.id}
             task={task}
+            users={usersWithAccessToProject}
             depth={task.depth}
             hasChildren={parentIds.has(task.id)}
             collapsed={collapsed.has(task.id)}

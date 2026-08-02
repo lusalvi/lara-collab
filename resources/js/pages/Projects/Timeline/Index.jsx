@@ -18,7 +18,6 @@ import Bars from './components/Bars';
 dayjs.extend(isoWeek);
 dayjs.extend(quarterOfYear);
 
-
 const MIN_COLUMNS = {
   activity: 180,
   assignee: 150,
@@ -146,6 +145,8 @@ function buildGroupedHeader(columnStarts, format) {
 export default function TimelineIndex() {
   const { project, tasks: initialTasks, taskGroups, usersWithAccessToProject } = usePage().props;
   const [tasks, setTasks] = useState(initialTasks);
+  console.log(tasks);
+  const [collapsed, setCollapsed] = useState(new Set());
 
   const [zoom, setZoom] = useState('month');
   const config = ZOOM_CONFIG[zoom];
@@ -272,6 +273,78 @@ export default function TimelineIndex() {
     };
   }, []);
 
+  const parentIds = new Set(
+    tasks.filter(task => task.parent_task_id).map(task => task.parent_task_id)
+  );
+
+  const visibleTasks = [];
+
+  const hasScheduleConflict = task => {
+    if (!parentIds.has(task.id) || !task.due_on) {
+      return false;
+    }
+
+    const parentDue = dayjs(task.due_on);
+
+    const checkChildren = parentId => {
+      return tasks.some(child => {
+        if (child.parent_task_id !== parentId) {
+          return false;
+        }
+
+        if (child.due_on && dayjs(child.due_on).isAfter(parentDue)) {
+          return true;
+        }
+
+        return checkChildren(child.id);
+      });
+    };
+
+    return checkChildren(task.id);
+  };
+
+  const addChildren = (parentId, depth = 1) => {
+    tasks
+      .filter(task => task.parent_task_id === parentId)
+      .forEach(child => {
+        visibleTasks.push({
+          ...child,
+          depth,
+        });
+
+        if (!collapsed.has(child.id)) {
+          addChildren(child.id, depth + 1);
+        }
+      });
+  };
+
+  tasks
+    .filter(task => !task.parent_task_id)
+    .forEach(parent => {
+      visibleTasks.push({
+        ...parent,
+        depth: 0,
+      });
+
+      if (!collapsed.has(parent.id)) {
+        addChildren(parent.id);
+      }
+    });
+
+  const toggleCollapsed = taskId => {
+    setCollapsed(prev => {
+      const next = new Set(prev);
+
+      if (next.has(taskId)) {
+        next.delete(taskId);
+      } else {
+        next.add(taskId);
+      }
+
+      return next;
+    });
+  };
+
   return (
     <>
       <div>
@@ -296,11 +369,24 @@ export default function TimelineIndex() {
           <Title order={1}>{project.name}</Title>
         </Group>
       </div>
+      
+      <div className="timeline-header-toolbar">
+        <div style={{ width: listWidth }} />
+
+        <Toolbar
+          zoom={zoom}
+          setZoom={setZoom}
+          scrollToToday={scrollToToday}
+        />
+      </div>
 
       <div className='timeline-wrapper'>
         <Sidebar
           project={project}
-          tasks={tasks}
+          tasks={visibleTasks}
+          parentIds={parentIds}
+          collapsed={collapsed}
+          onToggle={toggleCollapsed}
           taskGroups={taskGroups}
           columns={columns}
           onTaskChange={handleTaskChange}
@@ -318,11 +404,6 @@ export default function TimelineIndex() {
         />
 
         <div className='timeline-gantt'>
-          <Toolbar
-            zoom={zoom}
-            setZoom={setZoom}
-            scrollToToday={scrollToToday}
-          />
 
           <ScrollArea
             type='auto'
@@ -355,10 +436,11 @@ export default function TimelineIndex() {
                 />
 
                 <Bars
-                  tasks={tasks}
+                  tasks={visibleTasks}
                   start={gridStart}
                   config={config}
                   project={project}
+                  hasScheduleConflict={hasScheduleConflict}
                 />
               </div>
             </div>
@@ -370,4 +452,3 @@ export default function TimelineIndex() {
 }
 
 TimelineIndex.layout = page => <Layout title={page.props.project?.name}>{page}</Layout>;
-

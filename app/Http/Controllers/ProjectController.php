@@ -104,7 +104,6 @@ class ProjectController extends Controller
             ['name' => 'En curso'],
             ['name' => 'En revisión'],
             ['name' => 'Finalizado'],
-            ['name' => 'Desplegado'],
         ]);
 
         return redirect()->route('projects.index')->success('Project created', 'A new project was successfully created.');

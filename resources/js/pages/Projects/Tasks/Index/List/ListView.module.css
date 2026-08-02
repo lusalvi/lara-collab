@@ -1,11 +1,18 @@
 .container {
-  background: white;
-  border: 1px solid var(--mantine-color-gray-3);
+  background: var(--mantine-color-body);
+
+  border: 1px solid
+    light-dark(
+      var(--mantine-color-gray-3),
+      var(--mantine-color-dark-4)
+    );
+
   border-radius: 12px;
 
   overflow-x: auto;
   overflow-y: hidden;
 }
+
 /* =========================
    FILAS
 ========================= */
@@ -19,7 +26,8 @@
     48px                                  /* checkbox */
     var(--col-key-width, 70px)            /* número */
     minmax(var(--col-summary-width, 450px), var(--col-summary-width, 450px)) /* tarea */
-    var(--col-assignee-width, 220px)      /* responsable */
+    var(--col-creator-width, 180px)       /* creador */
+    var(--col-assignee-width, 180px)      /* responsable */
     var(--col-priority-width, 140px)      /* prioridad */
     var(--col-status-width, 160px)        /* estado */
     var(--col-due-width, 140px)           /* vencimiento */
@@ -29,7 +37,11 @@
 
   min-height: 52px;
 
-  border-bottom: 1px solid var(--mantine-color-gray-2);
+border-bottom: 1px solid
+  light-dark(
+    var(--mantine-color-gray-3),
+    var(--mantine-color-dark-4)
+  );
 
 transition: background-color .15s ease;}
 
@@ -51,19 +63,32 @@ transition: background-color .15s ease;}
   top: 0;
   z-index: 20;
 
-  background: white;
+  background:
+    light-dark(
+      var(--mantine-color-gray-0),
+      var(--mantine-color-dark-7)
+    );
 
   min-height: 46px;
 
-  border-bottom: 2px solid var(--mantine-color-gray-2);
+  border-bottom: 1px solid
+    light-dark(
+      var(--mantine-color-gray-3),
+      var(--mantine-color-dark-4)
+    );
 }
 
 .headerText {
   font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
-  color: var(--mantine-color-gray-6);
   letter-spacing: .05em;
+
+  color:
+    light-dark(
+      var(--mantine-color-gray-6),
+      var(--mantine-color-gray-4)
+    );
 }
 
 /* =========================
@@ -73,6 +98,7 @@ transition: background-color .15s ease;}
 .checkbox,
 .key,
 .summary,
+.creator,
 .assignee,
 .priority,
 .status,
@@ -87,13 +113,23 @@ transition: background-color .15s ease;}
 }
 
 .key {
-  color: var(--mantine-color-gray-6);
+  color:
+    light-dark(
+      var(--mantine-color-gray-6),
+      var(--mantine-color-gray-4)
+    );
+
   font-weight: 600;
 }
 
 .summary {
   font-weight: 500;
-  color: #1d2939;
+
+  color:
+    light-dark(
+      #1d2939,
+      var(--mantine-color-gray-1)
+    );
 
   overflow: hidden;
 }
@@ -103,6 +139,10 @@ transition: background-color .15s ease;}
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.creator {
+  overflow: hidden;
 }
 
 .assignee {
@@ -153,7 +193,11 @@ transition: background-color .15s ease;}
 }
 
 .summaryAction:hover {
-  background: var(--mantine-color-gray-1);
+  background:
+    light-dark(
+        var(--mantine-color-gray-1),
+        rgba(255,255,255,.05)
+    );
   transform: scale(1.08);
 }
 
@@ -320,18 +364,21 @@ transition: background-color .15s ease;}
 }
 
 .dragOverlay {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  background:
+    light-dark(
+      white,
+      var(--mantine-color-dark-7)
+    );
 
-  padding: 8px 14px;
+  border: 1px solid
+    light-dark(
+      var(--mantine-color-gray-3),
+      var(--mantine-color-dark-4)
+    );
 
-  background: white;
-  border: 1px solid var(--mantine-color-gray-3);
   border-radius: 8px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 
-  min-width: 240px;
+  box-shadow: 0 8px 20px rgba(0,0,0,.18);
 }
 
 /* =========================

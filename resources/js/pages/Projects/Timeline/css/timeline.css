@@ -368,3 +368,13 @@
 
     border-radius: var(--mantine-radius-sm);
 }
+
+.timeline-header-toolbar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.timeline-header-toolbar > :last-child {
+    flex: 1;
+}

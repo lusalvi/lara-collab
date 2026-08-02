@@ -13,8 +13,6 @@ export const DEFAULT_GROUP_COLOR_NAMES = {
   finalizado: 'green',
   done: 'green',
 
-  desplegado: 'cyan',
-  deployed: 'cyan',
 };
 
 const FALLBACK_COLOR_NAME = 'gray';

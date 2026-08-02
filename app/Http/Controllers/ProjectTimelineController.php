@@ -27,6 +27,8 @@ class ProjectTimelineController extends Controller
                 'id' => $task->id,
                 'number' => $task->number,
                 'name' => $task->name,
+                'issue_type' => $task->issue_type,
+                'parent_task_id' => $task->parent_task_id,
                 'start_on' => $task->start_on?->toDateString() ?? $task->due_on?->toDateString(),
                 'due_on' => $task->due_on?->toDateString() ?? $task->start_on?->toDateString(),
                 'completed_at' => $task->completed_at?->toDateString(),

@@ -1,17 +1,47 @@
 import { Checkbox } from '@mantine/core';
+import { useMemo } from 'react';
 
 import ColumnHeader from './Components/ColumnHeader';
 import ResizeHandle from './Components/ResizeHandle';
+import useTasksStore from '@/hooks/store/useTasksStore';
 
 import classes from './ListView.module.css';
 
-export default function HeaderRow({ widths, setWidth }) {
+export default function HeaderRow({ widths, setWidth, allTasks = [] }) {
+  const { selectedTaskIds, toggleTaskSelection, selectAllTasks, clearTaskSelection } = useTasksStore();
+
+  // Calcular si todos están seleccionados
+  const allTaskIds = useMemo(() => {
+    return allTasks.map(task => task.id);
+  }, [allTasks]);
+
+  const isAllSelected = useMemo(() => {
+    return allTaskIds.length > 0 && allTaskIds.every(id => selectedTaskIds.includes(id));
+  }, [allTaskIds, selectedTaskIds]);
+
+  const isPartiallySelected = useMemo(() => {
+    return selectedTaskIds.length > 0 && !isAllSelected;
+  }, [selectedTaskIds, isAllSelected]);
+
+  const handleSelectAll = () => {
+    if (isAllSelected) {
+      clearTaskSelection();
+    } else {
+      selectAllTasks(allTasks);
+    }
+  };
+
   return (
     <div className={`${classes.row} ${classes.header}`}>
       <div className={classes.dragHandle}></div>
 
       <div className={classes.checkbox}>
-        <Checkbox size="xs" />
+        <Checkbox 
+          size="xs"
+          checked={isAllSelected}
+          indeterminate={isPartiallySelected}
+          onChange={handleSelectAll}
+        />
       </div>
 
       <ColumnHeader
@@ -21,7 +51,7 @@ export default function HeaderRow({ widths, setWidth }) {
 
       <ColumnHeader
         className={classes.summary}
-        title="Tarea"
+        title="Actividad"
       >
         <ResizeHandle
           column="summary"
@@ -29,6 +59,11 @@ export default function HeaderRow({ widths, setWidth }) {
           onResize={setWidth}
         />
       </ColumnHeader>
+
+      <ColumnHeader
+        className={classes.creator}
+        title="Informador"
+      />
 
       <ColumnHeader
         className={classes.assignee}

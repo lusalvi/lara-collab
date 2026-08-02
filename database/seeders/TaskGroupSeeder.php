@@ -21,7 +21,6 @@ class TaskGroupSeeder extends Seeder
                 ['name' => 'En curso'],
                 ['name' => 'En revisión'],
                 ['name' => 'Finalizado'],
-                ['name' => 'Desplegado'],
             ]);
         }
     }

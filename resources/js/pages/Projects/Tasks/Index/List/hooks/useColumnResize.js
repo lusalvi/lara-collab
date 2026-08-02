@@ -3,7 +3,8 @@ import { useState } from 'react';
 const DEFAULT_WIDTHS = {
   key: 50,
   summary: 450,
-  assignee: 220,
+  creator: 180,
+  assignee: 180,
   priority: 140,
   status: 160,
   due: 140,

@@ -4,7 +4,6 @@ const GROUP_NAME_TRANSLATIONS = {
   "In progress": "En curso",
   QA: "En revisión",
   Done: "Finalizado",
-  Deployed: "Desplegado",
 };
 
 export default function translateGroupName(name) {

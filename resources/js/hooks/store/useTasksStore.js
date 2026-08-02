@@ -13,6 +13,7 @@ const useTasksStore = create((set, get) => ({
 
   tasks: {},
   selectedTaskIds: [],
+
   toggleTaskSelection: (taskId) => {
     return set(produce(state => {
       const index = state.selectedTaskIds.indexOf(taskId);
@@ -30,14 +31,29 @@ const useTasksStore = create((set, get) => ({
       state.selectedTaskIds = [];
     }));
   },
-  
+
   isTaskSelected: (taskId) => {
     return get().selectedTaskIds.includes(taskId);
   },
 
-  selectAllTasks: () => {
-    const ids = [];
+  // 🔧 SOLUCIÓN: Métodos a AGREGAR al archivo useTasksStore.js
+  // (Reemplazar los métodos existentes selectAllTasks)
 
+  // ============================================================
+  // MÉTODO 1: Reemplazar selectAllTasks existente
+  // ============================================================
+
+  selectAllTasks: (allTasks = []) => {
+    // Si recibe allTasks, usarlos
+    if (allTasks.length > 0) {
+      const ids = allTasks.map(task => task.id);
+      return set({
+        selectedTaskIds: ids,
+      });
+    }
+
+    // Si no recibe allTasks, calcular desde el store (comportamiento antiguo)
+    const ids = [];
     Object.values(get().tasks).forEach(group => {
       group.forEach(task => ids.push(task.id));
     });
@@ -45,6 +61,44 @@ const useTasksStore = create((set, get) => ({
     return set({
       selectedTaskIds: ids,
     });
+  },
+
+  // ============================================================
+  // MÉTODO 2: AGREGAR archiveSelectedTasks (nuevo)
+  // ============================================================
+
+  archiveSelectedTasks: async (projectId) => {
+    const selectedTaskIds = get().selectedTaskIds;
+
+    if (selectedTaskIds.length === 0) {
+      alert('No tasks selected');
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        route("projects.tasks.bulk-archive", projectId),
+        { ids: selectedTaskIds },
+        { progress: false }
+      );
+
+      console.log('Archive response:', response);
+
+      // Remover las tareas archivadas del store
+      return set(produce(state => {
+        Object.keys(state.tasks).forEach(groupId => {
+          state.tasks[groupId] = state.tasks[groupId].filter(
+            task => !selectedTaskIds.includes(task.id)
+          );
+        });
+        state.selectedTaskIds = [];
+      }));
+    } catch (e) {
+      console.error('Archive error:', e);
+      console.error('Error response:', e.response?.data);
+      alert("Failed to archive selected tasks: " + (e.response?.data?.message || e.message));
+      throw e;
+    }
   },
   setTasks: (tasks) => set(() => ({ tasks: { ...tasks } })),
   addTask: (task) => {

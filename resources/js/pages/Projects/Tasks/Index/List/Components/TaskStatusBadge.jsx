@@ -1,43 +1,17 @@
 import { Badge, Group } from '@mantine/core';
 import { IconChevronDown } from '@tabler/icons-react';
 
-const getStatusColor = status => {
-  switch (status) {
-    case 'Backlog':
-      return 'gray';
+import { getGroupSelectColorName } from '@/utils/taskGroupColors';
 
-    case 'Por hacer':
-      return 'hospitalPrimary';
-
-    case 'En curso':
-      return 'orange';
-
-    case 'En revisión':
-      return 'violet';
-
-    case 'Finalizado':
-      return 'green';
-
-    case 'Desplegado':
-      return 'cyan';
-
-    default:
-      return 'gray';
-  }
-};
-
-export default function TaskStatusBadge({ status, editable = false }) {
+export default function TaskStatusBadge({ group, editable = false }) {
   return (
     <Badge
-      color={getStatusColor(status)}
+      color={getGroupSelectColorName(group)}
       variant="light"
       radius="sm"
     >
-      <Group
-        gap={4}
-        wrap="nowrap"
-      >
-        <span>{status}</span>
+      <Group gap={4} wrap="nowrap">
+        <span>{group?.name}</span>
 
         {editable && (
           <IconChevronDown

@@ -105,11 +105,15 @@ export default function TaskAssigneeSelect({ project, task, users, onTaskChange 
         }}
         onChange={handleChange}
         allowDeselect={false}
-        searchable
         disabled={saving}
         placeholder='Sin asignar'
         size='xs'
         variant='filled'
+        styles={{
+          input: {
+            cursor: 'pointer',
+          },
+        }}
         comboboxProps={{
           withinPortal: true,
           position: 'bottom-start',

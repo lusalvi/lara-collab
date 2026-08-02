@@ -46,6 +46,7 @@ class GroupController extends Controller
             return redirect()->route('projects.tasks', $project)->warning('Action stopped', 'You cannot archive a task group that still contains tasks.');
         }
 
+        $taskGroup->update(['archived_by_id' => auth()->id()]);
         $taskGroup->archive();
 
         TaskGroupDeleted::dispatch($taskGroup->id, $project->id);
@@ -60,6 +61,7 @@ class GroupController extends Controller
         $this->authorize('restore', [$taskGroup, $project]);
 
         $taskGroup->unArchive();
+        $taskGroup->update(['archived_by_id' => null]);
 
         TaskGroupRestored::dispatch($taskGroup);
 

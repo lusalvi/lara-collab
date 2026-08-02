@@ -20,7 +20,6 @@ import {
 const ProjectEdit = ({ dropdowns: { areas, users } }) => {
   const { item, auth } = usePage().props;
   const isSuperAdmin = auth.user.is_super_admin;
-  const { item } = usePage().props;
 
   const [form, submit, updateValue] = useForm('post', route('projects.update', item.id), {
     _method: 'put',

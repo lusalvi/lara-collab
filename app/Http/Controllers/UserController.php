@@ -65,6 +65,7 @@ class UserController extends Controller
         if (auth()->id() === $user->id) {
             return redirect()->route('users.index')->warning('Action stopped', 'You cannot archive the user with whom you are currently logged in.');
         }
+        $user->update(['archived_by_id' => auth()->id()]);
         $user->archive();
 
         return redirect()->back()->success('User archived', 'The user was successfully archived.');
@@ -77,6 +78,7 @@ class UserController extends Controller
         $this->authorize('restore', $user);
 
         $user->unArchive();
+        $user->update(['archived_by_id' => null]);
 
         return redirect()->back()->success('User restored', 'The restoring of the user was completed successfully.');
     }

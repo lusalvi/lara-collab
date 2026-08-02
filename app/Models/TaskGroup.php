@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasArchivedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,11 +16,11 @@ use Spatie\EloquentSortable\SortableTrait;
 
 class TaskGroup extends Model implements AuditableContract, Sortable
 {
-    use Archivable, Auditable, HasFactory, SortableTrait;
+    use Archivable, Auditable, HasArchivedBy, HasFactory, SortableTrait;
 
     public $timestamps = false;
 
-    protected $fillable = ['name', 'color', 'project_id', 'order_column'];
+    protected $fillable = ['name', 'color', 'project_id', 'order_column', 'archived_by_id'];
 
     protected static function booted(): void
     {

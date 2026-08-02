@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasArchivedBy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -16,12 +17,13 @@ use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 
 class Project extends Model implements AuditableContract
 {
-    use Archivable, Auditable, Favoriteable, IsSearchable, IsSortable;
+    use Archivable, Auditable, Favoriteable, HasArchivedBy, IsSearchable, IsSortable;
 
     protected $fillable = [
         'name',
         'description',
         'area_id',
+        'archived_by_id',
     ];
 
     protected $searchable = [

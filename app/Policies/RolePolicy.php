@@ -56,6 +56,10 @@ class RolePolicy
             return $user->isSuperAdmin();
         }
 
+        if ($role->archivedBy?->isSuperAdmin() && ! $user->isSuperAdmin()) {
+            return false;
+        }
+
         return true;
     }
 }

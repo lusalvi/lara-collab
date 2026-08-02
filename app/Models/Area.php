@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasArchivedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -13,10 +14,11 @@ use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 
 class Area extends Model implements AuditableContract
 {
-    use Archivable, Auditable, HasFactory, IsSearchable, IsSortable;
+    use Archivable, Auditable, HasArchivedBy, HasFactory, IsSearchable, IsSortable;
 
     protected $fillable = [
         'name',
+        'archived_by_id',
     ];
 
     protected $searchable = [

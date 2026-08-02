@@ -11,7 +11,7 @@ import ProjectCard from "./Index/ProjectCard";
 
 const ProjectsIndex = () => {
   const { items } = usePage().props;
-  const { isAdmin } = useAuthorization();
+  const { isAdmin, isSuperAdmin } = useAuthorization();
 
   const search = (search) => reloadWithQuery({ search });
 
@@ -21,7 +21,7 @@ const ProjectsIndex = () => {
         <Grid.Col span="content">
           <Group>
             <SearchInput placeholder="Search projects" search={search} />
-            {isAdmin() && <ArchivedFilterButton />}
+            {(isAdmin() || isSuperAdmin()) && <ArchivedFilterButton />}
           </Group>
         </Grid.Col>
         <Grid.Col span="content">

@@ -1,5 +1,6 @@
 import { openConfirmModal } from '@/components/ConfirmModal';
 import EmptyWithIcon from '@/components/EmptyWithIcon';
+import ProjectTabs from '@/components/ProjectTabs';
 import RichTextEditor from '@/components/RichTextEditor';
 import Layout from '@/layouts/MainLayout';
 import { diffForHumans } from '@/utils/datetime';
@@ -23,7 +24,6 @@ import {
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import {
-  IconArrowLeft,
   IconLock,
   IconLockOff,
   IconLockOpen,
@@ -228,37 +228,14 @@ const NotesIndex = () => {
 
   return (
     <>
-      <Group
-        justify='space-between'
-        align='flex-end'
-        mb='xl'
+      <Title
+        order={1}
+        mb='md'
       >
-        <div>
-          <Button
-            variant='transparent'
-            radius='xl'
-            size='sm'
-            color='gray'
-            pl={0}
-            leftSection={<IconArrowLeft size={14} />}
-            onClick={() => router.get(route('projects.tasks', project.id))}
-          >
-            Back to tasks
-          </Button>
-          <Title
-            order={1}
-            mt={4}
-          >
-            {project.name}{' '}
-            <Text
-              size='1rem'
-              fw={400}
-              c='dimmed'
-              span
-            ></Text>
-          </Title>
-        </div>
-      </Group>
+        {project.name}
+      </Title>
+
+      <ProjectTabs />
 
       <div className={classes.layout}>
         <Paper

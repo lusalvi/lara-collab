@@ -1,4 +1,4 @@
-import ArchivedFilterButton from '@/components/ArchivedFilterButton';
+import ArchivedTabs from '@/components/ArchivedTabs';
 import Pagination from '@/components/Pagination';
 import SearchInput from '@/components/SearchInput';
 import TableHead from '@/components/TableHead';
@@ -15,16 +15,16 @@ const AreasIndex = () => {
   const { items } = usePage().props;
 
   const columns = prepareColumns([
-    { label: 'Area', column: 'name' },
+    { label: 'Área', column: 'name' },
     {
-      label: 'Actions',
+      label: 'Acciones',
       sortable: false,
       visible: actionColumnVisibility('area'),
     },
   ]);
 
   const rows = items.data.length ? (
-    items.data.map(item => (
+    items.data.map((item) => (
       <TableRow
         item={item}
         key={item.id}
@@ -34,23 +34,26 @@ const AreasIndex = () => {
     <TableRowEmpty colSpan={columns.length} />
   );
 
-  const search = search => reloadWithQuery({ search });
-  const sort = sort => reloadWithQuery(sort);
+  const search = (search) => reloadWithQuery({ search });
+  const sort = (sort) => reloadWithQuery(sort);
 
   return (
     <>
+      <ArchivedTabs
+        activeLabel='Áreas activas'
+        archivedLabel='Áreas archivadas'
+      />
+
       <Grid
         justify='space-between'
         align='center'
+        mb='md'
       >
         <Grid.Col span='content'>
-          <Group>
-            <SearchInput
-              placeholder='Search areas'
-              search={search}
-            />
-            <ArchivedFilterButton />
-          </Group>
+          <SearchInput
+            placeholder='Buscar áreas'
+            search={search}
+          />
         </Grid.Col>
         <Grid.Col span='content'>
           {can('create area') && (
@@ -59,7 +62,7 @@ const AreasIndex = () => {
               radius='xl'
               onClick={() => redirectTo('areas.create')}
             >
-              Create
+              Crear
             </Button>
           )}
         </Grid.Col>
@@ -86,6 +89,6 @@ const AreasIndex = () => {
   );
 };
 
-AreasIndex.layout = page => <Layout title='Areas'>{page}</Layout>;
+AreasIndex.layout = (page) => <Layout title='Áreas'>{page}</Layout>;
 
 export default AreasIndex;

@@ -1,13 +1,13 @@
-import ArchivedFilterButton from "@/components/ArchivedFilterButton";
-import EmptyWithIcon from "@/components/EmptyWithIcon";
-import SearchInput from "@/components/SearchInput";
-import useAuthorization from "@/hooks/useAuthorization";
-import Layout from "@/layouts/MainLayout";
-import { redirectTo, reloadWithQuery } from "@/utils/route";
-import { usePage } from "@inertiajs/react";
-import { Button, Center, Flex, Grid, Group } from "@mantine/core";
-import { IconPlus, IconSearch } from "@tabler/icons-react";
-import ProjectCard from "./Index/ProjectCard";
+import ArchivedTabs from '@/components/ArchivedTabs';
+import EmptyWithIcon from '@/components/EmptyWithIcon';
+import SearchInput from '@/components/SearchInput';
+import useAuthorization from '@/hooks/useAuthorization';
+import Layout from '@/layouts/MainLayout';
+import { redirectTo, reloadWithQuery } from '@/utils/route';
+import { usePage } from '@inertiajs/react';
+import { Button, Center, Flex, Grid } from '@mantine/core';
+import { IconPlus, IconSearch } from '@tabler/icons-react';
+import ProjectCard from './Index/ProjectCard';
 
 const ProjectsIndex = () => {
   const { items } = usePage().props;
@@ -17,37 +17,59 @@ const ProjectsIndex = () => {
 
   return (
     <>
-      <Grid justify="space-between" align="center">
-        <Grid.Col span="content">
-          <Group>
-            <SearchInput placeholder="Search projects" search={search} />
-            {(isAdmin() || isSuperAdmin()) && <ArchivedFilterButton />}
-          </Group>
+      {/* Pestañas Activos / Archivados – solo visibles para admin */}
+      {(isAdmin() || isSuperAdmin()) && (
+        <ArchivedTabs
+          activeLabel='Proyectos activos'
+          archivedLabel='Proyectos archivados'
+        />
+      )}
+
+      <Grid
+        justify='space-between'
+        align='center'
+        mb='md'
+      >
+        <Grid.Col span='content'>
+          <SearchInput
+            placeholder='Buscar proyectos'
+            search={search}
+          />
         </Grid.Col>
-        <Grid.Col span="content">
-          {can("create project") && (
+        <Grid.Col span='content'>
+          {can('create project') && (
             <Button
               leftSection={<IconPlus size={14} />}
-              radius="xl"
-              onClick={() => redirectTo("projects.create")}
+              radius='xl'
+              onClick={() => redirectTo('projects.create')}
             >
-              Create
+              Crear
             </Button>
           )}
         </Grid.Col>
       </Grid>
 
       {items.length ? (
-        <Flex mt="xl" gap="lg" justify="flex-start" align="flex-start" direction="row" wrap="wrap">
+        <Flex
+          mt='xl'
+          gap='lg'
+          justify='flex-start'
+          align='flex-start'
+          direction='row'
+          wrap='wrap'
+        >
           {items.map((item) => (
-            <ProjectCard item={item} key={item.id} />
+            <ProjectCard
+              item={item}
+              key={item.id}
+            />
           ))}
         </Flex>
       ) : (
         <Center mih={400}>
           <EmptyWithIcon
-            title="No projects found"
-            subtitle="or you do not have access to any of them"
+            title='No se encontraron proyectos'
+            subtitle='o no tenés acceso a ninguno'
             icon={IconSearch}
           />
         </Center>
@@ -56,6 +78,6 @@ const ProjectsIndex = () => {
   );
 };
 
-ProjectsIndex.layout = (page) => <Layout title="Projects">{page}</Layout>;
+ProjectsIndex.layout = (page) => <Layout title='Proyectos'>{page}</Layout>;
 
 export default ProjectsIndex;

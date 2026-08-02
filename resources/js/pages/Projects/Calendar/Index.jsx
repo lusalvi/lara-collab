@@ -1,7 +1,7 @@
+import ProjectTabs from '@/components/ProjectTabs';
 import Layout from '@/layouts/MainLayout';
 import { router, usePage } from '@inertiajs/react';
-import { Button, Title } from '@mantine/core';
-import { IconArrowLeft } from '@tabler/icons-react';
+import { Title } from '@mantine/core';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
@@ -15,7 +15,7 @@ const CalendarIndex = () => {
 
   currentProject = project;
 
-  const events = tasks.map(task => ({
+  const events = tasks.map((task) => ({
     id: task.id.toString(),
     title: task.name,
     date: task.due_on.split('T')[0],
@@ -24,27 +24,14 @@ const CalendarIndex = () => {
 
   return (
     <>
-      <div>
-        <Button
-          variant='transparent'
-          radius='xl'
-          size='sm'
-          color='gray'
-          pl={0}
-          leftSection={<IconArrowLeft size={14} />}
-          onClick={() => router.get(route('projects.tasks', project.id))}
-        >
-          Back to tasks
-        </Button>
+      <Title
+        order={1}
+        mb='md'
+      >
+        {project.name}
+      </Title>
 
-        <Title
-          order={1}
-          mt={4}
-          mb='xl'
-        >
-          {project.name}{' '}
-        </Title>
-      </div>
+      <ProjectTabs />
 
       <FullCalendar
         plugins={[dayGridPlugin, interactionPlugin]}
@@ -52,7 +39,7 @@ const CalendarIndex = () => {
         initialView='dayGridMonth'
         events={events}
         height='auto'
-        eventClick={info => {
+        eventClick={(info) => {
           router.get(
             route('projects.tasks.open', {
               project: project.id,
@@ -65,6 +52,6 @@ const CalendarIndex = () => {
   );
 };
 
-CalendarIndex.layout = page => <Layout title={currentProject?.name}>{page}</Layout>;
+CalendarIndex.layout = (page) => <Layout title={currentProject?.name}>{page}</Layout>;
 
 export default CalendarIndex;

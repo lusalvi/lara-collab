@@ -1,7 +1,7 @@
+import ProjectTabs from '@/components/ProjectTabs';
 import Layout from '@/layouts/MainLayout';
-import { router, usePage } from '@inertiajs/react';
-import { Button, Group, ScrollArea, Title } from '@mantine/core';
-import { IconArrowLeft } from '@tabler/icons-react';
+import { usePage } from '@inertiajs/react';
+import { Group, ScrollArea, Title } from '@mantine/core';
 import dayjs from 'dayjs';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import quarterOfYear from 'dayjs/plugin/quarterOfYear';
@@ -17,6 +17,7 @@ import Bars from './components/Bars';
 
 dayjs.extend(isoWeek);
 dayjs.extend(quarterOfYear);
+
 
 const MIN_COLUMNS = {
   activity: 180,
@@ -348,36 +349,14 @@ export default function TimelineIndex() {
   return (
     <>
       <div>
-        <Button
-          variant='transparent'
-          radius='xl'
-          size='sm'
-          color='gray'
-          pl={0}
-          leftSection={<IconArrowLeft size={14} />}
-          onClick={() => router.get(route('projects.tasks', project.id))}
+        <Title
+          order={1}
+          mb='md'
         >
-          Volver
-        </Button>
+          {project.name}
+        </Title>
 
-        <Group
-          justify='space-between'
-          align='end'
-          mt={4}
-          mb='lg'
-        >
-          <Title order={1}>{project.name}</Title>
-        </Group>
-      </div>
-      
-      <div className="timeline-header-toolbar">
-        <div style={{ width: listWidth }} />
-
-        <Toolbar
-          zoom={zoom}
-          setZoom={setZoom}
-          scrollToToday={scrollToToday}
-        />
+        <ProjectTabs />
       </div>
 
       <div className='timeline-wrapper'>

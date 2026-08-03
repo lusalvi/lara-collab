@@ -1,6 +1,7 @@
 import { Label } from '@/components/Label';
 import useTaskDrawerStore from '@/hooks/store/useTaskDrawerStore';
-import { isOverdue } from '@/utils/task';
+import { isOverdue, isDueSoon } from '@/utils/task';
+import dayjs from 'dayjs';
 import { getInitials } from '@/utils/user';
 import { Draggable } from '@hello-pangea/dnd';
 import { Link } from '@inertiajs/react';
@@ -48,7 +49,15 @@ export default function TaskCard({ task, index }) {
                 className={classes.name}
                 size='xs'
                 fw={500}
-                c={isOverdue(task) && task.completed_at === null ? 'red.7' : ''}
+                c={
+                  task.completed_at === null
+                    ? isOverdue(task)
+                      ? 'red.7'
+                      : isDueSoon(task)
+                      ? 'yellow.7'
+                      : ''
+                    : ''
+                }
                 onClick={() => openEditTask(task)}
               >
                 #{task.number + ': ' + task.name}

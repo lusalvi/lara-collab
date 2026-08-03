@@ -6,7 +6,7 @@ export const openConfirmModal = ({
   title,
   content,
   confirmLabel,
-  cancelLabel = "Cancel",
+  cancelLabel = "Cancelar",
   ...props
 }) => {
   const typeColors = {
@@ -22,10 +22,18 @@ export const openConfirmModal = ({
       </Text>
     ),
     centered: true,
-    overlayProps: { backgroundOpacity: 0.55, blur: 3 },
+    overlayProps: {
+      backgroundOpacity: 0.55,
+      blur: 3,
+    },
     children: <Text size="sm">{content}</Text>,
-    labels: { confirm: confirmLabel, cancel: cancelLabel },
-    confirmProps: { color: typeColors[type] },
+    labels: {
+      confirm: confirmLabel,
+      cancel: cancelLabel,
+    },
+    confirmProps: {
+      color: typeColors[type],
+    },
     ...props,
   });
 };

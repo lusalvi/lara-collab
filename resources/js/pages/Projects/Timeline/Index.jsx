@@ -359,6 +359,16 @@ export default function TimelineIndex() {
         <ProjectTabs />
       </div>
 
+      <div className="timeline-header-toolbar">
+        <div style={{ width: listWidth }} />
+
+        <Toolbar
+          zoom={zoom}
+          setZoom={setZoom}
+          scrollToToday={scrollToToday}
+        />
+      </div>
+
       <div className='timeline-wrapper'>
         <Sidebar
           project={project}

@@ -51,9 +51,16 @@ export default function TaskActions({ task, ...props }) {
             {can("restore task") && route().params.archived && (
               <Menu.Item
                 leftSection={
-                  <IconArchiveOff style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
+                  <IconArchiveOff
+                    style={{ width: rem(16), height: rem(16) }}
+                    stroke={1.8}
+                  />
                 }
-                color="hospitalPrimary"
+                styles={{
+                  itemSection: {
+                    color: 'var(--mantine-color-hospitalPrimary-3)',
+                  },
+                }}
                 onClick={openRestoreModal}
               >
                 Restore

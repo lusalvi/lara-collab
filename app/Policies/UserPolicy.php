@@ -69,4 +69,29 @@ class UserPolicy
 
         return $user->area_id === $model->area_id;
     }
+
+    /**
+     * Solo puede borrar permanentemente usuarios de su misma área (o el superadmin).
+     * Nunca se puede borrar el propio usuario logueado.
+     */
+    public function forceDelete(User $user, User $model): bool
+    {
+        if (! $user->hasPermissionTo('force delete user')) {
+            return false;
+        }
+
+        if ($user->id === $model->id) {
+            return false;
+        }
+
+        if ($model->wasArchivedBySuperAdmin() && ! $user->isSuperAdmin()) {
+            return false;
+        }
+
+        if ($user->isSuperAdmin()) {
+            return true;
+        }
+
+        return $user->area_id === $model->area_id;
+    }
 }

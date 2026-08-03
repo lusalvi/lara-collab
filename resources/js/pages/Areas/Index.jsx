@@ -1,18 +1,25 @@
 import ArchivedTabs from '@/components/ArchivedTabs';
+import BulkForceDeleteButton from '@/components/BulkForceDeleteButton';
 import Pagination from '@/components/Pagination';
 import SearchInput from '@/components/SearchInput';
 import TableHead from '@/components/TableHead';
 import TableRowEmpty from '@/components/TableRowEmpty';
+import useBulkSelection from '@/hooks/useBulkSelection';
 import Layout from '@/layouts/MainLayout';
 import { redirectTo, reloadWithQuery } from '@/utils/route';
 import { actionColumnVisibility, prepareColumns } from '@/utils/table';
 import { usePage } from '@inertiajs/react';
-import { Button, Grid, Group, Table } from '@mantine/core';
+import { Button, Flex, Grid, Table } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
 import TableRow from './TableRow';
 
 const AreasIndex = () => {
   const { items } = usePage().props;
+
+  const isArchivedView = !!route().params.archived;
+  const selectableIds = items.data.filter((item) => item.can_force_delete).map((item) => item.id);
+  const { selectedIds, toggle, toggleAll, clear, allSelected, someSelected } =
+    useBulkSelection(selectableIds);
 
   const columns = prepareColumns([
     { label: 'Área', column: 'name' },
@@ -28,6 +35,9 @@ const AreasIndex = () => {
       <TableRow
         item={item}
         key={item.id}
+        selectable={isArchivedView && item.can_force_delete}
+        selected={selectedIds.includes(item.id)}
+        onToggleSelect={toggle}
       />
     ))
   ) : (
@@ -56,15 +66,26 @@ const AreasIndex = () => {
           />
         </Grid.Col>
         <Grid.Col span='content'>
-          {can('create area') && (
-            <Button
-              leftSection={<IconPlus size={14} />}
-              radius='xl'
-              onClick={() => redirectTo('areas.create')}
-            >
-              Crear
-            </Button>
-          )}
+          <Flex gap='sm' align='center'>
+            {selectedIds.length > 0 && (
+              <BulkForceDeleteButton
+                selectedIds={selectedIds}
+                routeName='areas.bulk-force-delete'
+                entityLabelSingular='área'
+                entityLabelPlural='áreas'
+                onSuccess={clear}
+              />
+            )}
+            {can('create area') && (
+              <Button
+                leftSection={<IconPlus size={14} />}
+                radius='xl'
+                onClick={() => redirectTo('areas.create')}
+              >
+                Crear
+              </Button>
+            )}
+          </Flex>
         </Grid.Col>
       </Grid>
 
@@ -76,6 +97,11 @@ const AreasIndex = () => {
           <TableHead
             columns={columns}
             sort={sort}
+            selectAll={
+              selectableIds.length > 0
+                ? { checked: allSelected, indeterminate: someSelected, onChange: toggleAll }
+                : undefined
+            }
           />
           <Table.Tbody>{rows}</Table.Tbody>
         </Table>

@@ -8,6 +8,7 @@ use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Http\Resources\User\UserResource;
 use App\Models\User;
+use App\Services\ForceDeleteService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -81,5 +82,30 @@ class UserController extends Controller
         $user->update(['archived_by_id' => null]);
 
         return redirect()->back()->success('User restored', 'The restoring of the user was completed successfully.');
+    }
+
+    public function bulkForceDelete(Request $request, ForceDeleteService $forceDeleteService)
+    {
+        $request->validate([
+            'ids' => ['required', 'array', 'min:1'],
+            'ids.*' => ['integer', 'exists:users,id'],
+        ]);
+
+        if (in_array(auth()->id(), $request->ids)) {
+            return redirect()->route('users.index')->warning('Action stopped', 'You cannot permanently delete the user with whom you are currently logged in.');
+        }
+
+        $users = User::onlyArchived()->whereIn('id', $request->ids)->get();
+
+        foreach ($users as $user) {
+            $this->authorize('forceDelete', $user);
+        }
+
+        $deletedCount = $forceDeleteService->forceDeleteUsers($users);
+
+        return redirect()->back()->success(
+            'Users deleted',
+            "{$deletedCount} user(s) were permanently deleted."
+        );
     }
 }

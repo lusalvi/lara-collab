@@ -18,6 +18,7 @@ class LabelResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'color' => $this->color,
+            'can_force_delete' => $this->archived_at ? $request->user()?->can('forceDelete', $this->resource) : null,
         ];
     }
 }

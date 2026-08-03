@@ -33,6 +33,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::group(['prefix' => 'projects', 'as' => 'projects.'], function () {
         // PROJECT
         Route::post('{projectId}/restore', [ProjectController::class, 'restore'])->name('restore');
+        Route::post('bulk-force-delete', [ProjectController::class, 'bulkForceDelete'])->name('bulk-force-delete');
         Route::put('{project}/favorite/toggle', [ProjectController::class, 'favoriteToggle'])->name('favorite.toggle');
         Route::post('{project}/user-access', [ProjectController::class, 'userAccess'])->name('user_access');
         // CALENDAR
@@ -45,6 +46,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::delete('{project}/task-groups/{taskGroup}', [GroupController::class, 'destroy'])->name('task-groups.destroy')->scopeBindings();
         Route::post('{project}/task-groups/{taskGroupId}/restore', [GroupController::class, 'restore'])->name('task-groups.restore')->scopeBindings();
         Route::post('{project}/task-groups/reorder', [GroupController::class, 'reorder'])->name('task-groups.reorder');
+        Route::post('{project}/task-groups/bulk-force-delete', [GroupController::class, 'bulkForceDelete'])->name('task-groups.bulk-force-delete');
 
         // TASKS
         Route::get('{project}/tasks', [TaskController::class, 'index'])->name('tasks');
@@ -59,6 +61,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('{project}/tasks/move', [TaskController::class, 'move'])->name('tasks.move');
         Route::post('{project}/tasks/reparent', [TaskController::class, 'reparent'])->name('tasks.reparent');
         Route::post('{project}/tasks/bulk-archive', [TaskController::class, 'bulkArchive'])->name('tasks.bulk-archive');
+        Route::post('{project}/tasks/bulk-force-delete', [TaskController::class, 'bulkForceDelete'])->name('tasks.bulk-force-delete');
 
         // NOTES
         Route::get('{project}/notes', [NoteController::class, 'index'])->name('notes');
@@ -91,18 +94,22 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // Areas
     Route::resource('areas', AreaController::class)->except(['show']);
     Route::post('areas/{areaId}/restore', [AreaController::class, 'restore'])->name('areas.restore');
+    Route::post('areas/bulk-force-delete', [AreaController::class, 'bulkForceDelete'])->name('areas.bulk-force-delete');
 
     // Users
     Route::resource('users', UserController::class)->except(['show']);
     Route::post('users/{userId}/restore', [UserController::class, 'restore'])->name('users.restore');
+    Route::post('users/bulk-force-delete', [UserController::class, 'bulkForceDelete'])->name('users.bulk-force-delete');
 
     // Settings
     Route::group(['prefix' => 'settings', 'as' => 'settings.'], function () {
         Route::resource('roles', RoleController::class)->except(['show']);
         Route::post('roles/{roleId}/restore', [RoleController::class, 'restore'])->name('roles.restore');
+        Route::post('roles/bulk-force-delete', [RoleController::class, 'bulkForceDelete'])->name('roles.bulk-force-delete');
 
         Route::resource('labels', LabelController::class)->except(['show']);
         Route::post('labels/{labelId}/restore', [LabelController::class, 'restore'])->name('labels.restore');
+        Route::post('labels/bulk-force-delete', [LabelController::class, 'bulkForceDelete'])->name('labels.bulk-force-delete');
 
         Route::resource('task-priorities', TaskPriorityController::class)->except(['show']);
         Route::post('task-priorities/{priorityId}/restore', [TaskPriorityController::class, 'restore'])->name('task-priorities.restore');

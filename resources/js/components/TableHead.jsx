@@ -1,13 +1,23 @@
-import { Table } from "@mantine/core";
+import { Checkbox, Table } from "@mantine/core";
 import TableHeaderCell from "./TableHeaderCell";
 import useSorting from "@/hooks/useSorting";
 
-export default function TableHead({ columns, sort }) {
+export default function TableHead({ columns, sort, selectAll }) {
   const [sortBy, reverseSortDirection, setSorting] = useSorting(sort);
 
   return (
     <Table.Thead>
       <Table.Tr>
+        {selectAll && (
+          <Table.Th w={40}>
+            <Checkbox
+              checked={selectAll.checked}
+              indeterminate={selectAll.indeterminate}
+              onChange={selectAll.onChange}
+              aria-label='Seleccionar todos'
+            />
+          </Table.Th>
+        )}
         {columns.map((item) => (
           <TableHeaderCell
             key={item.column || item.label}

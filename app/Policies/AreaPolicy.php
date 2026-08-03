@@ -47,4 +47,29 @@ class AreaPolicy
     {
         return $user->isSuperAdmin();
     }
+
+    /**
+     * Solo el superadmin borra áreas permanentemente, y solo si ya no tiene
+     * proyectos ni usuarios asociados (archivados o no).
+     */
+    public function forceDelete(User $user, Area $area): bool
+    {
+        if (! $user->hasPermissionTo('force delete area')) {
+            return false;
+        }
+
+        if (! $user->isSuperAdmin()) {
+            return false;
+        }
+
+        if ($area->projects()->withArchived()->exists()) {
+            return false;
+        }
+
+        if ($area->users()->withArchived()->exists()) {
+            return false;
+        }
+
+        return true;
+    }
 }

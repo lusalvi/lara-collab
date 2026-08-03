@@ -12,27 +12,27 @@ class PermissionService
 
         // ─── SUPERADMIN ───────────────────────────────────────
         'superadmin' => [
-            'Area' => ['view areas', 'create area', 'edit area', 'archive area', 'restore area'],
-            'User' => ['view users', 'create user', 'edit user', 'archive user', 'restore user'],
-            'Role' => ['view roles', 'create role', 'edit role', 'archive role', 'restore role'],
-            'Label' => ['view labels', 'create label', 'edit label', 'archive label', 'restore label'],
+            'Area' => ['view areas', 'create area', 'edit area', 'archive area', 'restore area', 'force delete area'],
+            'User' => ['view users', 'create user', 'edit user', 'archive user', 'restore user', 'force delete user'],
+            'Role' => ['view roles', 'create role', 'edit role', 'archive role', 'restore role', 'force delete role'],
+            'Label' => ['view labels', 'create label', 'edit label', 'archive label', 'restore label', 'force delete label'],
             'Task Priority' => ['view task priority', 'create task priority', 'edit task priority', 'delete task priority', 'restore task priority'],
-            'Project' => ['view projects', 'view project', 'create project', 'edit project', 'archive project', 'restore project', 'edit project user access'],
-            'TaskGroups' => ['create task group', 'edit task group', 'archive task group', 'restore task group', 'reorder task group'],
+            'Project' => ['view projects', 'view project', 'create project', 'edit project', 'archive project', 'restore project', 'edit project user access', 'force delete project'],
+            'TaskGroups' => ['create task group', 'edit task group', 'archive task group', 'restore task group', 'reorder task group', 'force delete task group'],
             'Notes' => ['view notes', 'create note', 'edit note', 'delete note'],
-            'Tasks' => ['view tasks', 'create task', 'edit task', 'archive task', 'restore task', 'reorder task', 'complete task', 'view comments'],
+            'Tasks' => ['view tasks', 'create task', 'edit task', 'archive task', 'restore task', 'reorder task', 'complete task', 'view comments', 'force delete task'],
             'Activities' => ['view activities'],
         ],
 
         // ─── ADMIN DE ÁREA ─────────
         'admin' => [
-            'User' => ['view users', 'create user', 'edit user', 'archive user', 'restore user'],
-            'Label' => ['view labels', 'create label', 'edit label', 'archive label', 'restore label'],
+            'User' => ['view users', 'create user', 'edit user', 'archive user', 'restore user', 'force delete user'],
+            'Label' => ['view labels', 'create label', 'edit label', 'archive label', 'restore label', 'force delete label'],
             'Task Priority' => ['view task priority', 'create task priority', 'edit task priority', 'delete task priority', 'restore task priority'],
-            'Project' => ['view projects', 'view project', 'create project', 'edit project', 'archive project', 'restore project', 'edit project user access'],
-            'TaskGroups' => ['create task group', 'edit task group', 'archive task group', 'restore task group', 'reorder task group'],
+            'Project' => ['view projects', 'view project', 'create project', 'edit project', 'archive project', 'restore project', 'edit project user access', 'force delete project'],
+            'TaskGroups' => ['create task group', 'edit task group', 'archive task group', 'restore task group', 'reorder task group', 'force delete task group'],
             'Notes' => ['view notes', 'create note', 'edit note', 'delete note'],
-            'Tasks' => ['view tasks', 'create task', 'edit task', 'archive task', 'restore task', 'reorder task', 'complete task', 'view comments'],
+            'Tasks' => ['view tasks', 'create task', 'edit task', 'archive task', 'restore task', 'reorder task', 'complete task', 'view comments', 'force delete task'],
             'Activities' => ['view activities'],
         ],
 

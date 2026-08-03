@@ -50,4 +50,16 @@ class LabelPolicy
 
         return ! ($label->wasArchivedBySuperAdmin() && ! $user->isSuperAdmin());
     }
+
+    /**
+     * Determine whether the user can permanently delete the model.
+     */
+    public function forceDelete(User $user, Label $label): bool
+    {
+        if (! $user->hasPermissionTo('force delete label')) {
+            return false;
+        }
+
+        return ! ($label->wasArchivedBySuperAdmin() && ! $user->isSuperAdmin());
+    }
 }

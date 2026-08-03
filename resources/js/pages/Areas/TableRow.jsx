@@ -1,9 +1,18 @@
 import TableRowActions from '@/components/TableRowActions';
-import { Table, Text } from '@mantine/core';
+import { Checkbox, Table, Text } from '@mantine/core';
 
-export default function TableRow({ item }) {
+export default function TableRow({ item, selectable = false, selected = false, onToggleSelect }) {
   return (
     <Table.Tr key={item.id}>
+      {selectable && (
+        <Table.Td>
+          <Checkbox
+            checked={selected}
+            onChange={() => onToggleSelect(item.id)}
+            aria-label={`Seleccionar área ${item.name}`}
+          />
+        </Table.Td>
+      )}
       <Table.Td>
         <Text
           fz='sm'

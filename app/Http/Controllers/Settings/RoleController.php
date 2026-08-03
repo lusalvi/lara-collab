@@ -7,6 +7,7 @@ use App\Http\Requests\Role\StoreRoleRequest;
 use App\Http\Requests\Role\UpdateRoleRequest;
 use App\Http\Resources\Role\RoleResource;
 use App\Models\Role;
+use App\Services\ForceDeleteService;
 use App\Services\PermissionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -87,5 +88,39 @@ class RoleController extends Controller
         $role->update(['archived_by_id' => null]);
 
         return redirect()->back()->success('Role restored', 'The restoring of the role was completed successfully.');
+    }
+
+    public function bulkForceDelete(Request $request, ForceDeleteService $forceDeleteService)
+    {
+        $request->validate([
+            'ids' => ['required', 'array', 'min:1'],
+            'ids.*' => ['integer', 'exists:roles,id'],
+        ]);
+
+        $roles = Role::onlyArchived()->whereIn('id', $request->ids)->get();
+
+        foreach ($roles as $role) {
+            $this->authorize('forceDelete', $role);
+        }
+
+        $rolesWithUsers = $roles->filter(
+            fn (Role $role) => DB::table('model_has_roles')->where('role_id', $role->id)->exists()
+        );
+
+        if ($rolesWithUsers->isNotEmpty()) {
+            $names = $rolesWithUsers->pluck('name')->implode(', ');
+
+            return redirect()->back()->warning(
+                'Action stopped',
+                "The following roles are still assigned to users and cannot be permanently deleted: {$names}."
+            );
+        }
+
+        $deletedCount = $forceDeleteService->forceDeleteRoles($roles);
+
+        return redirect()->back()->success(
+            'Roles deleted',
+            "{$deletedCount} role(s) were permanently deleted."
+        );
     }
 }

@@ -62,4 +62,21 @@ class RolePolicy
 
         return true;
     }
+
+    public function forceDelete(User $user, Role $role): bool
+    {
+        if (! $user->hasPermissionTo('force delete role')) {
+            return false;
+        }
+
+        if (in_array($role->name, $this->protectedRoles)) {
+            return $user->isSuperAdmin();
+        }
+
+        if ($role->archivedBy?->isSuperAdmin() && ! $user->isSuperAdmin()) {
+            return false;
+        }
+
+        return true;
+    }
 }

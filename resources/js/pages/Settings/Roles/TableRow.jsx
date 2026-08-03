@@ -1,13 +1,24 @@
 import TableRowActions from "@/components/TableRowActions";
-import { Table, Text } from "@mantine/core";
+import { Checkbox, Table, Text } from "@mantine/core";
 
-export default function TableRow({ item }) {
+export default function TableRow({ item, selectable = false, selected = false, onToggleSelect, showSelectColumn = false }) {
   const isLocked = (role) => {
     return role === "admin" || role === "superadmin";
   };
 
   return (
     <Table.Tr key={item.id}>
+      {showSelectColumn && (
+        <Table.Td>
+          {selectable && (
+            <Checkbox
+              checked={selected}
+              onChange={() => onToggleSelect(item.id)}
+              aria-label={`Seleccionar rol ${item.name}`}
+            />
+          )}
+        </Table.Td>
+      )}
       <Table.Td>
         <Text fz="sm" tt="capitalize" c={isLocked(item.name) ? "blue" : ""}>
           {item.name}

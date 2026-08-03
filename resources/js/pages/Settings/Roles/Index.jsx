@@ -1,20 +1,25 @@
 import ArchivedTabs from '@/components/ArchivedTabs';
+import BulkForceDeleteButton from '@/components/BulkForceDeleteButton';
 import Pagination from '@/components/Pagination';
 import SearchInput from '@/components/SearchInput';
 import TableHead from '@/components/TableHead';
 import TableRowEmpty from '@/components/TableRowEmpty';
+import useBulkSelection from '@/hooks/useBulkSelection';
 import Layout from '@/layouts/MainLayout';
 import { redirectTo, reloadWithQuery } from '@/utils/route';
 import { actionColumnVisibility, prepareColumns } from '@/utils/table';
 import { usePage } from '@inertiajs/react';
-import { Button, Grid, Table } from '@mantine/core';
+import { Button, Flex, Grid, Table } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
 import TableRow from './TableRow';
+
+const protectedRoles = ['superadmin', 'admin'];
 
 const RolesIndex = () => {
   const { items } = usePage().props;
 
-  const protectedRoles = ['superadmin', 'admin'];
+  const isArchivedView = !!route().params.archived;
+
   const sortedData = [...items.data].sort((a, b) => {
     const aIndex = protectedRoles.indexOf(a.name);
     const bIndex = protectedRoles.indexOf(b.name);
@@ -23,6 +28,14 @@ const RolesIndex = () => {
     if (bIndex !== -1) return 1;
     return a.name.localeCompare(b.name);
   });
+
+  // Los roles protegidos (superadmin, admin) nunca son seleccionables, aunque
+  // can_force_delete viniera true por algún motivo: es un doble seguro en la UI.
+  const selectableIds = sortedData
+    .filter((item) => item.can_force_delete && !protectedRoles.includes(item.name))
+    .map((item) => item.id);
+  const { selectedIds, toggle, toggleAll, clear, allSelected, someSelected } =
+    useBulkSelection(selectableIds);
 
   const columns = prepareColumns([
     { label: 'Nombre', column: 'name' },
@@ -39,6 +52,9 @@ const RolesIndex = () => {
       <TableRow
         item={item}
         key={item.id}
+        selectable={isArchivedView && item.can_force_delete && !protectedRoles.includes(item.name)}
+        selected={selectedIds.includes(item.id)}
+        onToggleSelect={toggle}
       />
     ))
   ) : (
@@ -67,15 +83,26 @@ const RolesIndex = () => {
           />
         </Grid.Col>
         <Grid.Col span='content'>
-          {can('create role') && (
-            <Button
-              leftSection={<IconPlus size={14} />}
-              radius='xl'
-              onClick={() => redirectTo('settings.roles.create')}
-            >
-              Crear
-            </Button>
-          )}
+          <Flex gap='sm' align='center'>
+            {selectedIds.length > 0 && (
+              <BulkForceDeleteButton
+                selectedIds={selectedIds}
+                routeName='settings.roles.bulk-force-delete'
+                entityLabelSingular='rol'
+                entityLabelPlural='roles'
+                onSuccess={clear}
+              />
+            )}
+            {can('create role') && (
+              <Button
+                leftSection={<IconPlus size={14} />}
+                radius='xl'
+                onClick={() => redirectTo('settings.roles.create')}
+              >
+                Crear
+              </Button>
+            )}
+          </Flex>
         </Grid.Col>
       </Grid>
 
@@ -87,6 +114,11 @@ const RolesIndex = () => {
           <TableHead
             columns={columns}
             sort={sort}
+            selectAll={
+              selectableIds.length > 0
+                ? { checked: allSelected, indeterminate: someSelected, onChange: toggleAll }
+                : undefined
+            }
           />
           <Table.Tbody>{rows}</Table.Tbody>
         </Table>

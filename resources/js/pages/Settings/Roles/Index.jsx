@@ -52,6 +52,7 @@ const RolesIndex = () => {
       <TableRow
         item={item}
         key={item.id}
+        showSelectColumn={isArchivedView}
         selectable={isArchivedView && item.can_force_delete && !protectedRoles.includes(item.name)}
         selected={selectedIds.includes(item.id)}
         onToggleSelect={toggle}

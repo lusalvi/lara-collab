@@ -15,6 +15,7 @@ import FiltersDrawer from './Index/FiltersDrawer';
 import Header from './Index/Header';
 import BoardView from './Index/BoardView';
 import ListView from './Index/ListView';
+import BulkActionsBar from './Index/BulkActionsBar';
 
 let currentProject = null;
 
@@ -61,6 +62,8 @@ const TasksIndex = () => {
 
       {can('create task') && <CreateTaskDrawer />}
       <EditTaskDrawer />
+
+      <BulkActionsBar />
 
       <Grid
         columns={12}

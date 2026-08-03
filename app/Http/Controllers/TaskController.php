@@ -230,7 +230,7 @@ class TaskController extends Controller
 
         // Archivar cada tarea
         $tasksToArchive->each(function ($task) {
-            $task->archiveWithChildren();
+            $task->archiveWithChildren(auth()->id());
             TaskDeleted::dispatch($task->id, $task->project_id);
         });
 

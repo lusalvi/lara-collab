@@ -51,7 +51,9 @@ export default function OverdueTasks({ tasks }) {
                     <Group>
                       <Tooltip label="Task group" openDelay={500} withArrow>
                         <div>
-                          <TaskGroupLabel>{translateGroupName(task.task_group.name)}</TaskGroupLabel>
+                          <TaskGroupLabel taskGroup={task.task_group}>
+                            {translateGroupName(task.task_group.name)}
+                          </TaskGroupLabel>
                         </div>
                       </Tooltip>
                       <Text fz={11} c="dimmed">

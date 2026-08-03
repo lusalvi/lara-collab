@@ -50,18 +50,23 @@ export default function RecentlyAssignedTasks({ tasks }) {
                     </Text>
                     <Group>
                       <Tooltip label="Task group" openDelay={500} withArrow>
-                        <TaskGroupLabel taskGroup={task.task_group}>
-                          {translateGroupName(task.task_group.name)}
-                        </TaskGroupLabel>                      </Tooltip>
+                        <div>
+                          <TaskGroupLabel taskGroup={task.task_group}>
+                            {translateGroupName(task.task_group.name)}
+                          </TaskGroupLabel>
+                        </div>
+                      </Tooltip>
                       <Text fz={11} c="dimmed">
                         {task.project.name}
                       </Text>
                     </Group>
                   </Stack>
                   <Tooltip label={date(task.assigned_at)} openDelay={500} withArrow>
-                    <Text fz={11} fw={700} className={classes.due}>
-                      {diffForHumans(task.assigned_at)}
-                    </Text>
+                    <div>
+                      <Text fz={11} fw={700} className={classes.due}>
+                        {diffForHumans(task.assigned_at)}
+                      </Text>
+                    </div>
                   </Tooltip>
                 </Group>
               </Box>

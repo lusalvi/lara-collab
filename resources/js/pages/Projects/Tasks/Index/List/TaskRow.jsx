@@ -12,7 +12,7 @@ import TaskCreator from './Components/TaskCreator';
 import { IconChevronDown, IconChevronRight, IconGripVertical, IconPlus } from '@tabler/icons-react';
 import useTaskDrawerStore from '@/hooks/store/useTaskDrawerStore';
 import useTasksStore from '@/hooks/store/useTasksStore';
-import { isOverdue } from '@/utils/task';
+import { isOverdue, isDueSoon } from '@/utils/task';
 
 function DropZone({ id, zone, isValid, className, children }) {
   const { setNodeRef, isOver } = useDroppable({
@@ -148,7 +148,15 @@ export default function TaskRow({
               fw={400}
               lineClamp={1}
               td={task.completed_at ? 'line-through' : undefined}
-              c={task.completed_at ? 'dimmed' : isOverdue(task) ? 'red.7' : undefined}
+              c={
+                task.completed_at
+                  ? 'dimmed'
+                  : isOverdue(task)
+                  ? 'red.7'
+                  : isDueSoon(task)
+                  ? 'yellow.7'
+                  : undefined
+              }
             >
               {task.name}
             </Text>

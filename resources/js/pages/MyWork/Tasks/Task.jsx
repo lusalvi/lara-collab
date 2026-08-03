@@ -30,7 +30,9 @@ export default function Task({ task }) {
           openDelay={1000}
           withArrow
         >
-          <TaskGroupLabel size='sm'>{translateGroupName(task.task_group.name)}</TaskGroupLabel>
+          <TaskGroupLabel taskGroup={task.task_group}>
+            {translateGroupName(task.task_group.name)}
+          </TaskGroupLabel>        
         </Tooltip>
         {task.assigned_to_user && (
           <Link href={route('users.edit', task.assigned_to_user.id)}>

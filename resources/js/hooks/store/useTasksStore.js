@@ -36,13 +36,6 @@ const useTasksStore = create((set, get) => ({
     return get().selectedTaskIds.includes(taskId);
   },
 
-  // 🔧 SOLUCIÓN: Métodos a AGREGAR al archivo useTasksStore.js
-  // (Reemplazar los métodos existentes selectAllTasks)
-
-  // ============================================================
-  // MÉTODO 1: Reemplazar selectAllTasks existente
-  // ============================================================
-
   selectAllTasks: (allTasks = []) => {
     // Si recibe allTasks, usarlos
     if (allTasks.length > 0) {
@@ -63,27 +56,20 @@ const useTasksStore = create((set, get) => ({
     });
   },
 
-  // ============================================================
-  // MÉTODO 2: AGREGAR archiveSelectedTasks (nuevo)
-  // ============================================================
-
   archiveSelectedTasks: async (projectId) => {
     const selectedTaskIds = get().selectedTaskIds;
-
+    
     if (selectedTaskIds.length === 0) {
-      alert('No tasks selected');
       return;
     }
-
+  
     try {
-      const response = await axios.post(
+      await axios.post(
         route("projects.tasks.bulk-archive", projectId),
         { ids: selectedTaskIds },
         { progress: false }
       );
-
-      console.log('Archive response:', response);
-
+  
       // Remover las tareas archivadas del store
       return set(produce(state => {
         Object.keys(state.tasks).forEach(groupId => {
@@ -96,7 +82,7 @@ const useTasksStore = create((set, get) => ({
     } catch (e) {
       console.error('Archive error:', e);
       console.error('Error response:', e.response?.data);
-      alert("Failed to archive selected tasks: " + (e.response?.data?.message || e.message));
+      
       throw e;
     }
   },

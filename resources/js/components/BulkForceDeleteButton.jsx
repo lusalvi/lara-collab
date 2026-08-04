@@ -10,6 +10,7 @@ import { openConfirmModal } from './ConfirmModal';
 export default function BulkForceDeleteButton({
   selectedIds,
   routeName,
+  routeParams = {},
   entityLabelSingular,
   entityLabelPlural,
   onSuccess,
@@ -26,7 +27,7 @@ export default function BulkForceDeleteButton({
       confirmProps: { color: 'red' },
       onConfirm: () =>
         router.post(
-          route(routeName),
+          route(routeName, routeParams),
           { ids: selectedIds, ...extraData },
           {
             preserveScroll: true,

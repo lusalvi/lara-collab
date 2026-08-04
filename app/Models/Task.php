@@ -27,6 +27,8 @@ class Task extends Model implements AuditableContract, Sortable
 {
     use Archivable, Auditable, HasArchivedBy, HasFactory, HasFilters, IsSearchable, SortableTrait;
 
+    private ?Project $fullProjectForPolicy = null;
+
     // Qué issue_type puede tener un hijo directo, según el issue_type del padre.
     public const ALLOWED_CHILD_TYPES = [
         'Epica' => ['Historia', 'Tarea'],
@@ -83,6 +85,11 @@ class Task extends Model implements AuditableContract, Sortable
     protected $observables = [
         'archived',
         'unArchived',
+    ];
+
+    protected $appends = [
+        'can_force_delete',
+        'can_restore',
     ];
 
     public array $defaultWith = [
@@ -228,5 +235,48 @@ class Task extends Model implements AuditableContract, Sortable
     public function activities(): MorphMany
     {
         return $this->morphMany(Activity::class, 'activity_capable');
+    }
+
+    public function getCanForceDeleteAttribute(): ?bool
+    {
+        if (! $this->archived_at) {
+            return null;
+        }
+
+        $user = auth()->user();
+
+        if (! $user) {
+            return null;
+        }
+
+        return $user->can('forceDelete', [$this, $this->projectForPolicy()]);
+    }
+
+    public function getCanRestoreAttribute(): ?bool
+    {
+        if (! $this->archived_at) {
+            return null;
+        }
+
+        $user = auth()->user();
+
+        if (! $user) {
+            return null;
+        }
+
+        return $user->can('restore', [$this, $this->projectForPolicy()]);
+    }
+
+    /**
+     * Resuelve el Project completo (no el select recortado de defaultWith) para
+     * evaluar las policies de Task, que necesitan campos como area_id.
+     */
+    private function projectForPolicy(): ?Project
+    {
+        if ($this->relationLoaded('project') && $this->project && array_key_exists('area_id', $this->project->getAttributes())) {
+            return $this->project;
+        }
+
+        return $this->fullProjectForPolicy ??= Project::withArchived()->find($this->project_id);
     }
 }

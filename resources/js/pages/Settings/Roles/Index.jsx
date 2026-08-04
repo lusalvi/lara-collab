@@ -115,6 +115,7 @@ const RolesIndex = () => {
           <TableHead
             columns={columns}
             sort={sort}
+            showSelectColumn={isArchivedView}
             selectAll={
               selectableIds.length > 0
                 ? { checked: allSelected, indeterminate: someSelected, onChange: toggleAll }

@@ -77,12 +77,14 @@ const RolesIndex = () => {
         align='center'
         mb='md'
       >
-        <Grid.Col span='content'>
-          <SearchInput
-            placeholder='Buscar roles'
-            search={search}
-          />
-        </Grid.Col>
+        {!isArchivedView && (
+          <Grid.Col span='content'>
+            <SearchInput
+              placeholder='Buscar roles'
+              search={search}
+            />
+          </Grid.Col>
+        )}
         <Grid.Col span='content'>
           <Flex gap='sm' align='center'>
             {selectedIds.length > 0 && (
@@ -94,7 +96,7 @@ const RolesIndex = () => {
                 onSuccess={clear}
               />
             )}
-            {can('create role') && (
+            {!isArchivedView && can('create role') && (
               <Button
                 leftSection={<IconPlus size={14} />}
                 radius='xl'

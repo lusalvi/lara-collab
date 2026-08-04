@@ -37,35 +37,67 @@ class TaskController extends Controller
             ->when($request->has('archived'), fn ($query) => $query->onlyArchived())
             ->get();
 
+        $searchQuery = $request->input('search');
+
         $groupedTasks = $project
             ->taskGroups()
             ->with(['project' => fn ($query) => $query->withArchived()])
             ->get()
-            ->mapWithKeys(function (TaskGroup $group) use ($request, $project) {
+            ->mapWithKeys(function (TaskGroup $group) use ($request, $project, $searchQuery) {
                 $prioritySort = data_get($request->input('sort', []), 'priority');
 
-                return [
-                    $group->id => Task::where('project_id', $project->id)
-                        ->where('group_id', $group->id)
-                        ->searchByQueryString()
-                        ->filterByQueryString()
-                        ->when($request->has('archived'), fn ($query) => $query->onlyArchived())
-                        ->withDefault()
-                        ->when($project->isArchived(), fn ($query) => $query->with(['project' => fn ($query) => $query->withArchived()]))
-                        ->when($prioritySort, function ($query, $direction) {
-                            $direction = $direction === 'asc' ? 'asc' : 'desc';
+                $matchedTasks = Task::where('project_id', $project->id)
+                    ->where('group_id', $group->id)
+                    ->searchByQueryString()
+                    ->filterByQueryString()
+                    ->when($request->has('archived'), fn ($query) => $query->onlyArchived())
+                    ->withDefault()
+                    ->when($project->isArchived(), fn ($query) => $query->with(['project' => fn ($query) => $query->withArchived()]))
+                    ->when($prioritySort, function ($query, $direction) {
+                        $direction = $direction === 'asc' ? 'asc' : 'desc';
 
-                            $query
-                                ->leftJoin('task_priorities', 'tasks.priority_id', '=', 'task_priorities.id')
-                                ->orderByRaw('tasks.priority_id IS NULL')
-                                ->orderBy('task_priorities.order', $direction)
-                                ->orderByDesc('tasks.created_at')
-                                ->select('tasks.*');
-                        }, function ($query) {
-                            $query->orderByDesc('created_at');
-                        })
-                        ->get(),
-                ];
+                        $query
+                            ->leftJoin('task_priorities', 'tasks.priority_id', '=', 'task_priorities.id')
+                            ->orderByRaw('tasks.priority_id IS NULL')
+                            ->orderBy('task_priorities.order', $direction)
+                            ->orderByDesc('tasks.created_at')
+                            ->select('tasks.*');
+                    }, function ($query) {
+                        $query->orderByDesc('created_at');
+                    })
+                    ->get();
+
+                // When there's an active search, also include ancestor tasks of matched
+                // child tasks so the frontend can correctly build the task hierarchy.
+                if ($searchQuery) {
+                    $matchedIds = $matchedTasks->pluck('id')->all();
+                    $ancestorIds = [];
+
+                    // Walk up the parent chain for every matched task
+                    $toCheck = $matchedTasks->filter(fn ($t) => $t->parent_task_id)->pluck('parent_task_id')->unique()->all();
+
+                    while (! empty($toCheck)) {
+                        $missing = array_diff($toCheck, $matchedIds, $ancestorIds);
+
+                        if (empty($missing)) {
+                            break;
+                        }
+
+                        $ancestors = Task::whereIn('id', $missing)
+                            ->where('project_id', $project->id)
+                            ->where('group_id', $group->id)
+                            ->withDefault()
+                            ->when($project->isArchived(), fn ($query) => $query->with(['project' => fn ($query) => $query->withArchived()]))
+                            ->get();
+
+                        $ancestorIds = array_merge($ancestorIds, $ancestors->pluck('id')->all());
+                        $toCheck = $ancestors->filter(fn ($t) => $t->parent_task_id)->pluck('parent_task_id')->unique()->all();
+
+                        $matchedTasks = $matchedTasks->merge($ancestors);
+                    }
+                }
+
+                return [$group->id => $matchedTasks];
             });
 
         return Inertia::render('Projects/Tasks/Index', [

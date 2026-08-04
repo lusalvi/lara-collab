@@ -68,12 +68,14 @@ const UsersIndex = () => {
         align='center'
         mb='md'
       >
-        <Grid.Col span='content'>
-          <SearchInput
-            placeholder='Buscar usuarios'
-            search={search}
-          />
-        </Grid.Col>
+        {!isArchivedView && (
+          <Grid.Col span='content'>
+            <SearchInput
+              placeholder='Buscar usuarios'
+              search={search}
+            />
+          </Grid.Col>
+        )}
         <Grid.Col span='content'>
           <Flex gap='sm' align='center'>
             {selectedIds.length > 0 && (
@@ -85,7 +87,7 @@ const UsersIndex = () => {
                 onSuccess={clear}
               />
             )}
-            {can('create user') && (
+            {!isArchivedView && can('create user') && (
               <Button
                 leftSection={<IconPlus size={14} />}
                 radius='xl'

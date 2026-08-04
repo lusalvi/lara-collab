@@ -9,9 +9,13 @@ import { openConfirmModal } from "./ConfirmModal";
 import FileThumbnail from "./FileThumbnail";
 import ImageModal from "./ImageModal";
 
+const MAX_FILE_SIZE_MB = 5;
+const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
+
 export default function Dropzone({ selected, onChange, remove, ...props }) {
   const [opened, { close, open }] = useDisclosure(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [rejectedFiles, setRejectedFiles] = useState([]);
 
   const confirmDeleteAttachment = (index) => {
     openConfirmModal({
@@ -40,13 +44,22 @@ export default function Dropzone({ selected, onChange, remove, ...props }) {
     }
   };
 
+  const handleReject = (files) => {
+    setRejectedFiles(files.map((f) => f.file.name));
+    setTimeout(() => setRejectedFiles([]), 4000);
+  };
+
   return (
     <>
       <ImageModal image={selectedImage} opened={opened} close={close} />
 
       <MantineDropzone
-        onDrop={(files) => onChange([...selected, ...files])}
-        onReject={(files) => console.log("rejected files", files)}
+        onDrop={(files) => {
+          setRejectedFiles([]);
+          onChange([...selected, ...files]);
+        }}
+        onReject={handleReject}
+        maxSize={MAX_FILE_SIZE_BYTES}
         {...props}
       >
         <Group justify="center" gap="md" mih={50} style={{ pointerEvents: "none" }}>
@@ -83,14 +96,22 @@ export default function Dropzone({ selected, onChange, remove, ...props }) {
 
           <div>
             <Text size="md" inline>
-              Drag files here or click to select
+              Arrastrá archivos acá o hacé clic para seleccionar
             </Text>
             <Text size="xs" c="dimmed" inline mt={7}>
-              Files of any type will be accepted
+              Máximo {MAX_FILE_SIZE_MB} MB por archivo
             </Text>
           </div>
         </Group>
       </MantineDropzone>
+
+      {rejectedFiles.length > 0 && (
+        <Text size="xs" c="red" mt="xs">
+          {rejectedFiles.length === 1
+            ? `"${rejectedFiles[0]}" supera el límite de ${MAX_FILE_SIZE_MB} MB y no fue agregado.`
+            : `${rejectedFiles.length} archivos superan el límite de ${MAX_FILE_SIZE_MB} MB y no fueron agregados.`}
+        </Text>
+      )}
 
       <SimpleGrid cols={2} mt="lg">
         {selected.map((file, index) => (

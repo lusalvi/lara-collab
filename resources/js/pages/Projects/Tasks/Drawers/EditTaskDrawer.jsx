@@ -92,6 +92,12 @@ export function EditTaskDrawer() {
   }, [edit.opened, task]);
 
   const updateValue = (field, value) => {
+    // Convertir Date objects a string YYYY-MM-DD para fechas
+    let valueToStore = value;
+    if ((field === 'due_on' || field === 'start_on') && value instanceof Date) {
+      valueToStore = dayjs(value).format('YYYY-MM-DD');
+    }
+
     setData({ ...data, [field]: value });
 
     const dropdowns = ['labels', 'subscribed_users'];
@@ -109,7 +115,7 @@ export function EditTaskDrawer() {
       const priority = value ? priorities.find(p => p.id === value) : null;
       updateTaskProperty(task, field, value, priority);
     } else if (!onBlurInputs.includes(field)) {
-      updateTaskProperty(task, field, value);
+      updateTaskProperty(task, field, valueToStore);
     }
   };
 
@@ -263,7 +269,7 @@ export function EditTaskDrawer() {
               <DateInput
                 clearable
                 valueFormat='DD MMM YYYY'
-                minDate={new Date()}
+                minDate={data.start_on || new Date()}
                 mt='md'
                 label='Due date'
                 placeholder='Pick task due date'

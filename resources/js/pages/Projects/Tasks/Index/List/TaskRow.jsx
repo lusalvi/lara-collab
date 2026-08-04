@@ -9,6 +9,7 @@ import TaskDueDate from './Components/TaskDueDate';
 import TaskActions from './Components/TaskActions';
 import TaskStatusDropdown from './Components/TaskStatusDropdown';
 import TaskCreator from './Components/TaskCreator';
+import EditableTaskName from './Components/EditableTaskName';
 import { IconChevronDown, IconChevronRight, IconGripVertical, IconPlus } from '@tabler/icons-react';
 import useTaskDrawerStore from '@/hooks/store/useTaskDrawerStore';
 import useTasksStore from '@/hooks/store/useTasksStore';
@@ -145,23 +146,29 @@ export default function TaskRow({
 
             <IssueTypeIcon type={task.issue_type} />
 
-            <Text
-              size='sm'
-              fw={400}
-              lineClamp={1}
-              td={task.completed_at ? 'line-through' : undefined}
-              c={
-                task.completed_at
-                  ? 'dimmed'
-                  : isOverdue(task)
-                  ? 'red.7'
-                  : isDueSoon(task)
-                  ? 'yellow.7'
-                  : undefined
-              }
+            <div
+              style={{
+                flex: 1,
+                opacity: task.completed_at ? 0.6 : 1,
+                textDecoration: task.completed_at ? 'line-through' : undefined,
+                color:
+                  task.completed_at
+                    ? 'var(--mantine-color-gray-6)'
+                    : isOverdue(task)
+                    ? 'var(--mantine-color-red-7)'
+                    : isDueSoon(task)
+                    ? 'var(--mantine-color-yellow-7)'
+                    : undefined,
+              }}
+              onClick={e => {
+                // Permitir que EditableTaskName maneje el click
+                if (e.target.tagName !== 'INPUT') {
+                  openEditTask(task);
+                }
+              }}
             >
-              {task.name}
-            </Text>
+              <EditableTaskName task={task} />
+            </div>
           </Group>
 
           {task.issue_type !== 'Subtarea' && (

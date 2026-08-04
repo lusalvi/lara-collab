@@ -11,9 +11,17 @@ export default function TaskDueDateDropdown({ task }) {
 
         // Si viene con hora (ISO), nos quedamos solo con la fecha
         const onlyDate = String(date).split('T')[0];
+        
+        // Validar que sea una fecha válida (YYYY-MM-DD)
+        if (!onlyDate.match(/^\d{4}-\d{2}-\d{2}$/)) {
+            return null;
+        }
 
         // Creamos la fecha al mediodía para evitar problemas de zona horaria
-        return new Date(`${onlyDate}T12:00:00`);
+        const parsed = new Date(`${onlyDate}T12:00:00`);
+        
+        // Validar que la fecha sea válida (no NaN)
+        return isNaN(parsed.getTime()) ? null : parsed;
     };
 
     return (

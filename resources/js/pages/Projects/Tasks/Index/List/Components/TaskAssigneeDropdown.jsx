@@ -62,14 +62,23 @@ export default function TaskAssigneeDropdown({ task, users }) {
           );
         }}
         leftSection={
-          <Avatar
-            src={task.assigned_to_user?.avatar}
-            size={20}
-            radius="xl"
-            color="gray"
-          >
-            {task.assigned_to_user?.name?.[0] ?? '?'}
-          </Avatar>
+          !task.assigned_to_user ? (
+            <Avatar
+              size={20}
+              radius="xl"
+              color="gray"
+            >
+              ?
+            </Avatar>
+          ) : (
+            <Avatar
+              src={task.assigned_to_user.avatar}
+              size={20}
+              radius="xl"
+            >
+              {task.assigned_to_user.name?.[0]}
+            </Avatar>
+          )
         }
         onChange={value => {
           const user =

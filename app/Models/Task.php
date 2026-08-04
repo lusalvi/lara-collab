@@ -135,7 +135,8 @@ class Task extends Model implements AuditableContract, Sortable
             ->whereDate('due_on', now()->addDay()->toDateString())
             ->whereNull('completed_at')
             ->whereNull('due_soon_notified_at')
-            ->whereNotNull('assigned_to_user_id');
+            ->whereNotNull('assigned_to_user_id')
+            ->whereHas('project');
     }
 
     /* Tareas vencidas */
@@ -145,7 +146,8 @@ class Task extends Model implements AuditableContract, Sortable
             ->whereDate('due_on', '<', now()->toDateString())
             ->whereNull('completed_at')
             ->whereNull('overdue_notified_at')
-            ->whereNotNull('assigned_to_user_id');
+            ->whereNotNull('assigned_to_user_id')
+            ->whereHas('project');
     }
 
     public function loadDefault()

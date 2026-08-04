@@ -41,6 +41,6 @@ class UserCreatedNotification extends Notification implements ShouldQueue
             ->line('El administrador ha creado una cuenta para usted. Puede hacer clic en el botón de abajo para iniciar sesión con la contraseña proporcionada. Es recomendable cambiar la contraseña al iniciar sesión.')
             ->line("Contraseña actual: {$this->password}")
             ->action('Login', route('auth.login.form', ['email' => $notifiable->email]))
-            ->salutation('Disfruta de LaraCollab');
+            ->salutation('Disfruta de TAHU!');
     }
 }

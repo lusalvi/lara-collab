@@ -9,10 +9,13 @@ import TaskDueDate from './Components/TaskDueDate';
 import TaskActions from './Components/TaskActions';
 import TaskStatusDropdown from './Components/TaskStatusDropdown';
 import TaskCreator from './Components/TaskCreator';
+import EditableTaskName from './Components/EditableTaskName';
 import { IconChevronDown, IconChevronRight, IconGripVertical, IconPlus } from '@tabler/icons-react';
 import useTaskDrawerStore from '@/hooks/store/useTaskDrawerStore';
 import useTasksStore from '@/hooks/store/useTasksStore';
 import { isOverdue, isDueSoon } from '@/utils/task';
+import TaskPriorityDropdown from './Components/TaskPriorityDropdown';
+import TaskDueDateDropdown from './Components/TaskDueDateDropdown';
 
 function DropZone({ id, zone, isValid, className, children }) {
   const { setNodeRef, isOver } = useDroppable({
@@ -143,23 +146,29 @@ export default function TaskRow({
 
             <IssueTypeIcon type={task.issue_type} />
 
-            <Text
-              size='sm'
-              fw={400}
-              lineClamp={1}
-              td={task.completed_at ? 'line-through' : undefined}
-              c={
-                task.completed_at
-                  ? 'dimmed'
-                  : isOverdue(task)
-                  ? 'red.7'
-                  : isDueSoon(task)
-                  ? 'yellow.7'
-                  : undefined
-              }
+            <div
+              style={{
+                flex: 1,
+                opacity: task.completed_at ? 0.6 : 1,
+                textDecoration: task.completed_at ? 'line-through' : undefined,
+                color:
+                  task.completed_at
+                    ? 'var(--mantine-color-gray-6)'
+                    : isOverdue(task)
+                    ? 'var(--mantine-color-red-7)'
+                    : isDueSoon(task)
+                    ? 'var(--mantine-color-yellow-7)'
+                    : undefined,
+              }}
+              onClick={e => {
+                // Permitir que EditableTaskName maneje el click
+                if (e.target.tagName !== 'INPUT') {
+                  openEditTask(task);
+                }
+              }}
             >
-              {task.name}
-            </Text>
+              <EditableTaskName task={task} />
+            </div>
           </Group>
 
           {task.issue_type !== 'Subtarea' && (
@@ -205,23 +214,11 @@ export default function TaskRow({
         />
       </div>
 
-      <div className={classes.priority}>
-        {task.priority ? (
-          <Badge
-            color={task.priority.color}
-            variant='light'
-            radius='sm'
-          >
-            {task.priority.label}
-          </Badge>
-        ) : (
-          <Text
-            c='dimmed'
-            size='sm'
-          >
-            -
-          </Text>
-        )}
+      <div
+        className={classes.priority}
+        onClick={e => e.stopPropagation()}
+      >
+        <TaskPriorityDropdown task={task} />
       </div>
 
       <div
@@ -231,8 +228,11 @@ export default function TaskRow({
         <TaskStatusDropdown task={task} />
       </div>
 
-      <div className={classes.due}>
-        <TaskDueDate date={task.due_on} />
+      <div
+        className={classes.due}
+        onClick={e => e.stopPropagation()}
+      >
+        <TaskDueDateDropdown task={task} />
       </div>
 
       <div

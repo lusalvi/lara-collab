@@ -129,7 +129,8 @@ const useTasksStore = create((set, get) => ({
           state.tasks[value][0].completed_at = isCompletedGroup ? new Date().toISOString() : null;
         } else {
           state.tasks[task.group_id][index][property] = value;
-          if (options) {
+          // Actualizar objeto relacionado si es un _id field (incluso si es null)
+          if (property.endsWith('_id')) {
             const relatedProperty = property.replace('_id', '');
             state.tasks[task.group_id][index][relatedProperty] = options;
           }

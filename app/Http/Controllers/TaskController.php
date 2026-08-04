@@ -76,7 +76,7 @@ class TaskController extends Controller
                     // Walk up the parent chain for every matched task
                     $toCheck = $matchedTasks->filter(fn ($t) => $t->parent_task_id)->pluck('parent_task_id')->unique()->all();
 
-                    while (!empty($toCheck)) {
+                    while (! empty($toCheck)) {
                         $missing = array_diff($toCheck, $matchedIds, $ancestorIds);
 
                         if (empty($missing)) {

@@ -19,7 +19,7 @@ class AttachmentController extends Controller
         $this->authorize('viewAny', [Attachment::class, $project]);
 
         $request->validate([
-            'attachments'   => ['required', 'array', 'max:10'],
+            'attachments' => ['required', 'array', 'max:10'],
             'attachments.*' => ['file', 'max:5120'], // 5 MB por archivo
         ]);
 

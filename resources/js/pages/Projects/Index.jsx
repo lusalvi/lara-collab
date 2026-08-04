@@ -67,12 +67,14 @@ const ProjectsIndex = () => {
         align='center'
         mb='md'
       >
-        <Grid.Col span='content'>
-          <SearchInput
-            placeholder='Buscar proyectos'
-            search={search}
-          />
-        </Grid.Col>
+        {!isArchivedView && (
+          <Grid.Col span='content'>
+            <SearchInput
+              placeholder='Buscar proyectos'
+              search={search}
+            />
+          </Grid.Col>
+        )}
         <Grid.Col span='content'>
           <Flex gap='sm' align='center'>
             {selectable && selectedIds.length > 0 && (
@@ -85,7 +87,7 @@ const ProjectsIndex = () => {
                 Eliminar seleccionados ({selectedIds.length})
               </Button>
             )}
-            {can('create project') && (
+            {!isArchivedView && can('create project') && (
               <Button
                 leftSection={<IconPlus size={14} />}
                 radius='xl'

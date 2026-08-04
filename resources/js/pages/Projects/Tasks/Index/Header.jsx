@@ -17,12 +17,11 @@ export default function Header() {
   const { openCreateTask } = useTaskDrawerStore();
   const { hasUrlParams } = useTaskFiltersStore();
 
-  // Mostrar búsqueda/filtros solo en Lista, Tablero y Archivados
+  // Buscador, filtros y botón crear solo en lista/tablero activos (no en archivados)
   const isArchived = !!route().params.archived;
   const currentRoute = route().current();
   const isTasksView =
     currentRoute === 'projects.tasks' || currentRoute === 'projects.tasks.open';
-  const showSearchAndFilters = isTasksView || isArchived;
 
   // Filtros activos (excluimos 'archived' porque ahora es pestaña)
   const usingFilters = hasUrlParams(['archived']);
@@ -50,57 +49,53 @@ export default function Header() {
       {/* Pestañas: Lista, Tablero, Calendario, Cronograma, Notas, Archivados */}
       <ProjectTabs />
 
-      {/* Barra de herramientas: buscador + filtros + botón crear */}
-      {showSearchAndFilters && (
+      {/* Barra de herramientas: buscador + filtros + botón crear – solo en lista/tablero activos */}
+      {isTasksView && !isArchived && (
         <Group
           justify='space-between'
           mb='md'
         >
           <Group>
             <SearchInput
-              placeholder='Buscar tareas'
+              placeholder='Buscar actividades'
               search={search}
             />
 
-            {/* Filtros avanzados solo en lista/tablero activos (no en archivados) */}
-            {!isArchived && (
-              <ActionIcon.Group>
-                <Tooltip
-                  label='Filtros'
-                  openDelay={500}
-                  withArrow
+            <ActionIcon.Group>
+              <Tooltip
+                label='Filtros'
+                openDelay={500}
+                withArrow
+              >
+                <ActionIcon
+                  variant='filled'
+                  size='lg'
+                  onClick={() => openDrawer()}
                 >
-                  <ActionIcon
-                    variant='filled'
-                    size='lg'
-                    onClick={() => openDrawer()}
-                  >
-                    {usingFilters ? (
-                      <IconFilterCog
-                        style={{ width: '60%', height: '60%' }}
-                        stroke={1.5}
-                      />
-                    ) : (
-                      <IconFilter
-                        style={{ width: '60%', height: '60%' }}
-                        stroke={1.5}
-                      />
-                    )}
-                  </ActionIcon>
-                </Tooltip>
-                {usingFilters && <ClearFiltersButton />}
-              </ActionIcon.Group>
-            )}
+                  {usingFilters ? (
+                    <IconFilterCog
+                      style={{ width: '60%', height: '60%' }}
+                      stroke={1.5}
+                    />
+                  ) : (
+                    <IconFilter
+                      style={{ width: '60%', height: '60%' }}
+                      stroke={1.5}
+                    />
+                  )}
+                </ActionIcon>
+              </Tooltip>
+              {usingFilters && <ClearFiltersButton />}
+            </ActionIcon.Group>
           </Group>
 
-          {/* Botón crear – solo en lista/tablero activos */}
-          {isTasksView && can('create task') && (
+          {can('create task') && (
             <Button
               leftSection={<IconPlus size={14} />}
               radius='xl'
               onClick={() => openCreateTask()}
             >
-              Agregar tarea
+              Agregar actividad
             </Button>
           )}
         </Group>

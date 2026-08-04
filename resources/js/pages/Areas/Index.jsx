@@ -59,12 +59,14 @@ const AreasIndex = () => {
         align='center'
         mb='md'
       >
-        <Grid.Col span='content'>
-          <SearchInput
-            placeholder='Buscar áreas'
-            search={search}
-          />
-        </Grid.Col>
+        {!isArchivedView && (
+          <Grid.Col span='content'>
+            <SearchInput
+              placeholder='Buscar áreas'
+              search={search}
+            />
+          </Grid.Col>
+        )}
         <Grid.Col span='content'>
           <Flex gap='sm' align='center'>
             {selectedIds.length > 0 && (
@@ -76,7 +78,7 @@ const AreasIndex = () => {
                 onSuccess={clear}
               />
             )}
-            {can('create area') && (
+            {!isArchivedView && can('create area') && (
               <Button
                 leftSection={<IconPlus size={14} />}
                 radius='xl'

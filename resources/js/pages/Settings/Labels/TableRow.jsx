@@ -1,16 +1,28 @@
 import TableRowActions from "@/components/TableRowActions";
-import { ColorSwatch, Table, Text } from "@mantine/core";
+import { Checkbox, ColorSwatch, Table, Text } from "@mantine/core";
 
-export default function TableRow({ item }) {
+export default function TableRow({ item, selectable = false, selected = false, onToggleSelect, showSelectColumn = false }) {
   return (
     <Table.Tr key={item.id}>
+      {showSelectColumn && (
+        <Table.Td>
+          {selectable && (
+            <Checkbox
+              checked={selected}
+              onChange={() => onToggleSelect(item.id)}
+              aria-label={`Seleccionar etiqueta ${item.name}`}
+            />
+          )}
+        </Table.Td>
+      )}
       <Table.Td w={80}>
         <ColorSwatch color={item.color} />
       </Table.Td>
       <Table.Td>
         <Text fz="sm">{item.name}</Text>
       </Table.Td>
-      {(can("edit label") || can("archive label") || can("restore label")) && (
+      {(can("edit label") || can("archive label") ||
+        (can("restore label") && item.can_restore !== false)) && (
         <Table.Td w={100}>
           <TableRowActions
             item={item}

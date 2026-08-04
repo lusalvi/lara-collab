@@ -17,6 +17,7 @@ class AreaResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'can_force_delete' => $this->archived_at ? $request->user()?->can('forceDelete', $this->resource) : null,
         ];
     }
 }

@@ -17,10 +17,12 @@ use App\Models\Project;
 use App\Models\Task;
 use App\Models\TaskGroup;
 use App\Models\TaskPriority;
+use App\Services\ForceDeleteService;
 use App\Services\PermissionService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -235,5 +237,38 @@ class TaskController extends Controller
         });
 
         return response()->json(['message' => 'Tasks archived successfully']);
+    }
+
+    public function bulkForceDelete(Request $request, Project $project, ForceDeleteService $forceDeleteService): RedirectResponse
+    {
+        $request->validate([
+            'ids' => ['required', 'array', 'min:1'],
+            'ids.*' => ['integer', 'exists:tasks,id'],
+        ]);
+
+        // Solo se procesan las tasks raíz seleccionadas: forceDeleteTask baja recursivamente
+        // por sus subtareas, así que no hace falta pedirlas explícitamente.
+        $tasksToDelete = Task::onlyArchived()
+            ->whereIn('id', $request->ids)
+            ->where('project_id', $project->id)
+            ->whereNull('parent_task_id')
+            ->get();
+
+        foreach ($tasksToDelete as $task) {
+            $this->authorize('forceDelete', [$task, $project]);
+        }
+
+        $deletedCount = 0;
+        DB::transaction(function () use ($tasksToDelete, $forceDeleteService, &$deletedCount) {
+            foreach ($tasksToDelete as $task) {
+                $forceDeleteService->forceDeleteTask($task);
+                $deletedCount++;
+            }
+        });
+
+        return redirect()->back()->success(
+            'Tasks deleted',
+            "{$deletedCount} task(s) were permanently deleted."
+        );
     }
 }

@@ -2,14 +2,23 @@ import RoleBadge from '@/components/RoleBadge';
 import TableRowActions from '@/components/TableRowActions';
 import { getInitials } from '@/utils/user';
 import { usePage } from '@inertiajs/react';
-import { Avatar, Badge, Flex, Group, Table, Text } from '@mantine/core';
+import { Avatar, Badge, Checkbox, Flex, Group, Table, Text } from '@mantine/core';
 
-export default function TableRow({ item }) {
+export default function TableRow({ item, selectable = false, selected = false, onToggleSelect }) {
   const { auth } = usePage().props;
   const isSuperAdmin = auth.user.is_super_admin;
 
   return (
     <Table.Tr key={item.id}>
+      {selectable && (
+        <Table.Td>
+          <Checkbox
+            checked={selected}
+            onChange={() => onToggleSelect(item.id)}
+            aria-label={`Seleccionar usuario ${item.name}`}
+          />
+        </Table.Td>
+      )}
       <Table.Td>
         <Group gap='sm'>
           <Avatar

@@ -7,6 +7,7 @@ use App\Http\Requests\Label\StoreLabelRequest;
 use App\Http\Requests\Label\UpdateLabelRequest;
 use App\Http\Resources\Label\LabelResource;
 use App\Models\Label;
+use App\Services\ForceDeleteService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -72,5 +73,26 @@ class LabelController extends Controller
         $label->update(['archived_by_id' => null]);
 
         return redirect()->back()->success('Label restored', 'The restoring of the label was completed successfully.');
+    }
+
+    public function bulkForceDelete(Request $request, ForceDeleteService $forceDeleteService)
+    {
+        $request->validate([
+            'ids' => ['required', 'array', 'min:1'],
+            'ids.*' => ['integer', 'exists:labels,id'],
+        ]);
+
+        $labels = Label::onlyArchived()->whereIn('id', $request->ids)->get();
+
+        foreach ($labels as $label) {
+            $this->authorize('forceDelete', $label);
+        }
+
+        $deletedCount = $forceDeleteService->forceDeleteLabels($labels);
+
+        return redirect()->back()->success(
+            'Labels deleted',
+            "{$deletedCount} label(s) were permanently deleted."
+        );
     }
 }

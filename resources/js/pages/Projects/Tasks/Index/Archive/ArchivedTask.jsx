@@ -8,7 +8,16 @@ import { IconChevronRight, IconChevronDown } from "@tabler/icons-react";
 import classes from "../Task/css/TaskRow.module.css";
 import TaskActions from "../TaskActions";
 
-export default function ArchivedTask({ task, depth = 0, hasChildren = false, collapsed = false, onToggle }) {
+export default function ArchivedTask({
+  task,
+  depth = 0,
+  hasChildren = false,
+  collapsed = false,
+  onToggle,
+  selectable = false,
+  selected = false,
+  onToggleSelect,
+}) {
   const paddingLeft = depth * 24;
 
   return (
@@ -37,15 +46,18 @@ export default function ArchivedTask({ task, depth = 0, hasChildren = false, col
       )}
       {!hasChildren && <div style={{ width: 24 }} />}
 
-      <Group gap="sm" flex={1} wrap="nowrap">
+      {selectable ? (
         <Checkbox
           size="sm"
-          radius="xl"
-          color="green"
-          defaultChecked={task.completed_at !== null}
-          className={classes.disabledCheckbox}
+          checked={selected}
+          onChange={() => onToggleSelect(task.id)}
+          aria-label={`Seleccionar tarea ${task.name}`}
         />
+      ) : (
+        <div style={{ width: 18 }} />
+      )}
 
+      <Group gap="sm" flex={1} wrap="nowrap">
         <IssueTypeIcon type={task.issue_type} size={16} />
 
         {task.assigned_to_user && (

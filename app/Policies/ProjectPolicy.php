@@ -78,6 +78,23 @@ class ProjectPolicy
         return $user->hasProjectAccess($project);
     }
 
+    public function forceDelete(User $user, Project $project): bool
+    {
+        if (! $user->hasPermissionTo('force delete project')) {
+            return false;
+        }
+
+        if ($project->wasArchivedBySuperAdmin() && ! $user->isSuperAdmin()) {
+            return false;
+        }
+
+        if ($user->isSuperAdmin()) {
+            return true;
+        }
+
+        return $user->belongsToArea($project->area_id);
+    }
+
     public function editUserAccess(User $user, Project $project): bool
     {
         if (! $user->hasPermissionTo('edit project user access')) {

@@ -8,6 +8,7 @@ use App\Http\Resources\Project\ProjectResource;
 use App\Models\Area;
 use App\Models\Project;
 use App\Models\User;
+use App\Services\ForceDeleteService;
 use App\Services\ProjectService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -138,6 +139,27 @@ class ProjectController extends Controller
         $project->update(['archived_by_id' => null]);
 
         return redirect()->back()->success('Project restored', 'The restoring of the project was completed successfully.');
+    }
+
+    public function bulkForceDelete(Request $request, ForceDeleteService $forceDeleteService)
+    {
+        $request->validate([
+            'ids' => ['required', 'array', 'min:1'],
+            'ids.*' => ['integer', 'exists:projects,id'],
+        ]);
+
+        $projects = Project::onlyArchived()->whereIn('id', $request->ids)->get();
+
+        foreach ($projects as $project) {
+            $this->authorize('forceDelete', $project);
+        }
+
+        $deletedCount = $forceDeleteService->forceDeleteProjects($projects);
+
+        return redirect()->back()->success(
+            'Projects deleted',
+            "{$deletedCount} project(s) were permanently deleted."
+        );
     }
 
     public function favoriteToggle(Project $project)

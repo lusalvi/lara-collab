@@ -10,6 +10,7 @@ use App\Http\Requests\Area\UpdateAreaRequest;
 use App\Http\Resources\Area\AreaResource;
 use App\Models\Area;
 use App\Models\User;
+use App\Services\ForceDeleteService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -82,5 +83,39 @@ class AreaController extends Controller
         $area->update(['archived_by_id' => null]);
 
         return redirect()->back()->success('Area restored', 'The restoring of the area was completed successfully.');
+    }
+
+    public function bulkForceDelete(Request $request, ForceDeleteService $forceDeleteService)
+    {
+        $request->validate([
+            'ids' => ['required', 'array', 'min:1'],
+            'ids.*' => ['integer', 'exists:areas,id'],
+        ]);
+
+        $areas = Area::onlyArchived()->whereIn('id', $request->ids)->get();
+
+        foreach ($areas as $area) {
+            $this->authorize('forceDelete', $area);
+        }
+
+        $blockedAreas = $areas->filter(
+            fn (Area $area) => $area->projects()->withArchived()->exists() || $area->users()->withArchived()->exists()
+        );
+
+        if ($blockedAreas->isNotEmpty()) {
+            $names = $blockedAreas->pluck('name')->implode(', ');
+
+            return redirect()->back()->warning(
+                'Action stopped',
+                "The following areas still have projects or users and cannot be permanently deleted: {$names}."
+            );
+        }
+
+        $deletedCount = $forceDeleteService->forceDeleteAreas($areas);
+
+        return redirect()->back()->success(
+            'Areas deleted',
+            "{$deletedCount} area(s) were permanently deleted."
+        );
     }
 }

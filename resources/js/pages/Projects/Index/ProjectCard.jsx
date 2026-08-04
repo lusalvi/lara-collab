@@ -1,12 +1,12 @@
 import { stopOnIgnoreLink } from "@/utils/domEvents";
 import { getInitials } from "@/utils/user";
 import { Link } from "@inertiajs/react";
-import { Avatar, Card, Group, Progress, Text, Tooltip } from "@mantine/core";
+import { Avatar, Card, Checkbox, Group, Progress, Text, Tooltip } from "@mantine/core";
 import ToggleFavorite from "./FavoriteToggle";
 import ProjectCardActions from "./ProjectCardActions";
 import classes from "./css/ProjectCard.module.css";
 
-export default function ProjectCard({ item }) {
+export default function ProjectCard({ item, selectable = false, selected = false, onToggleSelect }) {
   const completedPercent = (item.completed_tasks_count / item.all_tasks_count) * 100;
   const overduePercent = (item.overdue_tasks_count / item.all_tasks_count) * 100;
 
@@ -18,9 +18,20 @@ export default function ProjectCard({ item }) {
     >
       <Card withBorder padding="xl" radius="md" w={350} className={classes.card}>
         <Group justify="space-between">
-          <Text fz={23} fw={700} className={classes.title}>
-            {item.name}
-          </Text>
+          <Group gap="xs">
+            {selectable && (
+              <Checkbox
+                checked={selected}
+                onChange={() => onToggleSelect(item.id)}
+                onClick={(e) => e.stopPropagation()}
+                data-ignore-link
+                aria-label={`Seleccionar proyecto ${item.name}`}
+              />
+            )}
+            <Text fz={23} fw={700} className={classes.title}>
+              {item.name}
+            </Text>
+          </Group>
           <ToggleFavorite item={item} />
         </Group>
 

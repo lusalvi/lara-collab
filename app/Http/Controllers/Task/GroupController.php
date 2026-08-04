@@ -12,6 +12,7 @@ use App\Http\Requests\TaskGroup\StoreTaskGroupRequest;
 use App\Http\Requests\TaskGroup\UpdateTaskGroupRequest;
 use App\Models\Project;
 use App\Models\TaskGroup;
+use App\Services\ForceDeleteService;
 use Illuminate\Http\Request;
 
 class GroupController extends Controller
@@ -77,5 +78,29 @@ class GroupController extends Controller
         TaskGroupOrderChanged::dispatch($project->id, $request->ids);
 
         return response()->json();
+    }
+
+    public function bulkForceDelete(Request $request, Project $project, ForceDeleteService $forceDeleteService)
+    {
+        $request->validate([
+            'ids' => ['required', 'array', 'min:1'],
+            'ids.*' => ['integer', 'exists:task_groups,id'],
+        ]);
+
+        $taskGroups = TaskGroup::onlyArchived()
+            ->whereIn('id', $request->ids)
+            ->where('project_id', $project->id)
+            ->get();
+
+        foreach ($taskGroups as $taskGroup) {
+            $this->authorize('forceDelete', [$taskGroup, $project]);
+        }
+
+        $deletedCount = $forceDeleteService->forceDeleteTaskGroups($taskGroups);
+
+        return redirect()->route('projects.tasks', $project)->success(
+            'Task groups deleted',
+            "{$deletedCount} task group(s) were permanently deleted."
+        );
     }
 }

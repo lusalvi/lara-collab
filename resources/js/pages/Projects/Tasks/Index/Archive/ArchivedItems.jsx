@@ -1,10 +1,14 @@
 import { EmptyResult } from "@/components/EmptyResult";
-import { Text, Stack } from "@mantine/core";
+import BulkForceDeleteButton from "@/components/BulkForceDeleteButton";
+import useBulkSelection from "@/hooks/useBulkSelection";
+import { Text, Stack, Flex } from "@mantine/core";
+import { usePage } from "@inertiajs/react";
 import ArchivedTask from "./ArchivedTask";
 import ArchivedTaskGroup from "./ArchivedTaskGroup";
 import { useState } from "react";
 
 export default function ArchivedItems({ groups, tasks }) {
+  const { project } = usePage().props;
   const [collapsed, setCollapsed] = useState(new Set());
   
   const hasTasks = Object.keys(tasks).some((key) => tasks[key].length > 0);
@@ -85,13 +89,32 @@ export default function ArchivedItems({ groups, tasks }) {
     });
   };
 
+  // El borrado permanente solo aplica a tareas raíz (depth 0): forceDeleteTask
+  // baja recursivamente por las subtareas, así que estas no se seleccionan por separado.
+  const selectableIds = orderedTasks
+    .filter(task => task.depth === 0 && task.can_force_delete)
+    .map(task => task.id);
+  const { selectedIds, toggle, clear } = useBulkSelection(selectableIds);
+
   return groups.length || hasTasks ? (
     <Stack gap="lg">
       {hasTasks && (
         <>
-          <Text fz={24} fw={600} mb={20}>
-            Tareas archivadas
-          </Text>
+          <Flex justify="space-between" align="center" mb={20}>
+            <Text fz={24} fw={600}>
+              Tareas archivadas
+            </Text>
+            {selectedIds.length > 0 && (
+              <BulkForceDeleteButton
+                selectedIds={selectedIds}
+                routeName="projects.tasks.bulk-force-delete"
+                routeParams={{ project: project.id }}
+                entityLabelSingular="tarea"
+                entityLabelPlural="tareas"
+                onSuccess={clear}
+              />
+            )}
+          </Flex>
           <Stack gap={0}>
             {orderedTasks.map(task => (
               <ArchivedTask 
@@ -101,6 +124,9 @@ export default function ArchivedItems({ groups, tasks }) {
                 hasChildren={parentIds.has(task.id)}
                 collapsed={collapsed.has(task.id)}
                 onToggle={() => toggleCollapsed(task.id)}
+                selectable={task.depth === 0 && task.can_force_delete}
+                selected={selectedIds.includes(task.id)}
+                onToggleSelect={toggle}
               />
             ))}
           </Stack>

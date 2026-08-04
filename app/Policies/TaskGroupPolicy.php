@@ -51,4 +51,20 @@ class TaskGroupPolicy
     {
         return $user->hasPermissionTo('reorder task group') && $user->hasProjectAccess($project);
     }
+
+    /**
+     * Determine whether the user can permanently delete the model.
+     */
+    public function forceDelete(User $user, TaskGroup $taskGroup, Project $project): bool
+    {
+        if (! $user->hasPermissionTo('force delete task group')) {
+            return false;
+        }
+
+        if ($taskGroup->wasArchivedBySuperAdmin() && ! $user->isSuperAdmin()) {
+            return false;
+        }
+
+        return $user->hasProjectAccess($project);
+    }
 }

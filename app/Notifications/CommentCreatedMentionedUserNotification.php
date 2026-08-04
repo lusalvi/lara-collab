@@ -64,6 +64,7 @@ class CommentCreatedMentionedUserNotification extends Notification implements Sh
 
         return true;
     }
+
     /**
      * Get the mail representation of the notification.
      */

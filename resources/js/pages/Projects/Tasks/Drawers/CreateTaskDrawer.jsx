@@ -64,12 +64,27 @@ export function CreateTaskDrawer() {
   );
 
   useEffect(() => {
-    const resolvedIssueType = forcedChildType || create.issue_type || '';
+    if (create.opened) {
+      const resolvedIssueType = forcedChildType || create.issue_type || '';
 
-    updateValue('group_id', create.group_id ? create.group_id.toString() : '');
-    updateValue('parent_task_id', create.parent_task_id);
-    updateValue('issue_type', resolvedIssueType);
-  }, [create]);
+      // Resetear todos los campos con un objeto
+      form.setData({
+        group_id: create.group_id ? create.group_id.toString() : '',
+        assigned_to_user_id: '',
+        name: '',
+        description: '',
+        issue_type: resolvedIssueType,
+        parent_task_id: create.parent_task_id,
+        priority_id: null,
+        start_on: '',
+        due_on: '',
+        subscribed_users: [user.id.toString()],
+        labels: [],
+        attachments: [],
+      });
+      form.clearErrors();
+    }
+  }, [create.opened, create.group_id, create.issue_type, create.parent_task_id]);
 
   const closeDrawer = (force = false) => {
     if (force || (JSON.stringify(form.data) === JSON.stringify(initial) && !form.processing)) {
@@ -113,6 +128,7 @@ export function CreateTaskDrawer() {
 
   return (
     <Drawer
+      key={create.opened ? 'open' : 'closed'}
       opened={create.opened}
       onClose={closeDrawer}
       title={
@@ -150,6 +166,7 @@ export function CreateTaskDrawer() {
       >
         <div className={classes.content}>
           <TextInput
+            key={`name-${create.opened}`}
             label='Name'
             placeholder='Task name'
             required
@@ -160,9 +177,11 @@ export function CreateTaskDrawer() {
           />
 
           <RichTextEditor
+            key={create.opened ? 'editor-open' : 'editor-closed'}
             mt='xl'
             placeholder='Task description'
             height={260}
+            value={form.data.description}
             onChange={content => updateValue('description', content)}
           />
 
@@ -174,6 +193,7 @@ export function CreateTaskDrawer() {
           />
 
           <MultiSelect
+            key={`subscribers-${create.opened}`}
             label='Subscribers'
             placeholder='Select subscribers'
             searchable
@@ -211,6 +231,7 @@ export function CreateTaskDrawer() {
         </div>
         <div className={classes.sidebar}>
           <Select
+            key={`group-${create.opened}`}
             label='Task group'
             placeholder='Select task group'
             required
@@ -224,6 +245,7 @@ export function CreateTaskDrawer() {
           />
 
           <Select
+            key={`issue-${create.opened}`}
             label='Issue type'
             placeholder='Select issue type'
             required
@@ -236,6 +258,7 @@ export function CreateTaskDrawer() {
           />
 
           <Select
+            key={`assignee-${create.opened}`}
             label='Assignee'
             placeholder='Select assignee'
             searchable
@@ -250,27 +273,30 @@ export function CreateTaskDrawer() {
           />
 
           <DateInput
+            key={`start-${create.opened}`}
             clearable
             valueFormat='DD MMM YYYY'
             mt='md'
             label='Start date'
             placeholder='Pick task start date'
-            value={form.data.start_on}
-            onChange={value => updateValue('start_on', value)}
+            value={form.data.start_on || null}
+            onChange={value => updateValue('start_on', value || '')}
           />
 
           <DateInput
+            key={`due-${create.opened}`}
             clearable
             valueFormat='DD MMM YYYY'
             minDate={new Date()}
             mt='md'
             label='Due date'
             placeholder='Pick task due date'
-            value={form.data.due_on}
-            onChange={value => updateValue('due_on', value)}
+            value={form.data.due_on || null}
+            onChange={value => updateValue('due_on', value || '')}
           />
 
           <LabelsDropdown
+            key={`labels-${create.opened}`}
             items={labels}
             selected={form.data.labels}
             onChange={values => updateValue('labels', values)}
@@ -278,6 +304,7 @@ export function CreateTaskDrawer() {
           />
 
           <PriorityDropdown
+            key={`priority-${create.opened}`}
             value={form.data.priority_id}
             onChange={value => updateValue('priority_id', value || null)}
             mt='md'

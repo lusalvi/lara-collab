@@ -13,6 +13,8 @@ import { IconChevronDown, IconChevronRight, IconGripVertical, IconPlus } from '@
 import useTaskDrawerStore from '@/hooks/store/useTaskDrawerStore';
 import useTasksStore from '@/hooks/store/useTasksStore';
 import { isOverdue, isDueSoon } from '@/utils/task';
+import TaskPriorityDropdown from './Components/TaskPriorityDropdown';
+import TaskDueDateDropdown from './Components/TaskDueDateDropdown';
 
 function DropZone({ id, zone, isValid, className, children }) {
   const { setNodeRef, isOver } = useDroppable({
@@ -205,23 +207,11 @@ export default function TaskRow({
         />
       </div>
 
-      <div className={classes.priority}>
-        {task.priority ? (
-          <Badge
-            color={task.priority.color}
-            variant='light'
-            radius='sm'
-          >
-            {task.priority.label}
-          </Badge>
-        ) : (
-          <Text
-            c='dimmed'
-            size='sm'
-          >
-            -
-          </Text>
-        )}
+      <div
+        className={classes.priority}
+        onClick={e => e.stopPropagation()}
+      >
+        <TaskPriorityDropdown task={task} />
       </div>
 
       <div
@@ -231,8 +221,11 @@ export default function TaskRow({
         <TaskStatusDropdown task={task} />
       </div>
 
-      <div className={classes.due}>
-        <TaskDueDate date={task.due_on} />
+      <div
+        className={classes.due}
+        onClick={e => e.stopPropagation()}
+      >
+        <TaskDueDateDropdown task={task} />
       </div>
 
       <div

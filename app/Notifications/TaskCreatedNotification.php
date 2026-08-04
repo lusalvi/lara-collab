@@ -56,9 +56,9 @@ class TaskCreatedNotification extends Notification implements ShouldQueue
     public function shouldSend(object $notifiable, string $channel): bool
     {
         if ($channel === 'mail') {
-            return $notifiable
-                ->unreadNotifications()
-                ->whereJsonContains('data->id', $this->task->id)
+            return ! $notifiable
+                ->readNotifications()
+                ->whereJsonContains('data->task_id', $this->task->id)
                 ->exists();
         }
 
@@ -71,9 +71,9 @@ class TaskCreatedNotification extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject("[{$this->task->project->name}] Task {$this->task->name} was created")
-            ->greeting("{$this->task->createdByUser->name} created a new task")
-            ->action('Open task', route('projects.tasks.open', ['project' => $this->task->project_id, 'task' => $this->task->id]))
+            ->subject("[{$this->task->project->name}] Se ha cargado una nueva actividad")
+            ->greeting("{$this->task->createdByUser->name} ha creado una nueva actividad")
+            ->action('Abrir actividad', route('projects.tasks.open', ['project' => $this->task->project_id, 'task' => $this->task->id]))
             ->line($this->task->description);
     }
 
@@ -86,8 +86,8 @@ class TaskCreatedNotification extends Notification implements ShouldQueue
     {
         return [
             'task_id' => $this->task->id,
-            'title' => "{$this->task->createdByUser->name} created a new task",
-            'subtitle' => "On \"{$this->task->project->name}\" project",
+            'title' => "{$this->task->createdByUser->name} creo una nueva actividad",
+            'subtitle' => "En el proyecto \"{$this->task->project->name}\" ",
             'link' => route('projects.tasks.open', [$this->task->project_id, $this->task->id]),
         ];
     }

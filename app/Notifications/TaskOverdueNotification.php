@@ -43,11 +43,11 @@ class TaskOverdueNotification extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject("[{$this->task->project->name}] Task \"{$this->task->name}\" is overdue")
+            ->subject("[{$this->task->project->name}] Tienes una actividad vencida")
             ->greeting("Hola {$notifiable->name},")
             ->line("La actividad \"{$this->task->name}\" con fecha de vencimiento {$this->task->due_on->format('d/m/Y')} se encuentra vencida")
             ->action('Abrir actividad', route('projects.tasks.open', ['project' => $this->task->project_id, 'task' => $this->task->id]))
-            ->line('Revisa lo antes posible');
+            ->line('Revisa lo antes posible.');
     }
 
     /**
@@ -59,8 +59,8 @@ class TaskOverdueNotification extends Notification implements ShouldQueue
     {
         return [
             'task_id' => $this->task->id,
-            'title' => "\"{$this->task->name}\" is overdue",
-            'subtitle' => "On \"{$this->task->project->name}\" project",
+            'title' => "\"{$this->task->name}\" está vencida.",
+            'subtitle' => "En el proyecto \"{$this->task->project->name}\" ",
             'link' => route('projects.tasks.open', [$this->task->project_id, $this->task->id]),
         ];
     }

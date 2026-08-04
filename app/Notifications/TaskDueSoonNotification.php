@@ -43,11 +43,11 @@ class TaskDueSoonNotification extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject("[{$this->task->project->name}] Task \"{$this->task->name}\" is due tomorrow")
+            ->subject("[{$this->task->project->name}] La actividad \"{$this->task->name}\" vence mañana")
             ->greeting("Hola {$notifiable->name},")
             ->line("La actividad \"{$this->task->name}\" vence mañana ({$this->task->due_on->format('d/m/Y')}).")
             ->action('Abrir actividad', route('projects.tasks.open', ['project' => $this->task->project_id, 'task' => $this->task->id]))
-            ->line('Completar antes de su vencimiento');
+            ->line('Completar antes de su vencimiento.');
     }
 
     /**
@@ -59,8 +59,8 @@ class TaskDueSoonNotification extends Notification implements ShouldQueue
     {
         return [
             'task_id' => $this->task->id,
-            'title' => "\"{$this->task->name}\" is due tomorrow",
-            'subtitle' => "On \"{$this->task->project->name}\" project",
+            'title' => "\"{$this->task->name}\" vence mañana",
+            'subtitle' => "En el proyecto \"{$this->task->project->name}\" ",
             'link' => route('projects.tasks.open', [$this->task->project_id, $this->task->id]),
         ];
     }

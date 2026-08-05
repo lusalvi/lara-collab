@@ -35,7 +35,7 @@ class ResetPasswordController extends Controller
 
         $message = match ($status) {
             'passwords.throttled' => 'Por favor, espere antes de volver a intentarlo.',
-            'passwords.user' => "No se pudo encontrar un usuario con esa dirección de correo electrónico.",
+            'passwords.user' => 'No se pudo encontrar un usuario con esa dirección de correo electrónico.',
             default => 'Ups, algo salió mal.',
         };
 

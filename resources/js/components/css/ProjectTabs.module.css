@@ -3,29 +3,42 @@
 }
 
 .list {
-  border-bottom: 2px solid var(--mantine-color-default-border);
-  gap: 0;
+  display: flex;
   flex-wrap: nowrap;
+  gap: 0;
+
   overflow-x: auto;
-  scrollbar-width: none; 
+  overflow-y: hidden;
+
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+
+  border-bottom: 2px solid var(--mantine-color-default-border);
 }
 
 .list::-webkit-scrollbar {
-  display: none; 
+  display: none;
 }
 
 .tab {
+  flex-shrink: 0;
+  white-space: nowrap;
+
   font-size: var(--mantine-font-size-sm);
   font-weight: 500;
+
   color: var(--mantine-color-dimmed);
+
   padding: 10px 16px;
+
   border-bottom: 2px solid transparent;
-  margin-bottom: -2px; 
+  margin-bottom: -2px;
+
   border-radius: 0;
+
   transition:
     color 120ms ease,
     border-color 120ms ease;
-  white-space: nowrap;
 }
 
 .tab:hover:not([data-active]) {
@@ -38,11 +51,25 @@
   color: var(--mantine-color-hospitalPrimary-6, var(--mantine-primary-color-filled));
   border-bottom-color: var(--mantine-color-hospitalPrimary-6, var(--mantine-primary-color-filled));
   font-weight: 700;
-  background-color: transparent;
+  background: transparent;
 }
 
-/* Pestaña "Archivados" activa usa rojo */
-.tab[data-active][data-color='red'] {
+.tab[data-active][data-color="red"] {
   color: var(--mantine-color-red-7);
   border-bottom-color: var(--mantine-color-red-7);
+}
+
+/* -------- Mobile -------- */
+
+@media (max-width: 768px) {
+
+  .root {
+    margin-bottom: var(--mantine-spacing-md);
+  }
+
+  .tab {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+
 }

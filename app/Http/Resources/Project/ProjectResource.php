@@ -20,7 +20,9 @@ class ProjectResource extends JsonResource
             'name' => $this->name,
             'description' => $this->description,
             'favorite' => $this->favorite,
-            'area' => $this->area->only(['id', 'name']),
+            'area' => $this->area
+                ? $this->area->only(['id', 'name'])
+                : null,
             'users_with_access' => PermissionService::usersWithAccessToProject($this->resource),
             'all_tasks_count' => $this->all_tasks_count,
             'completed_tasks_count' => $this->completed_tasks_count,

@@ -6,6 +6,7 @@ import { IconChevronRight, IconChevronDown } from '@tabler/icons-react';
 import IssueTypeIcon from '@/components/IssueTypeIcon';
 
 export default function TaskRow({
+  mobile,
   project,
   task,
   columns,
@@ -75,29 +76,33 @@ export default function TaskRow({
         </div>
       </div>
 
-      <div
-        className='timeline-assignee-column'
-        style={{ width: columns.assignee }}
-      >
-        <TaskAssigneeSelect
-          project={project}
-          task={task}
-          users={users}
-          onTaskChange={onTaskChange}
-        />
-      </div>
+      {!mobile && (
+        <>
+          <div
+            className='timeline-assignee-column'
+            style={{ width: columns.assignee }}
+          >
+            <TaskAssigneeSelect
+              project={project}
+              task={task}
+              users={users}
+              onTaskChange={onTaskChange}
+            />
+          </div>
 
-      <div
-        className='timeline-status-column'
-        style={{ width: columns.status }}
-      >
-        <TaskGroupSelect
-          project={project}
-          task={task}
-          groups={taskGroups}
-          onTaskChange={onTaskChange}
-        />
-      </div>
+          <div
+            className='timeline-status-column'
+            style={{ width: columns.status }}
+          >
+            <TaskGroupSelect
+              project={project}
+              task={task}
+              groups={taskGroups}
+              onTaskChange={onTaskChange}
+            />
+          </div>
+        </>
+      )}
     </div>
   );
 }

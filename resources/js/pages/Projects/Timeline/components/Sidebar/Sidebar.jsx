@@ -2,6 +2,7 @@ import { ScrollArea, Text } from '@mantine/core';
 import TaskRow from './TaskRow';
 
 export default function Sidebar({
+  mobile,
   project,
   tasks,
   columns,
@@ -17,6 +18,7 @@ export default function Sidebar({
   taskGroups,
   users,
 }) {
+
   return (
     <div
       className='timeline-list'
@@ -44,36 +46,40 @@ export default function Sidebar({
           />
         </div>
 
-        <div
-          className='timeline-list-header-cell'
-          style={{ width: columns.assignee }}
-        >
-          <Text
-            size='sm'
-            fw={600}
-            c='dimmed'
-          >
-            Responsable
-          </Text>
+        {!mobile && (
+          <>
+            <div
+              className='timeline-list-header-cell'
+              style={{ width: columns.assignee }}
+            >
+              <Text
+                size='sm'
+                fw={600}
+                c='dimmed'
+              >
+                Responsable
+              </Text>
 
-          <div
-            className='timeline-col-resize-handle'
-            onMouseDown={startColumnResize('assignee')}
-          />
-        </div>
+              <div
+                className='timeline-col-resize-handle'
+                onMouseDown={startColumnResize('assignee')}
+              />
+            </div>
 
-        <div
-          className='timeline-status-column'
-          style={{ width: columns.status }}
-        >
-          <Text
-            size='sm'
-            fw={600}
-            c='dimmed'
-          >
-            Estado
-          </Text>
-        </div>
+            <div
+              className='timeline-status-column'
+              style={{ width: columns.status }}
+            >
+              <Text
+                size='sm'
+                fw={600}
+                c='dimmed'
+              >
+                Estado
+              </Text>
+            </div>
+          </>
+        )}
       </div>
 
       <ScrollArea
@@ -88,12 +94,12 @@ export default function Sidebar({
             project={project}
             task={task}
             columns={columns}
-            onTaskChange={onTaskChange}
-            taskGroups={taskGroups}
             users={users}
+            taskGroups={taskGroups}
             hasChildren={parentIds.has(task.id)}
             collapsed={collapsed.has(task.id)}
             onToggle={() => onToggle(task.id)}
+            onTaskChange={onTaskChange}
           />
         ))}
 

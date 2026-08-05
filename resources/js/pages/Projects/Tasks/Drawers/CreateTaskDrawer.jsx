@@ -134,16 +134,16 @@ export function CreateTaskDrawer() {
       onClose={closeDrawer}
       title={
         <Text
-          fz={rem(28)}
+          fz={{ base: 'lg', sm: rem(28) }}
           fw={600}
-          ml={25}
+          ml={{ base: 0, sm: 25 }}
           my='sm'
         >
           Crear nueva actividad
         </Text>
       }
       position='right'
-      size={1000}
+      size={{ base: '100%', xs: '90%', sm: 800, md: 1000 }}
       overlayProps={{ backgroundOpacity: 0.55, blur: 3 }}
       transitionProps={{
         transition: 'slide-left',

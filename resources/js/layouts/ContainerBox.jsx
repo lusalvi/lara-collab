@@ -4,8 +4,8 @@ import classes from './css/ContainerBox.module.css';
 export default function ContainerBox({ children, ...props }) {
   return (
     <Paper
-      px={40}
-      py={30}
+      px={{ base: 'md', sm: 'lg', md: 40 }}
+      py={{ base: 'md', sm: 'xl', md: 30 }}
       className={classes.box}
       {...props}
     >

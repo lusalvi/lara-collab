@@ -29,12 +29,15 @@ export default function Header() {
   return (
     <>
       {/* Título del proyecto */}
-      <Group mb='md'>
-        <Title order={1}>
+      <Group mb='md' wrap='wrap'>
+        <Title 
+          order={1}
+          size={{ base: 'h2', sm: 'h1' }}
+        >
           {project.name}
           {project.archived_at && (
             <Text
-              size='2rem'
+              size={{ base: 'md', sm: 'lg' }}
               fw={500}
               c='red.8'
               ml='md'
@@ -54,8 +57,10 @@ export default function Header() {
         <Group
           justify='space-between'
           mb='md'
+          wrap='wrap'
+          gap={{ base: 'xs', sm: 'md' }}
         >
-          <Group>
+          <Group grow={{ base: true, sm: false }}>
             <SearchInput
               placeholder='Buscar actividades'
               search={search}
@@ -94,6 +99,7 @@ export default function Header() {
               leftSection={<IconPlus size={14} />}
               radius='xl'
               onClick={() => openCreateTask()}
+              fullWidth={{ base: true, sm: false }}
             >
               Agregar actividad
             </Button>

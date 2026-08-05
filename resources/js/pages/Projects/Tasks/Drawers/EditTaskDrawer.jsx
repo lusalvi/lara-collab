@@ -154,7 +154,7 @@ export function EditTaskDrawer() {
         </Group>
       }
       position='right'
-      size={1000}
+      size={{ base: '100%', xs: '90%', sm: 800, md: 1000 }}
       overlayProps={{ backgroundOpacity: 0.55, blur: 3 }}
       transitionProps={{
         transition: 'slide-left',

@@ -7,7 +7,9 @@ import NavbarLinksGroup from "./NavbarLinksGroup";
 import UserButton from "./UserButton";
 import classes from "./css/NavBarNested.module.css";
 
-export default function Sidebar() {
+export default function Sidebar({
+  closeDrawer = () => {},
+}) {
   const { version } = usePage().props;
   const { items, setItems } = useNavigationStore();
 
@@ -99,7 +101,11 @@ export default function Sidebar() {
           {items
             .filter((i) => i.visible)
             .map((item) => (
-              <NavbarLinksGroup key={item.label} item={item} />
+              <NavbarLinksGroup
+                key={item.label}
+                item={item}
+                closeDrawer={closeDrawer}
+              />
             ))}
         </div>
       </ScrollArea>

@@ -53,10 +53,10 @@ export default function ProjectCard({ item, selectable = false, selected = false
         </Text>
 
         <Progress.Root value={item.all_tasks_count} mt={10} radius="xl">
-          <Tooltip label={`Completed: ${item.completed_tasks_count}`} withArrow>
+          <Tooltip label={`Completadas: ${item.completed_tasks_count}`} withArrow>
             <Progress.Section value={completedPercent} color="hospitalPrimary" />
           </Tooltip>
-          <Tooltip label={`Overdue: ${item.overdue_tasks_count}`} withArrow>
+          <Tooltip label={`Vencidas: ${item.overdue_tasks_count}`} withArrow>
             <Progress.Section value={overduePercent} color="red" />
           </Tooltip>
           <Progress.Section value={100 - (completedPercent + overduePercent)} color="gray" />

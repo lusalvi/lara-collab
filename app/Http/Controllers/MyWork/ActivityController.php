@@ -36,7 +36,7 @@ class ActivityController extends Controller
             'dropdowns' => [
                 'projects' => Arr::prepend(
                     Project::dropdownValues(),
-                    ['value' => '0', 'label' => 'All projects']
+                    ['value' => '0', 'label' => 'Todos los proyectos']
                 ),
             ],
         ]);

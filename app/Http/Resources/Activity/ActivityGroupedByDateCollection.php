@@ -24,7 +24,7 @@ class ActivityGroupedByDateCollection extends ResourceCollection
                     'title' => $activity->title,
                     'subtitle' => $activity->subtitle,
                     'created_at' => $activity->created_at,
-                    'date' => $activity->created_at->format('F j, Y'),
+                    'date' => $activity->created_at->locale('es')->isoFormat('D [de] MMMM [de] YYYY'),
                 ];
             })
             ->groupBy('date')

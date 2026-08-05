@@ -73,7 +73,7 @@ export default function UserButton() {
       </Menu.Target>
 
       <Menu.Dropdown>
-        <Menu.Label>Account</Menu.Label>
+        <Menu.Label>Cuenta</Menu.Label>
         <Menu.Item
           leftSection={
             <AppIcon
@@ -83,7 +83,7 @@ export default function UserButton() {
           }
           onClick={() => redirectTo('account.profile.edit')}
         >
-          My Profile
+          Mi Perfil
         </Menu.Item>
         <Menu.Item
           leftSection={
@@ -94,7 +94,7 @@ export default function UserButton() {
           }
           onClick={() => redirectTo('notifications')}
         >
-          Notifications
+          Notificaciones
         </Menu.Item>
 
         <Menu.Divider />
@@ -115,7 +115,7 @@ export default function UserButton() {
           }
           onClick={() => setColorScheme(computedColorScheme === 'light' ? 'dark' : 'light')}
         >
-          {upperFirst(computedColorScheme)} mode
+          {computedColorScheme === 'light' ? 'Modo claro' : 'Modo oscuro'}
         </Menu.Item>
 
         <Menu.Divider />
@@ -130,7 +130,7 @@ export default function UserButton() {
           }
           onClick={logout}
         >
-          Logout
+          Cerrar Sesión
         </Menu.Item>
       </Menu.Dropdown>
     </Menu>

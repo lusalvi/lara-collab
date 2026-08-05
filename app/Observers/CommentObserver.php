@@ -14,8 +14,8 @@ class CommentObserver
         $comment->activities()->create([
             'project_id' => $comment->task->project_id,
             'user_id' => auth()->id(),
-            'title' => 'New comment',
-            'subtitle' => auth()->user()->name." left a comment on \"{$comment->task->name}\" task",
+            'title' => 'Nuevo comentario',
+            'subtitle' => auth()->user()->name . " dejó un comentario en la actividad \"{$comment->task->name}\"",
         ]);
     }
 }

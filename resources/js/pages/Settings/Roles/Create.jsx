@@ -47,12 +47,12 @@ const RoleCreate = () => {
         >
           Roles
         </Anchor>
-        <div>Create</div>
+        <div>Crear rol</div>
       </Breadcrumbs>
 
       <Grid justify="space-between" align="flex-end" gutter="xl" mb="lg">
         <Grid.Col span="auto">
-          <Title order={1}>Create role</Title>
+          <Title order={1}>Crear rol</Title>
         </Grid.Col>
         <Grid.Col span="content"></Grid.Col>
       </Grid>
@@ -60,8 +60,8 @@ const RoleCreate = () => {
       <ContainerBox maw={700}>
         <form onSubmit={submit}>
           <TextInput
-            label="Name"
-            placeholder="Role name"
+            label="Nombre"
+            placeholder="Nombre del rol"
             required
             value={form.data.name}
             onChange={(e) => updateValue("name", e.target.value)}
@@ -69,7 +69,7 @@ const RoleCreate = () => {
           />
 
           <Title order={3} mt="xl">
-            Permissions
+            Permisos
           </Title>
 
           {Object.keys(allPermissionsGrouped).map((group) => (
@@ -93,7 +93,7 @@ const RoleCreate = () => {
 
           <Group justify="space-between" mt="xl">
             <BackButton route="settings.roles.index" />
-            <ActionButton loading={form.processing}>Create</ActionButton>
+            <ActionButton loading={form.processing}>Crear</ActionButton>
           </Group>
         </form>
       </ContainerBox>

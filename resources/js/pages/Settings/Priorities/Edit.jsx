@@ -38,14 +38,14 @@ const PriorityEdit = () => {
           onClick={() => redirectTo('settings.task-priorities.index')}
           fz={14}
         >
-          Priorities
+          Prioridades
         </Anchor>
-        <div>Edit</div>
+        <div>Editar prioridad</div>
       </Breadcrumbs>
 
       <Grid justify='space-between' align='flex-end' gutter='xl' mb='lg'>
         <Grid.Col span='auto'>
-          <Title order={1}>Edit priority</Title>
+          <Title order={1}>Editar prioridad</Title>
         </Grid.Col>
         <Grid.Col span='content'></Grid.Col>
       </Grid>
@@ -53,8 +53,8 @@ const PriorityEdit = () => {
       <ContainerBox maw={400}>
         <form onSubmit={submit}>
           <TextInput
-            label='Label'
-            placeholder='Priority label'
+            label='Etiqueta'
+            placeholder='Etiqueta de prioridad'
             required
             value={form.data.label}
             onChange={e => updateValue('label', e.target.value)}
@@ -62,7 +62,7 @@ const PriorityEdit = () => {
           />
           <ColorInput
             label='Color'
-            placeholder='Priority color'
+            placeholder='Color de prioridad'
             required
             mt='md'
             swatches={[
@@ -86,8 +86,8 @@ const PriorityEdit = () => {
             error={form.errors.color}
           />
           <NumberInput
-            label='Order'
-            placeholder='Display order (e.g., 1, 2, 3)'
+            label='Orden'
+            placeholder='Orden de prioridad (ej. 1, 2, 3)'
             required
             mt='md'
             min={1}
@@ -98,7 +98,7 @@ const PriorityEdit = () => {
 
           <Group justify='space-between' mt='xl'>
             <BackButton route='settings.task-priorities.index' />
-            <ActionButton loading={form.processing}>Update</ActionButton>
+            <ActionButton loading={form.processing}>Actualizar</ActionButton>
           </Group>
         </form>
       </ContainerBox>

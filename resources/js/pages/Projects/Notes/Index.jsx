@@ -108,9 +108,9 @@ const NotesIndex = () => {
     if (isDirty) {
       openConfirmModal({
         type: 'warning',
-        title: 'Discard changes?',
-        content: 'You have unsaved changes in the current note. Switching will discard them.',
-        confirmLabel: 'Discard & switch',
+        title: '¿Deseas descartar los cambios?',
+        content: 'Los cambios no guardados se perderán si cambias de nota. ¿Deseas continuar?',
+        confirmLabel: 'Descartar cambios',
         onConfirm: () => setSelectedId(id),
       });
       return;
@@ -185,9 +185,10 @@ const NotesIndex = () => {
   const removeLock = () => {
     openConfirmModal({
       type: 'danger',
-      title: 'Remove lock?',
-      content: 'The note will be stored as plain text and no longer require a passcode.',
-      confirmLabel: 'Remove lock',
+      // traducir a español
+      title: '¿Deseas eliminar el bloqueo de la nota?',
+      content: 'La nota se desbloqueará y ya no requerirá un código de acceso.',
+      confirmLabel: 'Eliminar bloqueo',
       confirmProps: { color: 'red' },
       onConfirm: () =>
         router.post(
@@ -208,9 +209,9 @@ const NotesIndex = () => {
   const deleteNote = note => {
     openConfirmModal({
       type: 'danger',
-      title: 'Delete note?',
-      content: `"${note.title}" will be permanently deleted. This action cannot be undone.`,
-      confirmLabel: 'Delete',
+      title: '¿Deseas eliminar la nota?',
+      content: `"${note.title}" se eliminará permanentemente y no se podrá recuperar. ¿Deseas continuar?`,
+      confirmLabel: 'Eliminar nota',
       confirmProps: { color: 'red' },
       onConfirm: () =>
         router.delete(route('projects.notes.destroy', [project.id, note.id]), {
@@ -253,7 +254,7 @@ const NotesIndex = () => {
             <Title order={4}>Notes</Title>
             {canCreate && (
               <Tooltip
-                label='New note'
+                label='Crear nota'
                 openDelay={500}
                 withArrow
               >
@@ -275,7 +276,7 @@ const NotesIndex = () => {
                 ta='center'
                 py='lg'
               >
-                No notes yet
+                No se encontraron notas
               </Text>
             ) : (
               notes.map(note => {
@@ -364,20 +365,20 @@ const NotesIndex = () => {
                       fw={600}
                       size='lg'
                     >
-                      This note is locked
+                      Esta nota está bloqueada
                     </Text>
                     <Text
                       size='sm'
                       c='dimmed'
                     >
-                      Enter the passcode to view and edit its content.
+                      Ingresa el código de acceso para ver el contenido de la nota.
                     </Text>
                   </Stack>
                   <Button
                     leftSection={<IconLockOpen size={16} />}
                     onClick={openUnlockModal}
                   >
-                    Unlock
+                    Desbloquear nota
                   </Button>
                 </Stack>
               </Center>
@@ -395,7 +396,7 @@ const NotesIndex = () => {
                   <TextInput
                     className={classes.titleInput}
                     size='md'
-                    placeholder='Note title'
+                    placeholder='Título de la nota'
                     value={title}
                     onChange={e => setTitle(e.target.value)}
                     disabled={!canEdit}
@@ -417,7 +418,7 @@ const NotesIndex = () => {
                       </Button>
                     )}
                     {canEdit && isUnlockedInSession && (
-                      <Tooltip label="Remove lock" openDelay={250} withArrow>
+                      <Tooltip label="Quitar bloqueo" openDelay={250} withArrow>
                         <Button
                           size='md'
                           variant='light'
@@ -436,7 +437,7 @@ const NotesIndex = () => {
                         onClick={saveNote}
                         disabled={!title.trim()}
                       >
-                        Save
+                        Guardar
                       </Button>
                     )}
                   </Group>
@@ -447,7 +448,7 @@ const NotesIndex = () => {
                     key={selectedId}
                     content={isUnlockedInSession ? content : selectedNote.content || ''}
                     onChange={setContent}
-                    placeholder='Start writing your note...'
+                    placeholder='Escribe el contenido de la nota aquí...'
                     height={300}
                     fill
                     readOnly={!canEdit}
@@ -459,13 +460,13 @@ const NotesIndex = () => {
             <Center className={classes.emptyState}>
               <EmptyWithIcon
                 icon={IconNote}
-                title={empty ? 'No notes' : 'Select a note'}
+                title={empty ? 'Sin notas' : 'Selecciona una nota'}
                 subtitle={
                   empty
                     ? canCreate
-                      ? 'Create a new note to get started'
-                      : 'No notes have been added to this project'
-                    : 'Choose a note from the list to view or edit it'
+                      ? 'Crea una nueva nota para empezar.'
+                      : 'No hay notas disponibles.'
+                    : 'Selecciona una nota de la lista para ver o editar su contenido.'
                 }
               />
             </Center>
@@ -476,7 +477,7 @@ const NotesIndex = () => {
       <Modal
         opened={lockOpened}
         onClose={closeLockModal}
-        title='Lock note'
+        title='Nota bloqueada'
         centered
       >
         <Stack>
@@ -484,13 +485,12 @@ const NotesIndex = () => {
             size='sm'
             c='dimmed'
           >
-            Choose a passcode to encrypt this note&apos;s content. You will need it to view the
-            note. The content will be lost if you forget the passcode, so make sure to remember it.
+            Ingresa un código de acceso para bloquear la nota. Este código será necesario para desbloquearla y ver su contenido. Asegúrate de recordarlo, ya que no se puede recuperar si lo olvidas.
           </Text>
           <PasswordInput
             ref={lockPassRef}
-            label='Passcode'
-            placeholder='At least 4 characters'
+            label='Código de acceso'
+            placeholder='Mínimo 4 caracteres'
             value={lockPass}
             onChange={e => setLockPass(e.target.value)}
             onKeyDown={e => {
@@ -498,8 +498,8 @@ const NotesIndex = () => {
             }}
           />
           <PasswordInput
-            label='Confirm passcode'
-            placeholder='Re-enter passcode'
+            label='Confirmar código de acceso'
+            placeholder='Vuelve a ingresar el código de acceso'
             value={lockConfirm}
             onChange={e => setLockConfirm(e.target.value)}
             error={lockConfirm && lockPass !== lockConfirm ? 'Passcodes do not match' : null}
@@ -512,14 +512,14 @@ const NotesIndex = () => {
               variant='default'
               onClick={closeLockModal}
             >
-              Cancel
+              Cancelar
             </Button>
             <Button
               loading={processing}
               disabled={lockPass.length < 4 || lockPass !== lockConfirm}
               onClick={submitLock}
             >
-              Lock note
+              Bloquear nota
             </Button>
           </Group>
         </Stack>
@@ -528,13 +528,13 @@ const NotesIndex = () => {
       <Modal
         opened={unlockOpened}
         onClose={closeUnlockModal}
-        title='Unlock note'
+        title='Nota desbloqueada'
         centered
       >
         <Stack>
           <PasswordInput
             ref={unlockPassRef}
-            placeholder='Enter passcode'
+            placeholder='Ingresa el código de acceso'
             value={unlockPass}
             onChange={e => {
               setUnlockPass(e.target.value);
@@ -550,14 +550,14 @@ const NotesIndex = () => {
               variant='default'
               onClick={closeUnlockModal}
             >
-              Cancel
+              Cancelar
             </Button>
             <Button
               loading={processing}
               disabled={unlockPass.length < 4}
               onClick={submitUnlock}
             >
-              Unlock
+              Desbloquear nota
             </Button>
           </Group>
         </Stack>

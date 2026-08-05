@@ -20,9 +20,9 @@ export default function Dropzone({ selected, onChange, remove, ...props }) {
   const confirmDeleteAttachment = (index) => {
     openConfirmModal({
       type: "danger",
-      title: "Delete attachment",
-      content: `Are you sure you want to delete this attachment?`,
-      confirmLabel: "Delete",
+      title: "Borrar archivo adjunto",
+      content: `¿Estás seguro de que deseas borrar este archivo adjunto? Esta acción no se puede deshacer.`,
+      confirmLabel: "Borrar",
       confirmProps: { color: "red" },
       onConfirm: () => remove(index),
     });
@@ -40,7 +40,7 @@ export default function Dropzone({ selected, onChange, remove, ...props }) {
         filename: file.name,
         contentType: file.type,
         nativeFallbackOnError: true,
-      }).catch((error) => console.error("Failed to download file", error));
+      }).catch((error) => console.error("Falló la descarga del archivo:", error));
     }
   };
 

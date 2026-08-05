@@ -24,12 +24,16 @@ const TasksIndex = () => {
   currentProject = project;
 
   const { groups, setGroups, reorderGroup } = useTaskGroupsStore();
-  const { tasks, setTasks, addTask, reorderTask, moveTask } = useTasksStore();
+  const { tasks, setTasks, addTask, reorderTask, moveTask, clearTaskSelection } = useTasksStore();
   const { hasFilters } = useTaskFiltersStore();
   const { initProjectWebSocket } = useWebSockets();
   const { tasksView } = usePreferences();
 
   const usingFilters = hasFilters();
+  const isArchived = !!route().params.archived;
+  useEffect(() => {
+    clearTaskSelection();
+  }, [isArchived]);
 
   useEffect(() => {
     setGroups(taskGroups);

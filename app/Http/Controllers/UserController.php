@@ -46,7 +46,7 @@ class UserController extends Controller
     {
         (new CreateUser)->create($request->validated());
 
-        return redirect()->route('users.index')->success('User created', 'A new user was successfully created.');
+        return redirect()->route('users.index')->success('Usuario creado', 'Un nuevo usuario se creó con éxito.');
     }
 
     public function edit(User $user)
@@ -58,18 +58,18 @@ class UserController extends Controller
     {
         (new UpdateUser)->update($user, $request->validated());
 
-        return redirect()->route('users.index')->success('User updated', 'The user was successfully updated.');
+        return redirect()->route('users.index')->success('Usuario actualizado', 'El usuario se actualizó con éxito.');
     }
 
     public function destroy(User $user)
     {
         if (auth()->id() === $user->id) {
-            return redirect()->route('users.index')->warning('Action stopped', 'You cannot archive the user with whom you are currently logged in.');
+            return redirect()->route('users.index')->warning('Acción Detenida', 'No es posible archivar el usuario con el que actualmente has iniciado sesión.');
         }
         $user->update(['archived_by_id' => auth()->id()]);
         $user->archive();
 
-        return redirect()->back()->success('User archived', 'The user was successfully archived.');
+        return redirect()->back()->success('Usuario archivado', 'El usuario se archivó con éxito.');
     }
 
     public function restore(int $userId)
@@ -81,7 +81,7 @@ class UserController extends Controller
         $user->unArchive();
         $user->update(['archived_by_id' => null]);
 
-        return redirect()->back()->success('User restored', 'The restoring of the user was completed successfully.');
+        return redirect()->back()->success('Usuario Restaurado', 'La restauración del usuario se realizó con éxito.');
     }
 
     public function bulkForceDelete(Request $request, ForceDeleteService $forceDeleteService)
@@ -92,7 +92,7 @@ class UserController extends Controller
         ]);
 
         if (in_array(auth()->id(), $request->ids)) {
-            return redirect()->route('users.index')->warning('Action stopped', 'You cannot permanently delete the user with whom you are currently logged in.');
+            return redirect()->route('users.index')->warning('Acción Detenida', 'No es posible eliminar permanentemente el usuario con el que actualmente has iniciado sesión.');
         }
 
         $users = User::onlyArchived()->whereIn('id', $request->ids)->get();
@@ -104,8 +104,8 @@ class UserController extends Controller
         $deletedCount = $forceDeleteService->forceDeleteUsers($users);
 
         return redirect()->back()->success(
-            'Users deleted',
-            "{$deletedCount} user(s) were permanently deleted."
+            'Usuario Eliminado',
+            "{$deletedCount} usuario(s) fueron eliminados permanentemente."
         );
     }
 }

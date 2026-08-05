@@ -52,9 +52,9 @@ class Handler extends ExceptionHandler
                 ->toResponse($request)
                 ->setStatusCode($response->status());
         } elseif ($response->status() === 419) {
-            return back()->error('The page has expired', 'Please refresh your page and try again.');
+            return back()->error('La página ha expirado', 'Por favor, refresca la página e inténtalo de nuevo.');
         } elseif ($response->status() === 403) {
-            return back()->error('Unauthorized', 'You do not have the necessary permissions to perform this action.');
+            return back()->error('No Autorizado', 'No tienes permiso para realizar esta acción.');
         }
 
         return $response;

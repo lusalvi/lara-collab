@@ -46,7 +46,7 @@ class RoleController extends Controller
         $role = Role::create(['name' => $request->name, 'guard_name' => 'web']);
         $role->syncPermissions($request->permissions);
 
-        return redirect()->route('settings.roles.index')->success('Role created', 'A new role was successfully created.');
+        return redirect()->route('settings.roles.index')->success('Rol Creado', 'Un nuevo rol se creó con éxito.');
     }
 
     public function edit(Role $role)
@@ -62,7 +62,7 @@ class RoleController extends Controller
         $role->update(['name' => $request->name]);
         $role->syncPermissions($request->permissions);
 
-        return redirect()->route('settings.roles.index')->success('Role updated', 'The role was successfully updated.');
+        return redirect()->route('settings.roles.index')->success('Rol Actualizado', 'El rol se actualizó con éxito.');
     }
 
     public function destroy(Role $role)
@@ -70,12 +70,12 @@ class RoleController extends Controller
         $usersWithRole = DB::table('model_has_roles')->where('role_id', $role->id)->exists();
 
         if ($usersWithRole) {
-            return redirect()->route('settings.roles.index')->warning('Action stopped', 'You cannot archive a role that is currently assigned to users.');
+            return redirect()->route('settings.roles.index')->warning('Acción Detenida', 'No es posible archivar un rol que aún está asignado a usuarios.');
         }
         $role->update(['archived_by_id' => auth()->id()]);
         $role->archive();
 
-        return redirect()->back()->success('Role archived', 'The role was successfully archived.');
+        return redirect()->back()->success('Rol Archivado', 'El rol se archivó con éxito.');
     }
 
     public function restore(int $roleId)
@@ -87,7 +87,7 @@ class RoleController extends Controller
         $role->unArchive();
         $role->update(['archived_by_id' => null]);
 
-        return redirect()->back()->success('Role restored', 'The restoring of the role was completed successfully.');
+        return redirect()->back()->success('Rol Restaurado', 'La restauración del rol se realizó con éxito.');
     }
 
     public function bulkForceDelete(Request $request, ForceDeleteService $forceDeleteService)
@@ -111,16 +111,16 @@ class RoleController extends Controller
             $names = $rolesWithUsers->pluck('name')->implode(', ');
 
             return redirect()->back()->warning(
-                'Action stopped',
-                "The following roles are still assigned to users and cannot be permanently deleted: {$names}."
+                'Acción Detenida',
+                "Los siguientes roles aún están asignados a usuarios: {$names}."
             );
         }
 
         $deletedCount = $forceDeleteService->forceDeleteRoles($roles);
 
         return redirect()->back()->success(
-            'Roles deleted',
-            "{$deletedCount} role(s) were permanently deleted."
+            'Roles Eliminados',
+            "{$deletedCount} role(s) fueron eliminados permanentemente."
         );
     }
 }

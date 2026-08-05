@@ -25,7 +25,7 @@ class GroupController extends Controller
 
         TaskGroupCreated::dispatch($taskGroup);
 
-        return redirect()->route('projects.tasks', $project)->success('Tasks group created', 'A new tasks group was successfully created.');
+        return redirect()->route('projects.tasks', $project)->success('Estado Creado', 'Un nuevo estado de tareas se creó con éxito.');
     }
 
     public function update(UpdateTaskGroupRequest $request, Project $project, TaskGroup $taskGroup)
@@ -36,7 +36,7 @@ class GroupController extends Controller
 
         TaskGroupUpdated::dispatch($taskGroup);
 
-        return redirect()->route('projects.tasks', $project)->success('Tasks group updated', 'The tasks group was successfully updated.');
+        return redirect()->route('projects.tasks', $project)->success('Estado Actualizado', 'El estado de tareas se actualizó con éxito.');
     }
 
     public function destroy(Project $project, TaskGroup $taskGroup)
@@ -44,7 +44,7 @@ class GroupController extends Controller
         $this->authorize('delete', [$taskGroup, $project]);
 
         if ($taskGroup->tasks->isNotEmpty()) {
-            return redirect()->route('projects.tasks', $project)->warning('Action stopped', 'You cannot archive a task group that still contains tasks.');
+            return redirect()->route('projects.tasks', $project)->warning('Acción Detenida', 'No es posible archivar un estado de tareas que contiene tareas asociadas.');
         }
 
         $taskGroup->update(['archived_by_id' => auth()->id()]);
@@ -52,7 +52,7 @@ class GroupController extends Controller
 
         TaskGroupDeleted::dispatch($taskGroup->id, $project->id);
 
-        return redirect()->route('projects.tasks', $project)->success('Tasks group archived', 'The tasks group was successfully archived.');
+        return redirect()->route('projects.tasks', $project)->success('Estado Archivado', 'El estado de tareas se archivó con éxito.');
     }
 
     public function restore(Project $project, int $taskGroupId)
@@ -66,7 +66,7 @@ class GroupController extends Controller
 
         TaskGroupRestored::dispatch($taskGroup);
 
-        return redirect()->back()->success('Tasks group restored', 'The restoring of the tasks group was completed successfully.');
+        return redirect()->back()->success('Estado Restaurado', 'La restauración del estado de tareas se realizó con éxito.');
     }
 
     public function reorder(Request $request, Project $project)
@@ -99,8 +99,8 @@ class GroupController extends Controller
         $deletedCount = $forceDeleteService->forceDeleteTaskGroups($taskGroups);
 
         return redirect()->route('projects.tasks', $project)->success(
-            'Task groups deleted',
-            "{$deletedCount} task group(s) were permanently deleted."
+            'Estado Eliminado',
+            "{$deletedCount} estado(s) de tareas fueron eliminados permanentemente."
         );
     }
 }

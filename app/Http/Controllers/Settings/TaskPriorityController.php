@@ -38,7 +38,7 @@ class TaskPriorityController extends Controller
     {
         TaskPriority::create($request->validated());
 
-        return redirect()->route('settings.task-priorities.index')->success('Priority created', 'A new priority was successfully created.');
+        return redirect()->route('settings.task-priorities.index')->success('Prioridad Creada', 'Una nueva prioridad de tareas se creó con éxito.');
     }
 
     public function edit(TaskPriority $taskPriority)
@@ -52,13 +52,13 @@ class TaskPriorityController extends Controller
     {
         $taskPriority->update($request->validated());
 
-        return redirect()->route('settings.task-priorities.index')->success('Priority updated', 'The priority was successfully updated.');
+        return redirect()->route('settings.task-priorities.index')->success('Prioridad Actualizada', 'La prioridad de tareas se actualizó con éxito.');
     }
 
     public function destroy(TaskPriority $taskPriority)
     {
         $taskPriority->delete();
 
-        return redirect()->back()->success('Priority deleted', 'The priority was successfully deleted.');
+        return redirect()->back()->success('Prioridad Eliminada', 'La prioridad de tareas se eliminó con éxito.');
     }
 }

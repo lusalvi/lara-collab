@@ -117,7 +117,7 @@ class TaskController extends Controller
 
         (new CreateTask)->create($project, $request->validated());
 
-        return redirect()->route('projects.tasks', $project)->success('Task added', 'A new task was successfully added.');
+        return redirect()->route('projects.tasks', $project)->success('Actividad añadida', 'Una nueva actividad se añadió con éxito.');
     }
 
     public function update(UpdateTaskRequest $request, Project $project, Task $task): JsonResponse
@@ -184,14 +184,14 @@ class TaskController extends Controller
 
         if ($request->parent_task_id) {
             if ((int) $request->parent_task_id === $task->id) {
-                return response()->json(['message' => 'A task cannot be its own parent.'], 422);
+                return response()->json(['message' => 'Una actividad no puede ser su propio padre.'], 422);
             }
 
             $newParent = Task::findOrFail($request->parent_task_id);
 
             if (! $newParent->canHaveChildOfType($task->issue_type)) {
                 return response()->json([
-                    'message' => "A {$newParent->issue_type} cannot have a {$task->issue_type} as a child.",
+                    'message' => "Una {$newParent->issue_type} no puede tener como hija una {$task->issue_type}.",
                 ], 422);
             }
 
@@ -199,7 +199,7 @@ class TaskController extends Controller
             $ancestor = $newParent;
             while ($ancestor) {
                 if ($ancestor->id === $task->id) {
-                    return response()->json(['message' => 'Cannot move a task inside its own descendant.'], 422);
+                    return response()->json(['message' => 'No se puede mover una actividad dentro de su propia descendiente.'], 422);
                 }
                 $ancestor = $ancestor->parent;
             }
@@ -231,7 +231,7 @@ class TaskController extends Controller
         $task->archiveWithChildren(auth()->id());
         TaskDeleted::dispatch($task->id, $task->project_id);
 
-        return redirect()->back()->success('Task archived', 'The task was successfully archived.');
+        return redirect()->back()->success('Actividad Archivada', 'La actividad se archivó con éxito.');
     }
 
     public function restore(Project $project, Task $task)
@@ -242,7 +242,7 @@ class TaskController extends Controller
         $task->restoreWithChildren();
         TaskRestored::dispatch($task);
 
-        return redirect()->back()->success('Task restored', 'The restoring of the Task was completed successfully.');
+        return redirect()->back()->success('Actividad Restaurada', 'La restauración de la actividad se realizó con éxito.');
     }
 
     public function bulkArchive(Request $request, Project $project): JsonResponse
@@ -268,7 +268,7 @@ class TaskController extends Controller
             TaskDeleted::dispatch($task->id, $task->project_id);
         });
 
-        return response()->json(['message' => 'Tasks archived successfully']);
+        return response()->json(['message' => 'Actividades archivadas con éxito.']);
     }
 
     public function bulkForceDelete(Request $request, Project $project, ForceDeleteService $forceDeleteService): RedirectResponse
@@ -299,8 +299,8 @@ class TaskController extends Controller
         });
 
         return redirect()->back()->success(
-            'Tasks deleted',
-            "{$deletedCount} task(s) were permanently deleted."
+            'Actividades Eliminadas',
+            "{$deletedCount} actividad(es) eliminada(s) permanentemente."
         );
     }
 }

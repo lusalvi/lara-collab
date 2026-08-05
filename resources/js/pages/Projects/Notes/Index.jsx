@@ -251,7 +251,7 @@ const NotesIndex = () => {
             mb='sm'
             px={4}
           >
-            <Title order={4}>Notes</Title>
+            <Title order={4}>Notas</Title>
             {canCreate && (
               <Tooltip
                 label='Crear nota'

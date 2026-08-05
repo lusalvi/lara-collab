@@ -102,17 +102,17 @@ export default function TableRow({ item, selectable = false, selected = false, o
             restorePermission='restore user'
             archive={{
               route: 'users.destroy',
-              title: 'Archive user',
-              content: `Are you sure you want to archive this user? This action will prevent
-                the user from logging in, while all other aspects related to the
-                user's actions will remain unaffected.`,
-              confirmLabel: 'Archive',
+              title: 'Archivar usuario',
+              content: `¿Está seguro de que desea archivar este usuario? Esta acción impedirá
+                que el usuario inicie sesión, mientras que todos los demás aspectos relacionados con las
+                acciones del usuario permanecerán sin cambios.`,
+              confirmLabel: 'Archivar', 
             }}
             restore={{
               route: 'users.restore',
-              title: 'Restore user',
-              content: `Are you sure you want to restore this user? This action will allow the user to login.`,
-              confirmLabel: 'Restore',
+              title: 'Restaurar usuario',
+              content: `¿Está seguro de que desea restaurar este usuario? Esta acción permitirá que el usuario inicie sesión.`,
+              confirmLabel: 'Restaurar',
             }}
           />
         </Table.Td>

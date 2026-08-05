@@ -22,9 +22,9 @@ export default function TableRow({ item }) {
             archivePermission='delete task priority'
             archive={{
               route: 'settings.task-priorities.destroy',
-              title: 'Delete priority',
-              content: 'Are you sure you want to delete this priority?',
-              confirmLabel: 'Delete',
+              title: 'Borrar prioridad',
+              content: '¿Está seguro de que desea borrar esta prioridad?',
+              confirmLabel: 'Borrar',
             }}
           />
         </Table.Td>

@@ -39,9 +39,9 @@ const ProjectCreate = ({ dropdowns: { areas, users } }) => {
           onClick={() => redirectTo('projects.index')}
           fz={14}
         >
-          Projects
+          Proyectos
         </Anchor>
-        <div>Create</div>
+        <div>Crear Proyecto</div>
       </Breadcrumbs>
 
       <Grid
@@ -51,7 +51,7 @@ const ProjectCreate = ({ dropdowns: { areas, users } }) => {
         mb='lg'
       >
         <Grid.Col span='auto'>
-          <Title order={1}>Create project</Title>
+          <Title order={1}>Crear proyecto</Title>
         </Grid.Col>
         <Grid.Col span='content'></Grid.Col>
       </Grid>
@@ -59,8 +59,8 @@ const ProjectCreate = ({ dropdowns: { areas, users } }) => {
       <ContainerBox maw={500}>
         <form onSubmit={submit}>
           <TextInput
-            label='Name'
-            placeholder='Project name'
+            label='Nombre'
+            placeholder='Nombre del proyecto'
             required
             mt='md'
             value={form.data.name}
@@ -69,8 +69,8 @@ const ProjectCreate = ({ dropdowns: { areas, users } }) => {
           />
 
           <Textarea
-            label='Description'
-            placeholder='Project description'
+            label='Descripción'
+            placeholder='Descripción del proyecto'
             mt='md'
             autosize
             minRows={4}
@@ -80,8 +80,8 @@ const ProjectCreate = ({ dropdowns: { areas, users } }) => {
           />
 
           <Select
-            label='Area'
-            placeholder='Select area'
+            label='Área'
+            placeholder='Selecciona un área'
             required
             mt='md'
             value={form.data.area_id}
@@ -92,8 +92,8 @@ const ProjectCreate = ({ dropdowns: { areas, users } }) => {
           />
 
           <MultiSelect
-            label='Grant access to users'
-            placeholder='Select users'
+            label='Usuarios asignados'
+            placeholder='Selecciona usuarios'
             mt='md'
             searchable
             value={form.data.users}
@@ -107,7 +107,7 @@ const ProjectCreate = ({ dropdowns: { areas, users } }) => {
             mt='xl'
           >
             <BackButton route='projects.index' />
-            <ActionButton loading={form.processing}>Create</ActionButton>
+            <ActionButton loading={form.processing}>Crear</ActionButton>
           </Group>
         </form>
       </ContainerBox>

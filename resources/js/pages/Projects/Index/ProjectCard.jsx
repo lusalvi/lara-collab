@@ -46,7 +46,7 @@ export default function ProjectCard({ item, selectable = false, selected = false
         )}
 
         <Text c="dimmed" fz="sm" mt="md">
-          Completed tasks:{" "}
+          Avance de tareas:{" "}
           <Text span fw={500} c="bright">
             {item.completed_tasks_count} / {item.all_tasks_count}
           </Text>

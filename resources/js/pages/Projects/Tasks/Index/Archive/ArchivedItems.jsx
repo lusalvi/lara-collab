@@ -144,6 +144,6 @@ export default function ArchivedItems({ groups, tasks }) {
       )}
     </Stack>
   ) : (
-    <EmptyResult title="No tasks or groups found" subtitle="or none match your search criteria" />
+    <EmptyResult title="No hay elementos archivados" subtitle="Aquí se mostrarán las tareas y grupos que han sido archivados." />
   );
 }

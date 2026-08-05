@@ -16,14 +16,14 @@ const LabelCreate = () => {
     <>
       <Breadcrumbs fz={14} mb={30}>
         <Anchor href="#" onClick={() => redirectTo("settings.labels.index")} fz={14}>
-          Labels
+          Etiquetas
         </Anchor>
-        <div>Create</div>
+        <div>Crear etiqueta</div>
       </Breadcrumbs>
 
       <Grid justify="space-between" align="flex-end" gutter="xl" mb="lg">
         <Grid.Col span="auto">
-          <Title order={1}>Create label</Title>
+          <Title order={1}>Crear etiqueta</Title>
         </Grid.Col>
         <Grid.Col span="content"></Grid.Col>
       </Grid>
@@ -31,8 +31,8 @@ const LabelCreate = () => {
       <ContainerBox maw={400}>
         <form onSubmit={submit}>
           <TextInput
-            label="Name"
-            placeholder="Label name"
+            label="Nombre"
+            placeholder="Nombre de la etiqueta"
             required
             value={form.data.name}
             onChange={(e) => updateValue("name", e.target.value)}
@@ -40,7 +40,7 @@ const LabelCreate = () => {
           />
           <ColorInput
             label="Color"
-            placeholder="Label color"
+            placeholder="Color de la etiqueta"
             required
             mt="md"
             swatches={[
@@ -66,7 +66,7 @@ const LabelCreate = () => {
 
           <Group justify="space-between" mt="xl">
             <BackButton route="settings.labels.index" />
-            <ActionButton loading={form.processing}>Create</ActionButton>
+            <ActionButton loading={form.processing}>Crear</ActionButton>
           </Group>
         </form>
       </ContainerBox>

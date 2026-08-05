@@ -25,9 +25,9 @@ const AreaEdit = () => {
           onClick={() => redirectTo('areas.index')}
           fz={14}
         >
-          Areas
+          Áreas
         </Anchor>
-        <div>Edit</div>
+        <div>Editar área</div>
       </Breadcrumbs>
 
       <Grid
@@ -37,7 +37,7 @@ const AreaEdit = () => {
         mb='lg'
       >
         <Grid.Col span='auto'>
-          <Title order={1}>Edit area</Title>
+          <Title order={1}>Editar área</Title>
         </Grid.Col>
         <Grid.Col span='content'></Grid.Col>
       </Grid>
@@ -45,8 +45,8 @@ const AreaEdit = () => {
       <ContainerBox maw={600}>
         <form onSubmit={submit}>
           <TextInput
-            label='Name'
-            placeholder='Area name'
+            label='Nombre'
+            placeholder='Nombre del área'
             required
             value={form.data.name}
             onChange={e => updateValue('name', e.target.value)}
@@ -58,7 +58,7 @@ const AreaEdit = () => {
             mt='xl'
           >
             <BackButton route='areas.index' />
-            <ActionButton loading={form.processing}>Update</ActionButton>
+            <ActionButton loading={form.processing}>Actualizar</ActionButton>
           </Group>
         </form>
       </ContainerBox>

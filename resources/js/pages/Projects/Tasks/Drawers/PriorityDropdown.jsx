@@ -31,7 +31,7 @@ export default function PriorityDropdown({ value, onChange, ...props }) {
 
   return (
     <Box {...props}>
-      <Input.Label>Priority</Input.Label>
+      <Input.Label>Prioridad</Input.Label>
       <Combobox
         store={combobox}
         onOptionSubmit={handleSelect}
@@ -66,7 +66,7 @@ export default function PriorityDropdown({ value, onChange, ...props }) {
                 <Text size='sm'>{selectedPriority.label}</Text>
               </Group>
             ) : (
-              <Input.Placeholder>Select priority</Input.Placeholder>
+              <Input.Placeholder>Selecciona el nivel</Input.Placeholder>
             )}
           </InputBase>
         </Combobox.Target>

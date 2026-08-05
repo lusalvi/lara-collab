@@ -31,15 +31,15 @@ export default function TableRow({ item, selectable = false, selected = false, o
             restorePermission='restore area'
             archive={{
               route: 'areas.destroy',
-              title: 'Archive area',
-              content: `Are you sure you want to archive this area?`,
-              confirmLabel: 'Archive',
+              title: 'Archivar área',
+              content: `¿Estás seguro de que deseas archivar el área seleccionada?`,
+              confirmLabel: 'Archivar',
             }}
             restore={{
               route: 'areas.restore',
-              title: 'Restore area',
-              content: `Are you sure you want to restore this area?`,
-              confirmLabel: 'Restore',
+              title: 'Restaurar área',
+              content: `¿Estás seguro de que deseas restaurar el área seleccionada?`,
+              confirmLabel: 'Restaurar',
             }}
           />
         </Table.Td>

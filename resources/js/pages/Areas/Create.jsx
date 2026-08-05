@@ -22,9 +22,9 @@ const AreaCreate = () => {
           onClick={() => redirectTo('areas.index')}
           fz={14}
         >
-          Areas
+          Áreas
         </Anchor>
-        <div>Create</div>
+        <div>Crear área</div>
       </Breadcrumbs>
 
       <Grid
@@ -34,7 +34,7 @@ const AreaCreate = () => {
         mb='lg'
       >
         <Grid.Col span='auto'>
-          <Title order={1}>Create area</Title>
+          <Title order={1}>Crear área</Title>
         </Grid.Col>
         <Grid.Col span='content'></Grid.Col>
       </Grid>
@@ -42,8 +42,8 @@ const AreaCreate = () => {
       <ContainerBox maw={600}>
         <form onSubmit={submit}>
           <TextInput
-            label='Name'
-            placeholder='Area name'
+            label='Nombre'
+            placeholder='Nombre del área'
             required
             value={form.data.name}
             onChange={e => updateValue('name', e.target.value)}
@@ -55,7 +55,7 @@ const AreaCreate = () => {
             mt='xl'
           >
             <BackButton route='areas.index' />
-            <ActionButton loading={form.processing}>Create</ActionButton>
+            <ActionButton loading={form.processing}>Crear</ActionButton>
           </Group>
         </form>
       </ContainerBox>

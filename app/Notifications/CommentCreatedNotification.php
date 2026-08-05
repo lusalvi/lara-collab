@@ -56,9 +56,9 @@ class CommentCreatedNotification extends Notification implements ShouldQueue
     public function shouldSend(object $notifiable, string $channel): bool
     {
         if ($channel === 'mail') {
-            return $notifiable
-                ->unreadNotifications()
-                ->whereJsonContains('data->id', $this->comment->id)
+            return ! $notifiable
+                ->readNotifications()
+                ->whereJsonContains('data->task_id', $this->comment->task->id)
                 ->exists();
         }
 
@@ -71,10 +71,10 @@ class CommentCreatedNotification extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject("[{$this->comment->task->project->name}] {$this->comment->user->name} commented on {$this->comment->task->name} task")
-            ->greeting("{$this->comment->user->name} commented on {$this->comment->task->name} task")
+            ->subject("[{$this->comment->task->project->name}] Tiene un nuevo comentario.")
+            ->greeting("{$this->comment->user->name} ha comentado en la actividad {$this->comment->task->name}")
             ->line($this->comment->content)
-            ->action('Open task', route('projects.tasks.open', ['project' => $this->comment->task->project_id, 'task' => $this->comment->task->id]));
+            ->action('Abrir actividad', route('projects.tasks.open', ['project' => $this->comment->task->project_id, 'task' => $this->comment->task->id]));
     }
 
     /**
@@ -86,8 +86,8 @@ class CommentCreatedNotification extends Notification implements ShouldQueue
     {
         return [
             'task_id' => $this->comment->task->id,
-            'title' => "{$this->comment->user->name} commented on \"{$this->comment->task->name}\"",
-            'subtitle' => "On \"{$this->comment->task->project->name}\" project",
+            'title' => "{$this->comment->user->name} ha comentado en \"{$this->comment->task->name}\"",
+            'subtitle' => "En el proyecto \"{$this->comment->task->project->name}\" ",
             'link' => route('projects.tasks.open', [$this->comment->task->project_id, $this->comment->task->id]),
         ];
     }

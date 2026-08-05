@@ -17,7 +17,7 @@ export default function Filters() {
       <Stack justify="flex-start" gap={24}>
         <div>
           <Text fz="xs" fw={700} tt="uppercase" mb="sm">
-            Priority
+            Prioridad
           </Text>
           <Button.Group>
             <Button
@@ -36,7 +36,7 @@ export default function Filters() {
               radius="md"
               onClick={sortHighToLow}
             >
-              High
+              Alta
             </Button>
             <Button
               className={classes.button}
@@ -45,7 +45,7 @@ export default function Filters() {
               radius="md"
               onClick={sortLowToHigh}
             >
-              Low
+              Baja
             </Button>
           </Button.Group>
         </div>
@@ -53,7 +53,7 @@ export default function Filters() {
         {usersWithAccessToProject.length > 0 && (
           <div>
             <Text fz="xs" fw={700} tt="uppercase" mb="sm">
-              Assignees
+              Responsable
             </Text>
             <Stack justify="flex-start" gap={6}>
               {usersWithAccessToProject.map((item) => (
@@ -71,20 +71,20 @@ export default function Filters() {
 
         <div>
           <Text fz="xs" fw={700} tt="uppercase" mb="sm">
-            Due date
+            Fecha de vencimiento
           </Text>
           <Stack justify="flex-start" gap={6}>
             <FilterButton
               selected={filters.due_date.not_set === 1}
               onClick={() => toggleObjectFilter("due_date", "not_set")}
             >
-              Not set
+              Sin fecha
             </FilterButton>
             <FilterButton
               selected={filters.due_date.overdue === 1}
               onClick={() => toggleObjectFilter("due_date", "overdue")}
             >
-              Overdue
+              Vencidas
             </FilterButton>
           </Stack>
         </div>
@@ -92,7 +92,7 @@ export default function Filters() {
         {labels.length > 0 && (
           <div>
             <Text fz="xs" fw={700} tt="uppercase" mb="sm">
-              Labels
+              Etiquetas
             </Text>
             <Stack justify="flex-start" gap={6}>
               {labels.map((item) => (
@@ -109,24 +109,10 @@ export default function Filters() {
           </div>
         )}
 
-        <div>
-          <Text fz="xs" fw={700} tt="uppercase" mb="sm">
-            Status
-          </Text>
-          <Stack justify="flex-start" gap={6}>
-            <FilterButton
-              selected={filters.status === "completed"}
-              onClick={() => toggleValueFilter("status", "completed")}
-            >
-              Completed
-            </FilterButton>
-          </Stack>
-        </div>
-
         {groups.length > 0 && (
           <div>
             <Text fz="xs" fw={700} tt="uppercase" mb="sm">
-              Task groups
+              Estado
             </Text>
             <Stack justify="flex-start" gap={6}>
               {groups.map((item) => (

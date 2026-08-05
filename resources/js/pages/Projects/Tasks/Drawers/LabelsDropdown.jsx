@@ -1,5 +1,5 @@
 import { Label } from "@/components/Label";
-import {
+import { IconSelector } from "@tabler/icons-react";import {
   Box,
   CheckIcon,
   Combobox,
@@ -24,7 +24,7 @@ export default function LabelsDropdown({ items, selected, onChange, ...props }) 
 
   return (
     <Box {...props}>
-      <Input.Label>Labels</Input.Label>
+      <Input.Label>Etiquetas</Input.Label>
       <Combobox
         store={combobox}
         onOptionSubmit={handleValueSelect}
@@ -32,8 +32,19 @@ export default function LabelsDropdown({ items, selected, onChange, ...props }) 
         disabled={!can("edit task")}
       >
         <Combobox.DropdownTarget>
-          <PillsInput pointer onClick={() => combobox.toggleDropdown()}>
-            <Pill.Group style={{ rowGap: rem(3), columnGap: rem(12) }}>
+              <PillsInput
+                pointer
+                onClick={() => combobox.toggleDropdown()}
+                rightSection={
+                  <IconSelector
+                    size={14}
+                    stroke={1.5}
+                    color="var(--mantine-color-dimmed)"
+                  />
+                }
+                rightSectionPointerEvents="none"
+              >
+              <Pill.Group style={{ rowGap: rem(3), columnGap: rem(12) }}>
               {selected.length > 0 ? (
                 selected.map((id) => {
                   const label = items.find((i) => i.id === id);
@@ -49,7 +60,7 @@ export default function LabelsDropdown({ items, selected, onChange, ...props }) 
                   );
                 })
               ) : (
-                <Input.Placeholder>Select labels</Input.Placeholder>
+                <Input.Placeholder>Selecciona etiquetas</Input.Placeholder>
               )}
 
               <Combobox.EventsTarget>

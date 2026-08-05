@@ -92,9 +92,10 @@ export function CreateTaskDrawer() {
     } else {
       openConfirmModal({
         type: 'danger',
-        title: 'Discard changes?',
-        content: `All unsaved changes will be lost.`,
-        confirmLabel: 'Discard',
+        title: '¿Deseas descartar los cambios?',
+        content: `Si cierras este formulario, se perderán todos los cambios realizados en la actividad.`,
+        confirmLabel: 'Descartar cambios',
+        cancelLabel: 'Cancelar',
         confirmProps: { color: 'red' },
         onConfirm: () => closeCreateTask(),
       });
@@ -138,7 +139,7 @@ export function CreateTaskDrawer() {
           ml={25}
           my='sm'
         >
-          Add new task
+          Crear nueva actividad
         </Text>
       }
       position='right'
@@ -167,8 +168,8 @@ export function CreateTaskDrawer() {
         <div className={classes.content}>
           <TextInput
             key={`name-${create.opened}`}
-            label='Name'
-            placeholder='Task name'
+            label='Nombre'
+            placeholder='Nombre de la actividad'
             required
             data-autofocus
             value={form.data.name}
@@ -179,7 +180,7 @@ export function CreateTaskDrawer() {
           <RichTextEditor
             key={create.opened ? 'editor-open' : 'editor-closed'}
             mt='xl'
-            placeholder='Task description'
+            placeholder='Descripción de la actividad'
             height={260}
             value={form.data.description}
             onChange={content => updateValue('description', content)}
@@ -194,8 +195,8 @@ export function CreateTaskDrawer() {
 
           <MultiSelect
             key={`subscribers-${create.opened}`}
-            label='Subscribers'
-            placeholder='Select subscribers'
+            label='Suscriptores'
+            placeholder='Selecciona suscriptores'
             searchable
             mt='md'
             value={form.data.subscribed_users}
@@ -217,7 +218,7 @@ export function CreateTaskDrawer() {
               disabled={form.processing}
               onClick={closeDrawer}
             >
-              Cancel
+              Cancelar
             </Button>
 
             <Button
@@ -225,15 +226,15 @@ export function CreateTaskDrawer() {
               w={120}
               loading={form.processing}
             >
-              Add task
+              Crear
             </Button>
           </Flex>
         </div>
         <div className={classes.sidebar}>
           <Select
             key={`group-${create.opened}`}
-            label='Task group'
-            placeholder='Select task group'
+            label='Estado'
+            placeholder='Selecciona el estado'
             required
             value={form.data.group_id}
             onChange={value => updateValue('group_id', value)}
@@ -246,8 +247,8 @@ export function CreateTaskDrawer() {
 
           <Select
             key={`issue-${create.opened}`}
-            label='Issue type'
-            placeholder='Select issue type'
+            label='Tipo'
+            placeholder='Selecciona el tipo de actividad'
             required
             mt='md'
             value={form.data.issue_type}
@@ -259,8 +260,8 @@ export function CreateTaskDrawer() {
 
           <Select
             key={`assignee-${create.opened}`}
-            label='Assignee'
-            placeholder='Select assignee'
+            label='Reesponsable'
+            placeholder='Selecciona un responsable'
             searchable
             mt='md'
             value={form.data.assigned_to_user_id}
@@ -277,8 +278,8 @@ export function CreateTaskDrawer() {
             clearable
             valueFormat='DD MMM YYYY'
             mt='md'
-            label='Start date'
-            placeholder='Pick task start date'
+            label='Fecha de inicio'
+            placeholder='Selecciona la fecha de inicio'
             value={form.data.start_on || null}
             onChange={value => updateValue('start_on', value || '')}
           />
@@ -289,8 +290,8 @@ export function CreateTaskDrawer() {
             valueFormat='DD MMM YYYY'
             minDate={new Date()}
             mt='md'
-            label='Due date'
-            placeholder='Pick task due date'
+            label='Fecha de vencimiento'
+            placeholder='Selecciona la fecha de vencimiento'
             value={form.data.due_on || null}
             onChange={value => updateValue('due_on', value || '')}
           />

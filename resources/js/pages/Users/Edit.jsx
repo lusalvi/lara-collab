@@ -54,9 +54,9 @@ const UserEdit = () => {
           onClick={() => redirectTo('users.index')}
           fz={14}
         >
-          Users
+          Usuarios
         </Anchor>
-        <div>Edit</div>
+        <div>Editar usuario</div>
       </Breadcrumbs>
 
       <Grid
@@ -66,7 +66,7 @@ const UserEdit = () => {
         mb='lg'
       >
         <Grid.Col span='auto'>
-          <Title order={1}>Edit user</Title>
+          <Title order={1}>Editar usuario</Title>
         </Grid.Col>
         <Grid.Col span='content'></Grid.Col>
       </Grid>
@@ -91,8 +91,8 @@ const UserEdit = () => {
             </Grid.Col>
             <Grid.Col span='auto'>
               <FileInput
-                label='Profile image'
-                placeholder='Choose image'
+                label='Foto de perfil'
+                placeholder='Elige una imagen'
                 accept='image/png,image/jpeg'
                 onChange={image => updateValue('avatar', image)}
                 clearable
@@ -103,7 +103,7 @@ const UserEdit = () => {
                 c='dimmed'
                 mt='sm'
               >
-                If no image is uploaded we will try to fetch it via{' '}
+                Si no eliges una imagen, se generará un avatar automáticamente usando{' '}
                 <Anchor
                   href='https://unavatar.io'
                   target='_blank'
@@ -117,8 +117,8 @@ const UserEdit = () => {
           </Grid>
 
           <TextInput
-            label='Name'
-            placeholder='User full name'
+            label='Nombre '
+            placeholder='Nombre completo del usuario'
             required
             mt='md'
             value={form.data.name}
@@ -127,8 +127,8 @@ const UserEdit = () => {
           />
 
           <TextInput
-            label='Job title'
-            placeholder='e.g. Frontend Developer'
+            label='Puesto de trabajo'
+            placeholder='ej. Desarrollador, Técnico de soporte, etc.'
             required
             mt='md'
             value={form.data.job_title}
@@ -138,7 +138,7 @@ const UserEdit = () => {
 
           <MultiSelect
             label='Roles'
-            placeholder='Select role'
+            placeholder='Selecciona un rol'
             required
             mt='md'
             value={form.data.roles}
@@ -160,8 +160,8 @@ const UserEdit = () => {
           />
 
           <TextInput
-            label='Phone'
-            placeholder='Users phone number'
+            label='Teléfono'
+            placeholder='Número de teléfono del usuario'
             mt='md'
             value={form.data.phone}
             onChange={e => updateValue('phone', e.target.value)}
@@ -171,13 +171,13 @@ const UserEdit = () => {
           <Divider
             mt='xl'
             mb='md'
-            label='Login credentials'
+            label='Credenciales de acceso'
             labelPosition='center'
           />
 
           <TextInput
             label='Email'
-            placeholder='User email'
+            placeholder='Correo electrónico del usuario'
             required
             value={form.data.email}
             onChange={e => updateValue('email', e.target.value)}
@@ -186,8 +186,8 @@ const UserEdit = () => {
           />
 
           <PasswordInput
-            label='Password'
-            placeholder='User password'
+            label='Contraseña'
+            placeholder='Contraseña del usuario'
             mt='md'
             value={form.data.password}
             onChange={e => updateValue('password', e.target.value)}
@@ -195,8 +195,8 @@ const UserEdit = () => {
           />
 
           <PasswordInput
-            label='Confirm password'
-            placeholder='Confirm password'
+            label='Confirmar contraseña'
+            placeholder='Confirma la contraseña del usuario'
             mt='md'
             value={form.data.password_confirmation}
             onChange={e => updateValue('password_confirmation', e.target.value)}
@@ -208,7 +208,7 @@ const UserEdit = () => {
             mt='xl'
           >
             <BackButton route='users.index' />
-            <ActionButton loading={form.processing}>Update</ActionButton>
+            <ActionButton loading={form.processing}>Actualizar</ActionButton>
           </Group>
         </form>
       </ContainerBox>

@@ -26,14 +26,14 @@ const PriorityCreate = () => {
     <>
       <Breadcrumbs fz={14} mb={30}>
         <Anchor href='#' onClick={() => redirectTo('settings.task-priorities.index')} fz={14}>
-          Priorities
+          Prioridades
         </Anchor>
-        <div>Create</div>
+        <div>Crear prioridad</div>
       </Breadcrumbs>
 
       <Grid justify='space-between' align='flex-end' gutter='xl' mb='lg'>
         <Grid.Col span='auto'>
-          <Title order={1}>Create priority</Title>
+          <Title order={1}>Crear prioridad</Title>
         </Grid.Col>
         <Grid.Col span='content'></Grid.Col>
       </Grid>
@@ -41,8 +41,8 @@ const PriorityCreate = () => {
       <ContainerBox maw={400}>
         <form onSubmit={submit}>
           <TextInput
-            label='Label'
-            placeholder='Priority label'
+            label='Etiqueta'
+            placeholder='Etiqueta de prioridad'
             required
             value={form.data.label}
             onChange={e => updateValue('label', e.target.value)}
@@ -51,7 +51,7 @@ const PriorityCreate = () => {
 
           <ColorInput
             label='Color'
-            placeholder='Priority color'
+            placeholder='Color de prioridad'
             required
             mt='md'
             swatches={[
@@ -76,8 +76,8 @@ const PriorityCreate = () => {
           />
 
           <NumberInput
-            label='Order'
-            placeholder='Display order (e.g., 1, 2, 3)'
+            label='Orden'
+            placeholder='Orden de prioridad (ej. 1, 2, 3)'
             required
             mt='md'
             min={1}
@@ -88,7 +88,7 @@ const PriorityCreate = () => {
 
           <Group justify='space-between' mt='xl'>
             <BackButton route='settings.task-priorities.index' />
-            <ActionButton loading={form.processing}>Create</ActionButton>
+            <ActionButton loading={form.processing}>Crear</ActionButton>
           </Group>
         </form>
       </ContainerBox>

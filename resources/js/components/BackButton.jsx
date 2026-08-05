@@ -11,7 +11,7 @@ export default function BackButton({ route }) {
       size="sm"
       onClick={() => redirectTo(route)}
     >
-      Back
+      Volver
     </Button>
   );
 }

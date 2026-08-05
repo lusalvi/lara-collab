@@ -78,6 +78,8 @@ class ProjectController extends Controller
         /** @var User $authUser */
         $authUser = auth()->user();
 
+        $project->load('users:id,name,avatar');
+
         return Inertia::render('Projects/Edit', [
             'item' => $project,
             'dropdowns' => [

@@ -72,14 +72,14 @@ export default function Notifications() {
               m={10}
               ml={15}
             >
-              <Title order={4}>Notifications</Title>
+              <Title order={4}>Notificaciones</Title>
               {unreadCount > 0 && (
                 <UnstyledButton
                   fz={11}
                   onClick={markAllAsRead}
                   className={classes.link}
                 >
-                  Mark all as read
+                  Marcar todas como leídas
                 </UnstyledButton>
               )}
             </Group>
@@ -105,8 +105,8 @@ export default function Notifications() {
             ) : (
               <Center mih={100}>
                 <EmptyWithIcon
-                  title='Recent notifications'
-                  subtitle='Will be shown here'
+                  title='Las notificaciones recientes'
+                  subtitle='Aparecerán aqui.'
                   icon={IconMessage}
                   titleFontSize={17}
                   subtitleFontSize={13}
@@ -125,7 +125,7 @@ export default function Notifications() {
               my={6}
               className={classes.link}
             >
-              View all my notifications
+              Ver todas mis notificaciones
             </UnstyledButton>
           </Menu.Dropdown>
         </Indicator>

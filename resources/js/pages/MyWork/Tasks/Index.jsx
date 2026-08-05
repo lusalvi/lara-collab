@@ -23,12 +23,12 @@ const TasksIndex = () => {
   return (
     <>
       <Breadcrumbs fz={14} mb={30}>
-        <div>My Work</div>
-        <div>Tasks</div>
+        <div>Mi Trabajo</div>
+        <div>Tareas</div>
       </Breadcrumbs>
 
       <Title order={1} mb={20}>
-        Tasks assigned to you
+        Tareas asignadas
       </Title>
 
       <Group mb={16}>
@@ -38,18 +38,18 @@ const TasksIndex = () => {
             variant={prioritySort === "asc" ? "filled" : "light"}
             onClick={sortHighToLow}
           >
-            Priority: High → Low
+            Prioridad: Alta → Baja
           </Button>
           <Button
             size="xs"
             variant={prioritySort === "desc" ? "filled" : "light"}
             onClick={sortLowToHigh}
           >
-            Priority: Low → High
+            Prioridad: Baja → Alta
           </Button>
           {prioritySort && (
             <Button size="xs" variant="subtle" onClick={clearPrioritySort}>
-              Default order
+              Orden predeterminado
             </Button>
           )}
         </Group>
@@ -101,8 +101,8 @@ const TasksIndex = () => {
         ) : (
           <Center mih={300}>
             <EmptyWithIcon
-              title="All caught up!"
-              subtitle="No tasks assigned at the moment"
+              title="¡Ya estás al día!"
+              subtitle="No tienes tareas pendientes asignadas. ¡Sigue así!"
               icon={IconRocket}
             />
           </Center>
@@ -112,6 +112,6 @@ const TasksIndex = () => {
   );
 };
 
-TasksIndex.layout = (page) => <Layout title="My Tasks">{page}</Layout>;
+TasksIndex.layout = (page) => <Layout title="Tareas">{page}</Layout>;
 
 export default TasksIndex;

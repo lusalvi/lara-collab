@@ -14,8 +14,8 @@ class ProjectObserver
         $project->activities()->create([
             'project_id' => $project->id,
             'user_id' => auth()->id(),
-            'title' => 'New project',
-            'subtitle' => "\"{$project->name}\" was created by ".auth()->user()->name,
+            'title' => 'Nuevo proyecto',
+            'subtitle' => "El proyecto \"{$project->name}\" fue creado por ".auth()->user()->name,
         ]);
     }
 
@@ -28,8 +28,8 @@ class ProjectObserver
             $project->activities()->create([
                 'project_id' => $project->id,
                 'user_id' => auth()->id(),
-                'title' => 'Project name was changed',
-                'subtitle' => "from \"{$project->getOriginal('name')}\" to \"{$project->name}\" by ".auth()->user()->name,
+                'title' => 'Nombre del proyecto actualizado',
+                'subtitle' => "El nombre del proyecto cambió de \"{$project->getOriginal('name')}\" a \"{$project->name}\" por ".auth()->user()->name,
             ]);
         }
     }
@@ -42,8 +42,8 @@ class ProjectObserver
         $project->activities()->create([
             'project_id' => $project->id,
             'user_id' => auth()->id(),
-            'title' => 'Project was archived',
-            'subtitle' => "\"{$project->name}\" was archived by ".auth()->user()->name,
+            'title' => 'Proyecto archivado',
+            'subtitle' => "El proyecto \"{$project->name}\" fue archivado por ".auth()->user()->name,
         ]);
     }
 
@@ -55,8 +55,8 @@ class ProjectObserver
         $project->activities()->create([
             'project_id' => $project->id,
             'user_id' => auth()->id(),
-            'title' => 'Project was unarchived',
-            'subtitle' => "\"{$project->name}\" was unarchived by ".auth()->user()->name,
+            'title' => 'Proyecto desarchivado',
+            'subtitle' => "El proyecto \"{$project->name}\" fue desarchivado por ".auth()->user()->name,
         ]);
     }
 }

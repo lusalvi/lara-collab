@@ -48,12 +48,12 @@ export function ProjectCard({ project }) {
             {
               value: overduePercent,
               color: "red.5",
-              tooltip: `Overdue: ${project.overdue_tasks_count}`,
+              tooltip: `Vencidas: ${project.overdue_tasks_count}`,
             },
             {
               value: completedPercent,
               color: "hospitalPrimary.6",
-              tooltip: `Completed: ${project.completed_tasks_count}`,
+              tooltip: `Completadas: ${project.completed_tasks_count}`,
             },
           ]}
           label={

@@ -26,7 +26,7 @@ export default function Task({ task }) {
         wrap='nowrap'
       >
         <Tooltip
-          label='Task group'
+          label='Estado'
           openDelay={1000}
           withArrow
         >
@@ -53,7 +53,7 @@ export default function Task({ task }) {
 
         <Tooltip
           disabled={!isOverdue(task)}
-          label={`${diffForHumans(task.due_on, true)} overdue`}
+          label={`Vencida hace ${diffForHumans(task.due_on, true)}`}
           openDelay={1000}
           withArrow
         >

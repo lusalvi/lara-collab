@@ -32,31 +32,39 @@ const ActivityIndex = () => {
   }, [selectedProject]);
 
   const getIcon = (title) => {
-    if (title.includes("archived")) {
+    if (title.includes("archivad") || title.includes("archived")) {
       return <IconArchive size={18} />;
     }
-    if (title.includes("comment")) {
+    if (title.includes("comentario") || title.includes("comment")) {
       return <IconMessage size={18} />;
     }
-    if (title.includes("was changed")) {
+    if (title.includes("cambiado") || title.includes("cambiada") || title.includes("changed")  || title.includes("actualizad")) {
       return <IconEdit size={18} />;
     }
-    if (title.includes("Due date")) {
+    if (title.includes("Fecha de vencimiento") || title.includes("Due date")) {
       return <IconCalendarMonth size={18} />;
     }
-    if (title.includes("Attachment")) {
+    if (title.includes("Adjunto") || title.includes("Attachment")) {
       return <IconPaperclip size={18} />;
     }
-    if (title.includes("Estimation was set")) {
+    if (title.includes("Estimación") || title.includes("Estimation was set")) {
       return <IconClock size={18} />;
     }
-    if (title.includes("was completed")) {
+    if (title.includes("completada") || title.includes("was completed")) {
       return <IconCheck size={18} />;
     }
-    if (title.includes("uncompleted")) {
+    if (title.includes("incompleta") || title.includes("uncompleted")) {
       return <IconX size={18} />;
     }
-    if (title === "New task" || title === "New project" || title.includes("Assigned user")) {
+    if (
+      title === "Nueva actividad" ||
+      title === "New task" ||
+      title === "Nuevo proyecto" ||
+      title === "New project" ||
+      title === "Nuevo proyecto creado" ||
+      title.includes("Usuario asignado") ||
+      title.includes("Assigned user")
+    ) {
       return <IconPlus size={18} />;
     }
   };
@@ -64,17 +72,17 @@ const ActivityIndex = () => {
   return (
     <>
       <Breadcrumbs fz={14} mb={30}>
-        <div>My Work</div>
-        <div>Projects activity</div>
+        <div>Mi Trabajo </div>
+        <div>Actividades de los proyectos</div>
       </Breadcrumbs>
 
       <Title order={1} mb={20}>
-        Projects activity
+        Actividades de los proyectos
       </Title>
 
       <Select
         size="md"
-        placeholder="Select project"
+        placeholder="Seleccionar proyecto"
         allowDeselect={false}
         value={selectedProject}
         onChange={(value) => setSelectedProject(value)}
@@ -130,8 +138,8 @@ const ActivityIndex = () => {
       ) : (
         <Center mih={300}>
           <EmptyWithIcon
-            title="No activities found"
-            subtitle="On projects you have access to"
+            title="No se encontraron actividades"
+            subtitle="o proyectos a los que tengas acceso"
             icon={IconActivity}
           />
         </Center>
@@ -140,6 +148,6 @@ const ActivityIndex = () => {
   );
 };
 
-ActivityIndex.layout = (page) => <Layout title="Activity">{page}</Layout>;
+ActivityIndex.layout = (page) => <Layout title="Actividades">{page}</Layout>;
 
 export default ActivityIndex;

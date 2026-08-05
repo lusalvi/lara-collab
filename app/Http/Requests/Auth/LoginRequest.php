@@ -46,7 +46,7 @@ class LoginRequest extends FormRequest
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
-                'email' => 'These credentials do not match our records.',
+                'email' => 'Las credenciales proporcionadas no coinciden con nuestros registros.',
             ]);
         }
 
@@ -67,7 +67,7 @@ class LoginRequest extends FormRequest
         event(new Lockout($this));
 
         throw ValidationException::withMessages([
-            'email' => 'Too many login attempts. Please try again later.',
+            'email' => 'Demasiados intentos de inicio de sesión. Por favor, inténtalo de nuevo en unos segundos.',
         ]);
     }
 

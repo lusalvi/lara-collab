@@ -49,8 +49,8 @@ class NewPasswordController extends Controller
         }
 
         $message = match ($status) {
-            'passwords.token' => 'This password reset token is invalid.',
-            default => 'Whoops, something went wrong.',
+            'passwords.token' => 'El token de restablecimiento de contraseña es inválido.',
+            default => 'Ups, algo salió mal.',
         };
 
         throw ValidationException::withMessages([

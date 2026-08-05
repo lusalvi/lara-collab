@@ -48,7 +48,7 @@ class AreaController extends Controller
     {
         (new CreateArea)->create($request->validated());
 
-        return redirect()->route('areas.index')->success('Area created', 'A new area was successfully created.');
+        return redirect()->route('areas.index')->success('Área Creada', 'Una nueva área se creó con éxito.');
     }
 
     public function edit(Area $area)
@@ -62,7 +62,7 @@ class AreaController extends Controller
     {
         (new UpdateArea)->update($area, $request->validated());
 
-        return redirect()->route('areas.index')->success('Area updated', 'The area was successfully updated.');
+        return redirect()->route('areas.index')->success('Área Actualizada', 'El área se actualizó con éxito.');
     }
 
     public function destroy(Area $area)
@@ -70,7 +70,7 @@ class AreaController extends Controller
         $area->update(['archived_by_id' => auth()->id()]);
         $area->archive();
 
-        return redirect()->back()->success('Area archived', 'The area was successfully archived.');
+        return redirect()->back()->success('Área Archivada', 'El área se archivó con éxito.');
     }
 
     public function restore(int $areaId)
@@ -82,7 +82,7 @@ class AreaController extends Controller
         $area->unArchive();
         $area->update(['archived_by_id' => null]);
 
-        return redirect()->back()->success('Area restored', 'The restoring of the area was completed successfully.');
+        return redirect()->back()->success('Área Restaurada', 'La restauración del área se realizó con éxito.');
     }
 
     public function bulkForceDelete(Request $request, ForceDeleteService $forceDeleteService)
@@ -106,16 +106,16 @@ class AreaController extends Controller
             $names = $blockedAreas->pluck('name')->implode(', ');
 
             return redirect()->back()->warning(
-                'Action stopped',
-                "The following areas still have projects or users and cannot be permanently deleted: {$names}."
+                'Acción Detenida',
+                "Las siguientes áreas aún tienen usuarios o proyectos. No pueden ser eliminadas permanentemente: {$names}."
             );
         }
 
         $deletedCount = $forceDeleteService->forceDeleteAreas($areas);
 
         return redirect()->back()->success(
-            'Areas deleted',
-            "{$deletedCount} area(s) were permanently deleted."
+            'Área Eliminada',
+            "{$deletedCount} área(s) fueron eliminadas permanentemente."
         );
     }
 }

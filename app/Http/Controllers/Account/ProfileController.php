@@ -21,6 +21,6 @@ class ProfileController extends Controller
     {
         (new UpdateAuthUser)->update($request->user(), $request->validated());
 
-        return redirect()->back()->success('User updated', 'The user was successfully updated.');
+        return redirect()->back()->success('Usuario Actualizado', 'El perfil de usuario se actualizó con éxito.');
     }
 }

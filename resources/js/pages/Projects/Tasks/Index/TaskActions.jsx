@@ -74,7 +74,7 @@ export default function TaskActions({ task, ...props }) {
                 color="red"
                 onClick={openArchiveModal}
               >
-                Archive
+                Archivar
               </Menu.Item>
             )}
           </Menu.Dropdown>

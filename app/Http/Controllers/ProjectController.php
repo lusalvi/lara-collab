@@ -109,7 +109,7 @@ class ProjectController extends Controller
             ['name' => 'Finalizado'],
         ]);
 
-        return redirect()->route('projects.index')->success('Project created', 'A new project was successfully created.');
+        return redirect()->route('projects.index')->success('Proyecto Creado', 'Un nuevo proyecto se creó con éxito.');
     }
 
     public function update(UpdateProjectRequest $request, Project $project)
@@ -120,7 +120,7 @@ class ProjectController extends Controller
 
         $project->users()->sync($data['users']);
 
-        return redirect()->route('projects.index')->success('Project updated', 'The project was successfully updated.');
+        return redirect()->route('projects.index')->success('Proyecto Actualizado', 'El proyecto se actualizó con éxito.');
     }
 
     public function destroy(Project $project)
@@ -128,7 +128,7 @@ class ProjectController extends Controller
         $project->update(['archived_by_id' => auth()->id()]);
         $project->archive();
 
-        return redirect()->back()->success('Project archived', 'The project was successfully archived.');
+        return redirect()->back()->success('Proyecto Archivado', 'El proyecto se archivó con éxito.');
     }
 
     public function restore(int $projectId)
@@ -140,7 +140,7 @@ class ProjectController extends Controller
         $project->unArchive();
         $project->update(['archived_by_id' => null]);
 
-        return redirect()->back()->success('Project restored', 'The restoring of the project was completed successfully.');
+        return redirect()->back()->success('Proyecto Restaurado', 'La restauración del proyecto se realizó con éxito.');
     }
 
     public function bulkForceDelete(Request $request, ForceDeleteService $forceDeleteService)
@@ -159,8 +159,8 @@ class ProjectController extends Controller
         $deletedCount = $forceDeleteService->forceDeleteProjects($projects);
 
         return redirect()->back()->success(
-            'Projects deleted',
-            "{$deletedCount} project(s) were permanently deleted."
+            'Proyecto Eliminado',
+            "{$deletedCount} proyecto(s) fueron eliminados permanentemente."
         );
     }
 

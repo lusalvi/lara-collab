@@ -44,7 +44,7 @@ class TaskController extends Controller
             ->with(['project' => fn ($query) => $query->withArchived()])
             ->get()
             ->mapWithKeys(function (TaskGroup $group) use ($request, $project, $searchQuery) {
-                $prioritySort = data_get($request->input('sort', []), 'priority');
+                $prioritySort = $request->input('sort_priority');
 
                 $matchedTasks = Task::where('project_id', $project->id)
                     ->where('group_id', $group->id)

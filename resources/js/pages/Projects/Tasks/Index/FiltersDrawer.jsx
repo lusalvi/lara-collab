@@ -11,7 +11,7 @@ export default function FiltersDrawer() {
       onClose={() => closeDrawer()}
       title={
         <Text fz={rem(28)} fw={600} mt="sm">
-          Filters
+          Filtros
         </Text>
       }
       position="right"

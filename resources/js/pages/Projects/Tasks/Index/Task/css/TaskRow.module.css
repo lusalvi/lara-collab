@@ -80,3 +80,63 @@
     transition: 0.3s ease opacity;
     margin-top: 7px;
 }
+
+/* ===========================
+   ARCHIVADOS
+=========================== */
+
+.archivedCard {
+    padding: 14px 18px;
+    margin-bottom: 12px;
+
+    border-radius: 12px;
+
+    border: 1px solid
+        light-dark(
+            var(--mantine-color-gray-3),
+            var(--mantine-color-dark-4)
+        );
+
+    background: light-dark(
+        white,
+        var(--mantine-color-dark-7)
+    );
+
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease,
+        border-color .18s ease;
+}
+
+.archivedCard:hover {
+    transform: translateY(-1px);
+
+    box-shadow: 0 6px 18px rgba(0,0,0,.08);
+
+    border-color: var(--mantine-color-hospitalPrimary-4);
+}
+
+.archivedHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 12px;
+}
+
+.archivedName {
+    line-height: 1.5;
+
+    margin-bottom: 14px;
+
+    white-space: normal;
+    word-break: break-word;
+
+    font-size: 15px;
+}
+
+.archivedFooter {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}

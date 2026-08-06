@@ -1,10 +1,21 @@
-import { Label } from "@/components/Label";
 import IssueTypeIcon from "@/components/IssueTypeIcon";
 import { isOverdue } from "@/utils/task";
 import { shortName } from "@/utils/user";
-import { Link } from "@inertiajs/react";
-import { Checkbox, Flex, Group, Pill, Text, Tooltip, Button } from "@mantine/core";
-import { IconChevronRight, IconChevronDown } from "@tabler/icons-react";
+
+import {
+  Button,
+  Checkbox,
+  Group,
+  Pill,
+  Text,
+  Tooltip,
+} from "@mantine/core";
+
+import {
+  IconChevronDown,
+  IconChevronRight,
+} from "@tabler/icons-react";
+
 import classes from "../Task/css/TaskRow.module.css";
 import TaskActions from "../TaskActions";
 
@@ -20,76 +31,92 @@ export default function ArchivedTask({
 }) {
   const paddingLeft = depth * 24;
 
-  return (
-    <Flex 
-      className={`${classes.task} ${task.completed_at !== null && classes.completed}`}
-      style={{ paddingLeft: `${paddingLeft}px` }}
-      gap="xs"
-      align="center"
+  const ToggleButton = hasChildren ? (
+    <Button
+      variant="subtle"
+      size="xs"
+      p={0}
+      w={24}
+      h={24}
+      onClick={onToggle}
     >
-      {hasChildren && (
-        <Button
-          variant="subtle"
-          size="xs"
-          p={0}
-          w={24}
-          h={24}
-          onClick={onToggle}
-          title={collapsed ? "Expandir" : "Contraer"}
-        >
-          {collapsed ? (
-            <IconChevronRight size={16} />
-          ) : (
-            <IconChevronDown size={16} />
-          )}
-        </Button>
-      )}
-      {!hasChildren && <div style={{ width: 24 }} />}
-
-      {selectable ? (
-        <Checkbox
-          size="sm"
-          checked={selected}
-          onChange={() => onToggleSelect(task.id)}
-          aria-label={`Seleccionar tarea ${task.name}`}
-        />
+      {collapsed ? (
+        <IconChevronRight size={16} />
       ) : (
-        <div style={{ width: 18 }} />
+        <IconChevronDown size={16} />
       )}
+    </Button>
+  ) : (
+    <div style={{ width: 24 }} />
+  );
 
-      <Group gap="sm" flex={1} wrap="wrap">
-        <IssueTypeIcon type={task.issue_type} size={16} style={{ flexShrink: 0 }} />
+  const CheckboxOrSpace = selectable ? (
+    <Checkbox
+      checked={selected}
+      onChange={() => onToggleSelect(task.id)}
+    />
+  ) : (
+    <div style={{ width: 18 }} />
+  );
 
-        {task.assigned_to_user && (
-          <Link href={route("users.edit", task.assigned_to_user.id)}>
-            <Tooltip label={task.assigned_to_user.name} openDelay={1000} withArrow>
-              <Pill size="sm" className={classes.user} style={{ flexShrink: 0 }}>
-                {shortName(task.assigned_to_user.name)}
-              </Pill>
-            </Tooltip>
-          </Link>
-        )}
+  return (
+    <div
+      className={classes.archivedCard}
+      style={{ marginLeft: paddingLeft }}
+    >
+      <div className={classes.archivedHeader}>
+        <Group gap="xs" wrap="nowrap">
+          {ToggleButton}
 
-        <Text
-          key={task.id}
-          className={classes.name}
-          style={{ cursor: "default", minWidth: 0 }}
-          size="sm"
-          fw={500}
-          c={isOverdue(task) && task.completed_at === null ? "red" : ""}
-          flex={1}
-        >
-          #{task.number + ": " + task.name}
-        </Text>
+          {CheckboxOrSpace}
 
-        <Group gap={12} ml={8} wrap="wrap" style={{ flexShrink: 0 }}>
-          {task.labels.map((label) => (
-            <Label key={label.id} name={label.name} color={label.color} />
-          ))}
+          <IssueTypeIcon
+            type={task.issue_type}
+            size={16}
+          />
+
+          <Text fw={600}>
+            #{task.number}
+          </Text>
         </Group>
 
-        <TaskActions task={task} style={{ flexShrink: 0 }} />
-      </Group>
-    </Flex>
+        <TaskActions task={task} />
+      </div>
+
+      <Text
+        className={classes.archivedName}
+        fw={500}
+        c={
+          isOverdue(task) && task.completed_at === null
+            ? "red"
+            : undefined
+        }
+      >
+        {task.name}
+      </Text>
+
+      <div className={classes.archivedFooter}>
+        {task.assigned_to_user ? (
+          <Tooltip
+            label={task.assigned_to_user.name}
+            withArrow
+          >
+            <Pill
+              size="sm"
+              className={classes.user}
+            >
+              {shortName(task.assigned_to_user.name)}
+            </Pill>
+          </Tooltip>
+        ) : (
+          <Text
+            size="xs"
+            c="dimmed"
+          >
+            Sin responsable
+          </Text>
+        )}
+      </div>
+    </div>
   );
 }

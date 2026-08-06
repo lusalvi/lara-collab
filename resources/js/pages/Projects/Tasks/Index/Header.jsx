@@ -5,91 +5,115 @@ import useTaskDrawerStore from '@/hooks/store/useTaskDrawerStore';
 import useTaskFiltersStore from '@/hooks/store/useTaskFiltersStore';
 import { reloadWithQuery } from '@/utils/route';
 import { usePage } from '@inertiajs/react';
-import { ActionIcon, Button, Group, Text, Title, Tooltip } from '@mantine/core';
-import { IconFilter, IconFilterCog, IconPlus } from '@tabler/icons-react';
+import {
+  ActionIcon,
+  Button,
+  Group,
+  Text,
+  Title,
+  Tooltip,
+} from '@mantine/core';
+import { useMediaQuery } from '@mantine/hooks';
+import {
+  IconFilter,
+  IconFilterCog,
+  IconPlus,
+} from '@tabler/icons-react';
 
 export default function Header() {
   const { project } = usePage().props;
 
   const { openDrawer } = useTaskFiltersStore();
-  const search = (search) => reloadWithQuery({ search });
-
   const { openCreateTask } = useTaskDrawerStore();
   const { hasUrlParams } = useTaskFiltersStore();
 
-  // Buscador, filtros y botón crear solo en lista/tablero activos (no en archivados)
+  const mobile = useMediaQuery('(max-width: 768px)');
+
+  const search = search => reloadWithQuery({ search });
+
   const isArchived = !!route().params.archived;
   const currentRoute = route().current();
-  const isTasksView =
-    currentRoute === 'projects.tasks' || currentRoute === 'projects.tasks.open';
 
-  // Filtros activos (excluimos 'archived' porque ahora es pestaña)
+  const isTasksView =
+    currentRoute === 'projects.tasks' ||
+    currentRoute === 'projects.tasks.open';
+
   const usingFilters = hasUrlParams(['archived']);
 
   return (
     <>
-      {/* Título del proyecto */}
-      <Group mb='md' wrap='wrap'>
-        <Title 
-          order={1}
-          size={{ base: 'h2', sm: 'h1' }}
-        >
+      <Group
+        mt="md"
+        mb="md"
+        align="center"
+      >
+        <Title order={1}>
           {project.name}
-          {project.archived_at && (
-            <Text
-              size={{ base: 'md', sm: 'lg' }}
-              fw={500}
-              c='red.8'
-              ml='md'
-              span
-            >
-              (archivado)
-            </Text>
-          )}
         </Title>
+
+        {project.archived_at && (
+          <Text
+            size="lg"
+            fw={500}
+            c="red.8"
+          >
+            (archivado)
+          </Text>
+        )}
       </Group>
 
-      {/* Pestañas: Lista, Tablero, Calendario, Cronograma, Notas, Archivados */}
       <ProjectTabs />
 
-      {/* Barra de herramientas: buscador + filtros + botón crear – solo en lista/tablero activos */}
       {isTasksView && !isArchived && (
         <Group
-          justify='space-between'
-          mb='md'
-          wrap='wrap'
-          gap={{ base: 'xs', sm: 'md' }}
+          justify="space-between"
+          align="flex-end"
+          wrap="wrap"
+          mb="md"
+          gap="md"
         >
-          <Group grow={{ base: true, sm: false }}>
+          <Group
+            grow={mobile}
+            style={{
+              flex: mobile ? 1 : undefined,
+            }}
+          >
             <SearchInput
-              placeholder='Buscar actividades'
+              placeholder="Buscar actividades"
               search={search}
             />
 
             <ActionIcon.Group>
               <Tooltip
-                label='Filtros'
+                label="Filtros"
                 openDelay={500}
                 withArrow
               >
                 <ActionIcon
-                  variant='filled'
-                  size='lg'
-                  onClick={() => openDrawer()}
+                  variant="filled"
+                  size="lg"
+                  onClick={openDrawer}
                 >
                   {usingFilters ? (
                     <IconFilterCog
-                      style={{ width: '60%', height: '60%' }}
                       stroke={1.5}
+                      style={{
+                        width: '60%',
+                        height: '60%',
+                      }}
                     />
                   ) : (
                     <IconFilter
-                      style={{ width: '60%', height: '60%' }}
                       stroke={1.5}
+                      style={{
+                        width: '60%',
+                        height: '60%',
+                      }}
                     />
                   )}
                 </ActionIcon>
               </Tooltip>
+
               {usingFilters && <ClearFiltersButton />}
             </ActionIcon.Group>
           </Group>
@@ -97,9 +121,12 @@ export default function Header() {
           {can('create task') && (
             <Button
               leftSection={<IconPlus size={14} />}
-              radius='xl'
-              onClick={() => openCreateTask()}
-              fullWidth={{ base: true, sm: false }}
+              radius="xl"
+              onClick={openCreateTask}
+              fullWidth={mobile}
+              style={{
+                width: mobile ? '100%' : 'auto',
+              }}
             >
               Agregar actividad
             </Button>

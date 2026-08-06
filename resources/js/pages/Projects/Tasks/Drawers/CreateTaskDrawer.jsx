@@ -165,42 +165,46 @@ export function CreateTaskDrawer() {
         }}
         className={classes.inner}
       >
+
+        {/* Nombre */}
+        <TextInput
+          key={`name-${create.opened}`}
+          className={classes.nameField}
+          label="Nombre"
+          placeholder="Nombre de la actividad"
+          required
+          data-autofocus
+          value={form.data.name}
+          onChange={e => updateValue("name", e.target.value)}
+          error={form.errors.name}
+        />
+
+        {/* Contenido */}
         <div className={classes.content}>
-          <TextInput
-            key={`name-${create.opened}`}
-            label='Nombre'
-            placeholder='Nombre de la actividad'
-            required
-            data-autofocus
-            value={form.data.name}
-            onChange={e => updateValue('name', e.target.value)}
-            error={form.errors.name}
-          />
 
           <RichTextEditor
-            key={create.opened ? 'editor-open' : 'editor-closed'}
-            mt='xl'
-            placeholder='Descripción de la actividad'
+            key={create.opened ? "editor-open" : "editor-closed"}
+            placeholder="Descripción de la actividad"
             height={260}
             value={form.data.description}
-            onChange={content => updateValue('description', content)}
+            onChange={content => updateValue("description", content)}
           />
 
           <Dropzone
-            mt='xl'
+            mt="xl"
             selected={form.data.attachments}
-            onChange={files => updateValue('attachments', files)}
+            onChange={files => updateValue("attachments", files)}
             remove={index => removeAttachment(index)}
           />
 
           <MultiSelect
             key={`subscribers-${create.opened}`}
-            label='Suscriptores'
-            placeholder='Selecciona suscriptores'
+            label="Suscriptores"
+            placeholder="Selecciona suscriptores"
             searchable
-            mt='md'
+            mt="md"
             value={form.data.subscribed_users}
-            onChange={values => updateValue('subscribed_users', values)}
+            onChange={values => updateValue("subscribed_users", values)}
             data={usersWithAccessToProject.map(i => ({
               value: i.id.toString(),
               label: i.name,
@@ -209,11 +213,11 @@ export function CreateTaskDrawer() {
           />
 
           <Flex
-            justify='space-between'
-            mt='xl'
+            justify="space-between"
+            mt="xl"
           >
             <Button
-              variant='transparent'
+              variant="transparent"
               w={100}
               disabled={form.processing}
               onClick={closeDrawer}
@@ -222,22 +226,26 @@ export function CreateTaskDrawer() {
             </Button>
 
             <Button
-              type='submit'
+              type="submit"
               w={120}
               loading={form.processing}
             >
               Crear
             </Button>
           </Flex>
+
         </div>
+
+        {/* Sidebar */}
         <div className={classes.sidebar}>
+
           <Select
             key={`group-${create.opened}`}
-            label='Estado'
-            placeholder='Selecciona el estado'
+            label="Estado"
+            placeholder="Selecciona el estado"
             required
             value={form.data.group_id}
-            onChange={value => updateValue('group_id', value)}
+            onChange={value => updateValue("group_id", value)}
             data={taskGroups.map(i => ({
               value: i.id.toString(),
               label: i.name,
@@ -247,12 +255,12 @@ export function CreateTaskDrawer() {
 
           <Select
             key={`issue-${create.opened}`}
-            label='Tipo'
-            placeholder='Selecciona el tipo de actividad'
+            label="Tipo"
+            placeholder="Selecciona el tipo de actividad"
             required
-            mt='md'
+            mt="md"
             value={form.data.issue_type}
-            onChange={value => updateValue('issue_type', value || '')}
+            onChange={value => updateValue("issue_type", value || "")}
             data={availableIssueTypes}
             disabled={Boolean(forcedChildType)}
             error={form.errors.issue_type}
@@ -260,12 +268,12 @@ export function CreateTaskDrawer() {
 
           <Select
             key={`assignee-${create.opened}`}
-            label='Responsable'
-            placeholder='Selecciona un responsable'
+            label="Responsable"
+            placeholder="Selecciona un responsable"
             searchable
-            mt='md'
+            mt="md"
             value={form.data.assigned_to_user_id}
-            onChange={value => updateValue('assigned_to_user_id', value)}
+            onChange={value => updateValue("assigned_to_user_id", value)}
             data={usersWithAccessToProject.map(i => ({
               value: i.id.toString(),
               label: i.name,
@@ -276,41 +284,43 @@ export function CreateTaskDrawer() {
           <DateInput
             key={`start-${create.opened}`}
             clearable
-            valueFormat='DD MMM YYYY'
-            mt='md'
-            label='Fecha de inicio'
-            placeholder='Selecciona la fecha de inicio'
+            valueFormat="DD MMM YYYY"
+            mt="md"
+            label="Fecha de inicio"
+            placeholder="Selecciona la fecha de inicio"
             value={form.data.start_on || null}
-            onChange={value => updateValue('start_on', value || '')}
+            onChange={value => updateValue("start_on", value || "")}
           />
 
           <DateInput
             key={`due-${create.opened}`}
             clearable
-            valueFormat='DD MMM YYYY'
+            valueFormat="DD MMM YYYY"
             minDate={new Date()}
-            mt='md'
-            label='Fecha de vencimiento'
-            placeholder='Selecciona la fecha de vencimiento'
+            mt="md"
+            label="Fecha de vencimiento"
+            placeholder="Selecciona la fecha de vencimiento"
             value={form.data.due_on || null}
-            onChange={value => updateValue('due_on', value || '')}
+            onChange={value => updateValue("due_on", value || "")}
           />
 
           <LabelsDropdown
             key={`labels-${create.opened}`}
             items={labels}
             selected={form.data.labels}
-            onChange={values => updateValue('labels', values)}
-            mt='md'
+            onChange={values => updateValue("labels", values)}
+            mt="md"
           />
 
           <PriorityDropdown
             key={`priority-${create.opened}`}
             value={form.data.priority_id}
-            onChange={value => updateValue('priority_id', value || null)}
-            mt='md'
+            onChange={value => updateValue("priority_id", value || null)}
+            mt="md"
           />
+
         </div>
+
       </form>
     </Drawer>
   );

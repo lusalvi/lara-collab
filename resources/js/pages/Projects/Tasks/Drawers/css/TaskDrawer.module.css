@@ -1,53 +1,43 @@
-.inner {
-    padding: 0 rem(20);
-    display: flex;
-    column-gap: rem(30);
+.inner{
+    display:grid;
 
-    @media (max-width: $mantine-breakpoint-sm) {
-        flex-direction: column;
-        padding: 0 rem(16);
-    }
+    grid-template-columns:minmax(0,1fr) 340px;
+
+    gap:30px;
 }
 
-.content {
-    padding: rem(5);
-    width: 70%;
-    flex-grow: 1;
-
-    @media (max-width: $mantine-breakpoint-md) {
-        width: 100%;
-    }
-
-    @media (max-width: $mantine-breakpoint-sm) {
-        padding: rem(8);
-    }
+.nameField{
+    grid-column:1 / -1;
 }
 
-.sidebar {
-    padding: rem(5);
-    width: 30%;
-    flex-grow: 1;
-
-    @media (max-width: $mantine-breakpoint-md) {
-        width: 100%;
-    }
-
-    @media (max-width: $mantine-breakpoint-sm) {
-        padding: rem(8);
-        margin-top: rem(12);
-        border-top: 1px solid light-dark(
-            var(--mantine-color-gray-2),
-            var(--mantine-color-dark-6)
-        );
-        padding-top: rem(16);
-    }
+.content{
+    grid-column:1;
 }
 
-.checkbox input {
-    cursor: pointer;
+.sidebar{
+    grid-column:2;
 }
 
-.disabledCheckbox input {
-    cursor: default;
-    pointer-events: none;
+@media(max-width:992px){
+
+.inner{
+
+    grid-template-columns:1fr;
+}
+
+.nameField{
+
+    grid-column:1;
+}
+
+.sidebar{
+
+    grid-column:1;
+}
+
+.content{
+
+    grid-column:1;
+}
+
 }

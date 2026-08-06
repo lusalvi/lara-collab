@@ -354,7 +354,8 @@ export default function TimelineIndex() {
       <div>
         <Title
           order={1}
-          mb='md'
+          mb="md"
+          mt="md"
         >
           {project.name}
         </Title>

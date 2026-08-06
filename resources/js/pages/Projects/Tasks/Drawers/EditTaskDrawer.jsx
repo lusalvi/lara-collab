@@ -23,6 +23,7 @@ import Comments from './Comments';
 import LabelsDropdown from './LabelsDropdown';
 import PriorityDropdown from './PriorityDropdown';
 import classes from './css/TaskDrawer.module.css';
+import { useMediaQuery } from "@mantine/hooks";
 
 export function EditTaskDrawer() {
   const editorRef = useRef(null);
@@ -38,7 +39,8 @@ export function EditTaskDrawer() {
     openedTask,
     auth: { user },
   } = usePage().props;
-
+  const mobile = useMediaQuery("(max-width: 992px)");
+  
   useEffect(() => {
     if (openedTask) setTimeout(() => openEditTask(openedTask), 50);
   }, []);

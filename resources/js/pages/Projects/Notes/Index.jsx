@@ -123,7 +123,7 @@ const NotesIndex = () => {
     pendingCreateRef.current = true;
     router.post(
       route('projects.notes.store', project.id),
-      { title: 'Untitled', content: '' },
+      { title: 'Sin Título', content: '' },
       { preserveScroll: true, preserveState: true }
     );
   };
@@ -567,7 +567,7 @@ const NotesIndex = () => {
 };
 
 NotesIndex.layout = page => (
-  <Layout title={currentProject ? `${currentProject.name} - Notes` : 'Notes'}>{page}</Layout>
+  <Layout title={currentProject ? `${currentProject.name} - Notas` : 'Notas'}>{page}</Layout>
 );
 
 export default NotesIndex;

@@ -55,7 +55,7 @@ class NoteController extends Controller
 
         if ($note->is_locked) {
             if (! NoteEncryption::isValidPasscode($validated['passcode'], $note->passcode_salt, $note->content)) {
-                return redirect()->back()->error('Incorrect passcode', 'The passcode you entered is incorrect.');
+                return redirect()->back()->error('Passcode Incorrecto', 'El passcode que ingresaste es incorrecto.');
             }
 
             $note->update([
@@ -69,7 +69,7 @@ class NoteController extends Controller
             ]);
         }
 
-        return redirect()->route('projects.notes', $project)->success('Note saved', 'The note was successfully saved.');
+        return redirect()->route('projects.notes', $project)->success('Nota Guardada', 'La nota se guardó con éxito.');
     }
 
     public function lock(LockNoteRequest $request, Project $project, Note $note): RedirectResponse
@@ -77,7 +77,7 @@ class NoteController extends Controller
         $this->authorize('update', [$note, $project]);
 
         if ($note->is_locked) {
-            return redirect()->back()->error('Note is already locked', 'This note is already locked.');
+            return redirect()->back()->error('Nota Bloqueada', 'La nota se bloqueó con éxito.');
         }
 
         $validated = $request->validated();
@@ -89,7 +89,7 @@ class NoteController extends Controller
             'passcode_salt' => $salt,
         ]);
 
-        return redirect()->route('projects.notes', $project)->success('Note locked', 'The note is now locked with your passcode.');
+        return redirect()->route('projects.notes', $project)->success('Nota Bloqueada', 'La nota se bloqueó con un passcode con éxito.');
     }
 
     public function unlock(UnlockNoteRequest $request, Project $project, Note $note): JsonResponse
@@ -110,7 +110,7 @@ class NoteController extends Controller
         $this->authorize('update', [$note, $project]);
 
         if (! NoteEncryption::isValidPasscode($request->validated('passcode'), $note->passcode_salt, $note->content)) {
-            return redirect()->back()->error('Incorrect passcode', 'The passcode you entered is incorrect.');
+            return redirect()->back()->error('Passcode Incorrecto', 'The passcode you entered is incorrect.');
         }
 
         $decrypted = NoteEncryption::decrypt($request->validated('passcode'), $note->passcode_salt, $note->content);
@@ -121,7 +121,7 @@ class NoteController extends Controller
             'passcode_salt' => null,
         ]);
 
-        return redirect()->route('projects.notes', $project)->success('Lock removed', 'The note is no longer locked.');
+        return redirect()->route('projects.notes', $project)->success('Bloqueo Eliminado', 'El bloqueo de la nota se eliminó con éxito.');
     }
 
     public function destroy(Project $project, Note $note): RedirectResponse
@@ -130,6 +130,6 @@ class NoteController extends Controller
 
         $note->delete();
 
-        return redirect()->route('projects.notes', $project)->success('Note deleted', 'The note was successfully deleted.');
+        return redirect()->route('projects.notes', $project)->success('Nota Eliminada', 'La nota se eliminó con éxito.');
     }
 }

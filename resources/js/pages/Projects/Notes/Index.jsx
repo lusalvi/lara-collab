@@ -123,7 +123,7 @@ const NotesIndex = () => {
     pendingCreateRef.current = true;
     router.post(
       route('projects.notes.store', project.id),
-      { title: 'Untitled', content: '' },
+      { title: 'Sin Título', content: '' },
       { preserveScroll: true, preserveState: true }
     );
   };
@@ -252,7 +252,7 @@ const NotesIndex = () => {
             mb='sm'
             px={4}
           >
-            <Title order={4}>Notes</Title>
+            <Title order={4}>Notas</Title>
             {canCreate && (
               <Tooltip
                 label='Crear nota'
@@ -568,7 +568,7 @@ const NotesIndex = () => {
 };
 
 NotesIndex.layout = page => (
-  <Layout title={currentProject ? `${currentProject.name} - Notes` : 'Notes'}>{page}</Layout>
+  <Layout title={currentProject ? `${currentProject.name} - Notas` : 'Notas'}>{page}</Layout>
 );
 
 export default NotesIndex;

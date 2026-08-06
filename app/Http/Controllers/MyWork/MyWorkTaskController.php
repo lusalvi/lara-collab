@@ -19,7 +19,7 @@ class MyWorkTaskController extends Controller
 
         $projects = PermissionService::projectsThatUserCanAccess($user);
 
-        $prioritySort = data_get($request->input('sort', []), 'priority');
+        $prioritySort = $request->input('sort_priority');
 
         return Inertia::render('MyWork/Tasks/Index', [
             'projects' => Project::whereIn('id', $projects->pluck('id'))

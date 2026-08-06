@@ -40,7 +40,7 @@ class LabelController extends Controller
     {
         Label::create($request->validated());
 
-        return redirect()->route('settings.labels.index')->success('Label created', 'A new label was successfully created.');
+        return redirect()->route('settings.labels.index')->success('Etiqueta Creada', 'Una nueva etiqueta se creó con éxito.');
     }
 
     public function edit(Label $label)
@@ -52,7 +52,7 @@ class LabelController extends Controller
     {
         $label->update($request->validated());
 
-        return redirect()->route('settings.labels.index')->success('Label updated', 'The label was successfully updated.');
+        return redirect()->route('settings.labels.index')->success('Etiqueta Actualizada', 'La etiqueta se actualizó con éxito.');
     }
 
     public function destroy(Label $label)
@@ -60,7 +60,7 @@ class LabelController extends Controller
         $label->update(['archived_by_id' => auth()->id()]);
         $label->archive();
 
-        return redirect()->back()->success('Label archived', 'The label was successfully archived.');
+        return redirect()->back()->success('Etiqueta Archivada', 'La etiqueta se archivó con éxito.');
     }
 
     public function restore(int $labelId)
@@ -72,7 +72,7 @@ class LabelController extends Controller
         $label->unArchive();
         $label->update(['archived_by_id' => null]);
 
-        return redirect()->back()->success('Label restored', 'The restoring of the label was completed successfully.');
+        return redirect()->back()->success('Etiqueta Restaurada', 'La restauración de la etiqueta se realizó con éxito.');
     }
 
     public function bulkForceDelete(Request $request, ForceDeleteService $forceDeleteService)
@@ -91,8 +91,8 @@ class LabelController extends Controller
         $deletedCount = $forceDeleteService->forceDeleteLabels($labels);
 
         return redirect()->back()->success(
-            'Labels deleted',
-            "{$deletedCount} label(s) were permanently deleted."
+            'Etiquetas Eliminadas',
+            "{$deletedCount} etiqueta(s) fueron eliminadas permanentemente."
         );
     }
 }

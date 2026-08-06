@@ -1,85 +1,103 @@
-import ContainerBox from "@/layouts/ContainerBox";
-import GuestLayout from "@/layouts/GuestLayout";
-import { redirectTo } from "@/utils/route";
-import {
-  Alert,
-  Anchor,
-  Box,
-  Button,
-  Center,
-  Group,
-  Text,
-  TextInput,
-  Title,
-  rem,
-} from "@mantine/core";
-import { IconArrowLeft, IconInfoCircle } from "@tabler/icons-react";
-import { useForm } from "laravel-precognition-react-inertia";
-import classes from "./css/ForgotPassword.module.css";
+import GuestLayout from '@/layouts/GuestLayout';
+import { redirectTo } from '@/utils/route';
+import { Alert, Anchor, Box, Button, Center, Group, TextInput, rem } from '@mantine/core';
+import { IconArrowLeft, IconInfoCircle, IconMail } from '@tabler/icons-react';
+import { useForm } from 'laravel-precognition-react-inertia';
+import classes from './css/Login.module.css';
 
 const ForgotPassword = ({ status }) => {
-  const form = useForm("post", route("auth.forgotPassword.sendLink"), {
-    email: "",
+  const form = useForm('post', route('auth.forgotPassword.sendLink'), {
+    email: '',
   });
 
-  const submit = (e) => {
+  const submit = e => {
     e.preventDefault();
     form.clearErrors();
 
-    form.submit({ preserveScroll: true });
+    form.submit({
+      preserveScroll: true,
+    });
   };
 
   return (
     <>
-      <Title className={classes.title} ta="center">
-        ¿Olvidaste tu contraseña?
-      </Title>
-      <Text c="dimmed" fz="sm" ta="center">
-        Ingresa tu correo electrónico para recibir un enlace de restablecimiento de contraseña.
-      </Text>
+      {status && (
+        <Alert
+          mb='lg'
+          radius='xl'
+          color='green'
+          icon={<IconInfoCircle size={18} />}
+        >
+          {status}
+        </Alert>
+      )}
 
-      <ContainerBox shadow="md" p={30} mt="xl" radius="md">
-        <Text c="dimmed" fz="sm" mb={20}>
-          Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña, con el que podrás elegir una nueva.
-        </Text>
+      <form
+        onSubmit={submit}
+        className={classes.form}
+        style={{ marginTop: "1.4rem" }}
+      >
+        <TextInput
+          label='Correo electrónico'
+          placeholder='usuario@hospital.edu.ar'
+          required
+          radius='xl'
+          size='md'
+          leftSection={<IconMail size={18} />}
+          value={form.data.email}
+          onChange={e => form.setData('email', e.target.value)}
+          onBlur={() => form.validate('email')}
+          error={form.errors.email}
+        />
 
-        {status && (
-          <Alert radius="md" title={status} icon={<IconInfoCircle />} mb={10}>
-            Por favor, lee las instrucciones que figuran en el correo electrónico para establecer una nueva contraseña para tu cuenta.
-          </Alert>
-        )}
+        <Button
+          mt='lg'
+          type='submit'
+          fullWidth
+          radius='xl'
+          size='lg'
+          loading={form.processing}
+        >
+          Enviar enlace de recuperación
+        </Button>
 
-        <form onSubmit={submit}>
-          <TextInput
-            label="Correo electrónico"
-            placeholder="Tu correo electrónico"
-            required
-            onChange={(e) => form.setData("email", e.target.value)}
-            onBlur={() => form.validate("email")}
-            error={form.errors.email}
-          />
-          <Group justify="space-between" mt="lg" className={classes.controls}>
-            <Anchor
-              c="dimmed"
-              size="sm"
-              className={classes.control}
-              onClick={() => redirectTo("auth.login.form")}
-            >
-              <Center inline>
-                <IconArrowLeft style={{ width: rem(12), height: rem(12) }} stroke={1.5} />
-                <Box ml={5}>Volver</Box>
-              </Center>
-            </Anchor>
-            <Button type="submit" className={classes.control} disabled={form.processing}>
-              Restablecer contraseña
-            </Button>
-          </Group>
-        </form>
-      </ContainerBox>
+        <Group
+          justify='center'
+          mt='md'
+        >
+          <Anchor
+            component='button'
+            type='button'
+            c='dimmed'
+            onClick={() => redirectTo('auth.login.form')}
+          >
+            <Center inline>
+              <IconArrowLeft
+                style={{
+                  width: rem(14),
+                  height: rem(14),
+                }}
+              />
+
+              <Box ml={6}>Volver al inicio de sesión</Box>
+            </Center>
+          </Anchor>
+        </Group>
+      </form>
     </>
   );
 };
 
-ForgotPassword.layout = (page) => <GuestLayout title="Forgot Password">{page}</GuestLayout>;
+ForgotPassword.layout = page => (
+  <GuestLayout
+    title='Recuperar contraseña'
+    heading='¿Olvidaste tu contraseña?'
+    subtitle='Ingresá tu correo registrado y te enviaremos un enlace.'
+    sideTitle='Recuperá el acceso'
+    sideDescription='Te ayudaremos a recuperar tu cuenta de forma segura mediante un enlace enviado a tu correo registrado.'
+  >
+    {page}
+  </GuestLayout>
+);
 
 export default ForgotPassword;

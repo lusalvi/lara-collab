@@ -30,13 +30,13 @@ class ResetPasswordController extends Controller
         );
 
         if ($status == Password::RESET_LINK_SENT) {
-            return back()->with('status', 'Email with reset link was sent');
+            return back()->with('status', 'Email con enlace de restablecimiento de contraseña enviado');
         }
 
         $message = match ($status) {
-            'passwords.throttled' => 'Please wait before retrying.',
-            'passwords.user' => "We can't find a user with that email address.",
-            default => 'Whoops, something went wrong.',
+            'passwords.throttled' => 'Por favor, espere antes de volver a intentarlo.',
+            'passwords.user' => 'No se pudo encontrar un usuario con esa dirección de correo electrónico.',
+            default => 'Ups, algo salió mal.',
         };
 
         throw ValidationException::withMessages([

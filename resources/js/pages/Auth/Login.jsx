@@ -1,107 +1,119 @@
-import GoogleIcon from "@/icons/GoogleIcon";
-import ContainerBox from "@/layouts/ContainerBox";
-import GuestLayout from "@/layouts/GuestLayout";
-import { router } from "@inertiajs/react";
-import {
-  Anchor,
-  Button,
-  Checkbox,
-  Divider,
-  Group,
-  PasswordInput,
-  Text,
-  TextInput,
-  Title,
-} from "@mantine/core";
-import { useForm } from "laravel-precognition-react-inertia";
-import { useEffect, useRef, useState } from "react";
-import LoginNotification from "./LoginNotification";
-import classes from "./css/Login.module.css";
+import GuestLayout from '@/layouts/GuestLayout';
+import { router } from '@inertiajs/react';
+import { Anchor, Button, Checkbox, Group, PasswordInput, TextInput } from '@mantine/core';
+import { useForm } from 'laravel-precognition-react-inertia';
+import { useEffect, useRef } from 'react';
+import LoginNotification from './LoginNotification';
+import classes from './css/Login.module.css';
+import { IconMail, IconLock } from '@tabler/icons-react';
 
 const Login = ({ notify }) => {
-  const [socialLoginPending, setSocialLoginPending] = useState(false);
   const passwordRef = useRef(null);
 
-  const form = useForm("post", route("auth.login.attempt"), {
-    email: route().params?.email || "",
-    password: "",
+  const form = useForm('post', route('auth.login.attempt'), {
+    email: route().params?.email || '',
+    password: '',
     remember: false,
   });
 
-  useEffect(() => route().params?.email && passwordRef.current.focus(), []);
+  useEffect(() => {
+    if (route().params?.email) {
+      passwordRef.current?.focus();
+    }
+  }, []);
 
-  const submit = (e) => {
+  const submit = e => {
     e.preventDefault();
 
-    form.submit({ preserveScroll: true });
+    form.submit({
+      preserveScroll: true,
+    });
   };
 
   return (
-    <>
-      <Title ta="center" className={classes.title}>
-        ¡Bienvenido de nuevo!
-      </Title>
-      <Text c="dimmed" size="sm" ta="center" mt={5}>
-        Puede iniciar sesión aquí abajo.
-      </Text>
-
+    <form
+      onSubmit={submit}
+      className={classes.form}
+    >
       <LoginNotification notify={notify} />
 
-      <form onSubmit={submit}>
-        <ContainerBox shadow="md" p={30} mt={30} radius="md">
-          <Group grow mb="md" mt="md">
-            <Button
-              leftSection={<GoogleIcon />}
-              variant="default"
-              radius="xl"
-              component="a"
-              href={route("auth.login.social.google")}
-              loading={socialLoginPending}
-              onClick={() => setSocialLoginPending(true)}
-            >
-              Google
-            </Button>
-          </Group>
+      <TextInput
+        label='Correo electrónico'
+        placeholder='usuario@hospital.edu.ar'
+        size='md'
+        radius='xl'
+        required
+        value={form.data.email}
+        leftSection={<IconMail size={18} />}
+        onChange={e => form.setData('email', e.target.value)}
+        onBlur={() => form.validate('email')}
+        error={form.errors.email}
+      />
 
-          <Divider label="O continúa con tu correo electrónico" labelPosition="center" my="lg" />
+      <PasswordInput
+        ref={passwordRef}
+        mt='lg'
+        label='Contraseña'
+        placeholder='Ingresá tu contraseña'
+        size='md'
+        radius='xl'
+        required
+        value={form.data.password}
+        leftSection={<IconLock size={18} />}
+        onChange={e => form.setData('password', e.target.value)}
+      />
 
-          <TextInput
-            label="Correo electrónico"
-            placeholder="Tu correo electrónico"
-            required
-            value={form.data.email}
-            onChange={(e) => form.setData("email", e.target.value)}
-            onBlur={() => form.validate("email")}
-            error={form.errors.email}
-          />
-          <PasswordInput
-            ref={passwordRef}
-            label="Contraseña"
-            placeholder="Tu contraseña"
-            required
-            mt="md"
-            value={form.data.password}
-            onChange={(e) => form.setData("password", e.target.value)}
-          />
-          <Group justify="space-between" mt="lg">
-            <Checkbox label="Recuerdame" />
-            <Anchor
-              type="button"
-              size="sm"
-              onClick={() => router.get(route("auth.forgotPassword.form"))}
-            >
-              ¿Olvidaste tu contraseña?
-            </Anchor>
-          </Group>
-          <Button type="submit" fullWidth mt="xl" disabled={form.processing}>
-            Iniciar sesión
-          </Button>
-        </ContainerBox>
-      </form>
-    </>
+      <Group
+        justify='space-between'
+        mt='md'
+      >
+        <Checkbox
+          label='Recordarme'
+          checked={form.data.remember}
+          onChange={event => form.setData('remember', event.currentTarget.checked)}
+        />
+
+        <Anchor
+          component='button'
+          type='button'
+          size='sm'
+          c='hospitalSecondary.6'
+          fw={600}
+          onClick={() => router.get(route('auth.forgotPassword.form'))}
+        >
+          ¿Olvidaste tu contraseña?
+        </Anchor>
+      </Group>
+
+      <Button
+        type='submit'
+        fullWidth
+        mt='xl'
+        size='lg'
+        radius='xl'
+        loading={form.processing}
+      >
+        Iniciar sesión
+      </Button>
+    </form>
   );
 };
 
-Login.layout = (page) => <GuestLayout title="Login">{page}</GuestLayout>;
-
+Login.layout = page => (
+  <GuestLayout
+    title='Iniciar sesión'
+    heading='Iniciar sesión'
+    subtitle='Ingresá con tu correo registrado.'
+    sideTitle={
+      <>
+        ¡Bienvenido
+        <br />
+        de vuelta!
+      </>
+    }
+    sideDescription='Accedé de forma segura al sistema utilizando tus credenciales registradas.'
+  >
+    {page}
+  </GuestLayout>
+);
 export default Login;

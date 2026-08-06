@@ -9,11 +9,13 @@ import useTaskDragAndDrop from './List/hooks/useTaskDragAndDrop';
 import useColumnResize from './List/hooks/useColumnResize';
 import classes from './List/ListView.module.css';
 import { usePage } from '@inertiajs/react';
+import useTaskFiltersStore from '@/hooks/store/useTaskFiltersStore';
 
 const ListView = ({ groups, tasks, usingFilters }) => {
   const { usersWithAccessToProject } = usePage().props;
   const [collapsed, setCollapsed] = useState(new Set());
   const { widths, setWidth } = useColumnResize();
+  const { prioritySort } = useTaskFiltersStore();
 
   const allTasks = Object.entries(tasks).flatMap(([groupId, groupTasks]) => {
     const group = groups.find(g => g.id == groupId);
@@ -31,25 +33,32 @@ const ListView = ({ groups, tasks, usingFilters }) => {
 
   const orderedTasks = [];
 
-  const addChildren = (parentId, depth = 1) => {
-    allTasks
-      .filter(task => task.parent_task_id === parentId)
-      .sort((a, b) => a.number - b.number)
-      .forEach(child => {
-        orderedTasks.push({
-          ...child,
-          depth,
-        });
-
-        if (!collapsed.has(child.id)) {
-          addChildren(child.id, depth + 1);
-        }
+  const sortTasks = (taskList) => {
+    if (prioritySort) {
+      return [...taskList].sort((a, b) => {
+        const aOrder = a.priority?.order ?? Infinity;
+        const bOrder = b.priority?.order ?? Infinity;
+        return prioritySort === 'asc' ? aOrder - bOrder : bOrder - aOrder;
       });
+    }
+    return [...taskList].sort((a, b) => a.order_column - b.order_column);
   };
 
-  allTasks
-    .filter(task => !task.parent_task_id)
-    .sort((a, b) => a.number - b.number)
+  const addChildren = (parentId, depth = 1) => {
+    const children = allTasks.filter(task => task.parent_task_id === parentId);
+    sortTasks(children).forEach(child => {
+      orderedTasks.push({
+        ...child,
+        depth,
+      });
+
+      if (!collapsed.has(child.id)) {
+        addChildren(child.id, depth + 1);
+      }
+    });
+  };
+
+  sortTasks(allTasks.filter(task => !task.parent_task_id))
     .forEach(parent => {
       orderedTasks.push({
         ...parent,

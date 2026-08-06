@@ -1,75 +1,117 @@
-import ContainerBox from "@/layouts/ContainerBox";
 import GuestLayout from "@/layouts/GuestLayout";
-import { Button, PasswordInput, Text, TextInput, Title } from "@mantine/core";
+import {
+    Button,
+    PasswordInput,
+    TextInput,
+} from "@mantine/core";
+import {
+    IconLock,
+    IconMail,
+} from "@tabler/icons-react";
 import { useForm } from "laravel-precognition-react-inertia";
 import { useEffect } from "react";
-import classes from "./css/ResetPassword.module.css";
+import classes from "./css/Login.module.css";
 
 const ResetPassword = ({ token }) => {
-  const form = useForm("post", route("auth.newPassword.save"), {
-    token,
-    email: "",
-    password: "",
-    password_confirmation: "",
-  });
+    const form = useForm("post", route("auth.newPassword.save"), {
+        token,
+        email: "",
+        password: "",
+        password_confirmation: "",
+    });
 
-  useEffect(() => {
-    return () => {
-      form.reset("password", "password_confirmation");
+    useEffect(() => {
+        return () => {
+            form.reset("password", "password_confirmation");
+        };
+    }, []);
+
+    const submit = (e) => {
+        e.preventDefault();
+        form.clearErrors();
+
+        form.submit({
+            preserveScroll: true,
+        });
     };
-  }, []);
 
-  const submit = (e) => {
-    e.preventDefault();
-    form.clearErrors();
-    form.submit({ preserveScroll: true });
-  };
+    return (
+        <form
+            onSubmit={submit}
+            className={classes.form}
+            style={{ marginTop: "1rem" }}
+        >
+            <TextInput
+                label="Correo electrónico"
+                placeholder="usuario@hospital.edu.ar"
+                required
+                radius="xl"
+                size="md"
+                leftSection={<IconMail size={18} />}
+                value={form.data.email}
+                onChange={(e) => form.setData("email", e.target.value)}
+                error={form.errors.email}
+            />
 
-  return (
-    <>
-      <Title className={classes.title} ta="center">
-        Restablecer contraseña
-      </Title>
-      <Text c="dimmed" fz="sm" ta="center">
-        Ingresa tu correo electrónico y elige una nueva contraseña para tu cuenta.
-      </Text>
+            <PasswordInput
+                mt="lg"
+                label="Nueva contraseña"
+                placeholder="Ingresá tu nueva contraseña"
+                radius="xl"
+                size="md"
+                leftSection={<IconLock size={18} />}
+                value={form.data.password}
+                onChange={(e) => form.setData("password", e.target.value)}
+                error={form.errors.password}
+            />
 
-      <ContainerBox shadow="md" p={30} mt="xl" radius="md">
-        <form onSubmit={submit}>
-          <TextInput
-            label="Correo electrónico"
-            placeholder="Tu correo electrónico"
-            required
-            onChange={(e) => form.setData("email", e.target.value)}
-            error={form.errors.email}
-          />
-          <PasswordInput
-            label="Contraseña"
-            placeholder="Nueva contraseña"
-            required
-            mt="md"
-            value={form.data.password}
-            onChange={(e) => form.setData("password", e.target.value)}
-            error={form.errors.password}
-          />
-          <PasswordInput
-            label="Confirmar contraseña"
-            placeholder="Repite la nueva contraseña"
-            required
-            mt="md"
-            value={form.data.password_confirmation}
-            onChange={(e) => form.setData("password_confirmation", e.target.value)}
-            error={form.errors.password_confirmation}
-          />
-          <Button type="submit" fullWidth mt="xl" disabled={form.processing}>
-            Restablecer contraseña
-          </Button>
+            <PasswordInput
+                mt="lg"
+                label="Confirmar contraseña"
+                placeholder="Repetí la nueva contraseña"
+                radius="xl"
+                size="md"
+                leftSection={<IconLock size={18} />}
+                value={form.data.password_confirmation}
+                onChange={(e) =>
+                    form.setData(
+                        "password_confirmation",
+                        e.target.value
+                    )
+                }
+                error={form.errors.password_confirmation}
+            />
+
+            <Button
+                type="submit"
+                fullWidth
+                mt="xl"
+                radius="xl"
+                size="lg"
+                loading={form.processing}
+            >
+                Restablecer contraseña
+            </Button>
         </form>
-      </ContainerBox>
-    </>
-  );
+    );
 };
 
-ResetPassword.layout = (page) => <GuestLayout title="Reset Password">{page}</GuestLayout>;
+ResetPassword.layout = (page) => (
+    <GuestLayout
+        title="Restablecer contraseña"
+        heading="Restablecer contraseña"
+        subtitle="Ingresá tu correo electrónico y elegí una nueva contraseña para tu cuenta."
+        sideTitle={
+            <>
+                Protegé
+                <br />
+                tu cuenta
+            </>
+        }
+        sideDescription="Elegí una contraseña segura para proteger el acceso al sistema."
+    >
+        {page}
+    </GuestLayout>
+);
 
 export default ResetPassword;

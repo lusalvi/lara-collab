@@ -2,6 +2,11 @@
     padding: 0 rem(20);
     display: flex;
     column-gap: rem(30);
+
+    @media (max-width: $mantine-breakpoint-sm) {
+        flex-direction: column;
+        padding: 0 rem(16);
+    }
 }
 
 .content {
@@ -12,6 +17,10 @@
     @media (max-width: $mantine-breakpoint-md) {
         width: 100%;
     }
+
+    @media (max-width: $mantine-breakpoint-sm) {
+        padding: rem(8);
+    }
 }
 
 .sidebar {
@@ -21,6 +30,16 @@
 
     @media (max-width: $mantine-breakpoint-md) {
         width: 100%;
+    }
+
+    @media (max-width: $mantine-breakpoint-sm) {
+        padding: rem(8);
+        margin-top: rem(12);
+        border-top: 1px solid light-dark(
+            var(--mantine-color-gray-2),
+            var(--mantine-color-dark-6)
+        );
+        padding-top: rem(16);
     }
 }
 

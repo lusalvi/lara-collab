@@ -143,7 +143,7 @@ export function CreateTaskDrawer() {
         </Text>
       }
       position='right'
-      size={{ base: '100%', xs: '90%', sm: 800, md: 1000 }}
+      size={{ base: '100%', xs: '100%', sm: '90%', md: 1100, lg: 1200 }}
       overlayProps={{ backgroundOpacity: 0.55, blur: 3 }}
       transitionProps={{
         transition: 'slide-left',
@@ -260,7 +260,7 @@ export function CreateTaskDrawer() {
 
           <Select
             key={`assignee-${create.opened}`}
-            label='Reesponsable'
+            label='Responsable'
             placeholder='Selecciona un responsable'
             searchable
             mt='md'

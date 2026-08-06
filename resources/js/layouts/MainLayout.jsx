@@ -11,12 +11,13 @@ import {
   Burger,
 } from '@mantine/core';
 
-import { useDisclosure } from '@mantine/hooks';
+import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { useEffect } from 'react';
 
 export default function MainLayout({ children, title }) {
   window.can = useAuthorization().can;
 
+  const mobile = useMediaQuery('(max-width: 768px)');
   const [opened, { toggle, close }] = useDisclosure(false);
 
   const { initUserWebSocket } = useWebSockets();
@@ -36,10 +37,17 @@ export default function MainLayout({ children, title }) {
       <Head title={title} />
 
       <FlashNotification />
-      <Notifications />
+      {(!mobile || !opened) && <Notifications />}
 
       <AppShell
-        header={{ height: 60 }}
+        header={
+          mobile
+            ? {
+                height: 60,
+                collapsed: opened,
+              }
+            : undefined
+        }
         navbar={{
           width: 280,
           breakpoint: 'md',
@@ -47,25 +55,37 @@ export default function MainLayout({ children, title }) {
             mobile: !opened,
           },
         }}
-        padding="md"
+        padding={{
+          base: 'sm',
+          md: 'md',
+        }}
       >
-        <AppShell.Header
-          px="md"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-          }}
-        >
-          <Burger
-            opened={opened}
-            onClick={toggle}
-            hiddenFrom="md"
-            size="sm"
-          />
-        </AppShell.Header>
+        {mobile && (
+          <AppShell.Header
+            px="sm"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'flex-start',
 
-        <AppShell.Navbar p="md">
-          <NavBarNested closeDrawer={close} />
+              background: 'transparent',
+              borderBottom: 'none',
+              boxShadow: 'none',
+            }}
+          >
+            <Burger
+              opened={opened}
+              onClick={toggle}
+              size="sm"
+            />
+          </AppShell.Header>
+        )}
+
+        <AppShell.Navbar p={0}>
+          <NavBarNested
+            closeDrawer={close}
+            mobile={mobile}
+          />
         </AppShell.Navbar>
 
         <AppShell.Main

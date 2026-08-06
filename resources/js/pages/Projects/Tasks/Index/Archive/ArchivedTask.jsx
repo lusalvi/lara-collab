@@ -57,13 +57,13 @@ export default function ArchivedTask({
         <div style={{ width: 18 }} />
       )}
 
-      <Group gap="sm" flex={1} wrap="nowrap">
-        <IssueTypeIcon type={task.issue_type} size={16} />
+      <Group gap="sm" flex={1} wrap="wrap">
+        <IssueTypeIcon type={task.issue_type} size={16} style={{ flexShrink: 0 }} />
 
         {task.assigned_to_user && (
           <Link href={route("users.edit", task.assigned_to_user.id)}>
             <Tooltip label={task.assigned_to_user.name} openDelay={1000} withArrow>
-              <Pill size="sm" className={classes.user}>
+              <Pill size="sm" className={classes.user} style={{ flexShrink: 0 }}>
                 {shortName(task.assigned_to_user.name)}
               </Pill>
             </Tooltip>
@@ -73,7 +73,7 @@ export default function ArchivedTask({
         <Text
           key={task.id}
           className={classes.name}
-          style={{ cursor: "default" }}
+          style={{ cursor: "default", minWidth: 0 }}
           size="sm"
           fw={500}
           c={isOverdue(task) && task.completed_at === null ? "red" : ""}
@@ -82,13 +82,13 @@ export default function ArchivedTask({
           #{task.number + ": " + task.name}
         </Text>
 
-        <Group gap={12} ml={8} wrap="nowrap">
+        <Group gap={12} ml={8} wrap="wrap" style={{ flexShrink: 0 }}>
           {task.labels.map((label) => (
             <Label key={label.id} name={label.name} color={label.color} />
           ))}
         </Group>
 
-        <TaskActions task={task} />
+        <TaskActions task={task} style={{ flexShrink: 0 }} />
       </Group>
     </Flex>
   );

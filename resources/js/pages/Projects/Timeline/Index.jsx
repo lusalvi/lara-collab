@@ -201,7 +201,7 @@ export default function TimelineIndex() {
   }, [zoom]);
 
   const [columns, setColumns] = useState(() => ({
-    activity: mobile ? 200 : 260,
+    activity: mobile ? 150 : 260,
     assignee: mobile ? 0 : 180,
     status: mobile ? 0 : 150,
   }));

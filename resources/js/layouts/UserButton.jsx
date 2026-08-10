@@ -63,8 +63,9 @@ export default function UserButton() {
             </Text>
 
             <Text
-              c={computedColorScheme === 'light' ? 'blue.4' : 'dimmed'}
+              c='white'
               size='xs'
+              style={{ opacity: 0.65 }}
             >
               {user.job_title}
             </Text>

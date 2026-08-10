@@ -202,7 +202,9 @@ export default function TaskRow({
         />
       </div>
 
-      <TaskCreator user={task.created_by_user} />
+      <div className={classes.creator}>
+        <TaskCreator user={task.created_by_user} />
+      </div>
 
       <div
         className={classes.assignee}

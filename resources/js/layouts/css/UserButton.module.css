@@ -20,7 +20,7 @@
     width: 100%;
     padding: var(--mantine-spacing-sm) var(--mantine-spacing-md);
 
-    color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-white));
+    color: rgb(255, 255, 255);
 
     transition: background-color 0.2s ease;
 
@@ -28,17 +28,11 @@
 }
 
 .menuItem:hover {
-    background-color: light-dark(
-        var(--mantine-color-hospitalPrimary-9),
-        rgba(255, 255, 255, 0.05)
-    );
-    color: light-dark(var(--mantine-color-gray-9), var(--mantine-color-white));
+    background-color: rgba(255, 255, 255, 0.08);
+    color: var(--mantine-color-white);
 }
 
 .logout:hover {
-    background-color: light-dark(
-        var(--mantine-color-red-1),
-        rgba(220, 38, 38, 0.1)
-    );
-    color: var(--mantine-color-red-6);
+    background-color: rgba(220, 38, 38, 0.15);
+    color: var(--mantine-color-red-4);
 }

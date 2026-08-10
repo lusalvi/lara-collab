@@ -23,7 +23,6 @@ import Comments from './Comments';
 import LabelsDropdown from './LabelsDropdown';
 import PriorityDropdown from './PriorityDropdown';
 import classes from './css/TaskDrawer.module.css';
-import { useMediaQuery } from "@mantine/hooks";
 
 export function EditTaskDrawer() {
   const editorRef = useRef(null);
@@ -39,7 +38,6 @@ export function EditTaskDrawer() {
     openedTask,
     auth: { user },
   } = usePage().props;
-  const mobile = useMediaQuery("(max-width: 992px)");
   
   useEffect(() => {
     if (openedTask) setTimeout(() => openEditTask(openedTask), 50);
@@ -138,7 +136,7 @@ export function EditTaskDrawer() {
           wrap='nowrap'
         >
           <Checkbox
-            size='md'
+            size='ms'
             radius='xl'
             color='green'
             checked={task?.completed_at !== null}
@@ -156,7 +154,7 @@ export function EditTaskDrawer() {
         </Group>
       }
       position='right'
-      size={{ base: '100%', xs: '90%', sm: 800, md: 1000 }}
+      size={1000}
       overlayProps={{ backgroundOpacity: 0.55, blur: 3 }}
       transitionProps={{
         transition: 'slide-left',
@@ -167,24 +165,37 @@ export function EditTaskDrawer() {
       {task ? (
         <>
           <Breadcrumbs
+            className={classes.taskInfo}
             c='dark.3'
             ml={24}
             mb='xs'
             separator='I'
             separatorMargin='sm'
-            styles={{ separator: { opacity: 0.3 } }}
+            styles={{
+              separator: {
+                opacity: 0.3,
+              },
+            }}
           >
             <Text size='xs'>{task.project.name}</Text>
-            <Text size='xs'>Task #{task.number}</Text>
+
             <Text size='xs'>
-              Created by {task.created_by_user.name} on {date(task.created_at)}
+              Task #{task.number}
+            </Text>
+
+            <Text size='xs'>
+              Created by {task.created_by_user?.name} on {date(task.created_at)}
             </Text>
           </Breadcrumbs>
+
           <form className={classes.inner}>
             <div className={classes.content}>
+
+              {/* Nombre */}
               <TextInput
-                label='Name'
-                placeholder='Task name'
+                className={classes.nameField}
+                label='Nombre'
+                placeholder='Nombre de la actividad'
                 value={data.name}
                 onChange={e => updateValue('name', e.target.value)}
                 onBlur={() => onBlurUpdate('name')}
@@ -192,10 +203,11 @@ export function EditTaskDrawer() {
                 readOnly={!can('edit task')}
               />
 
+              {/* Descripción */}
               <RichTextEditor
                 ref={editorRef}
                 mt='xl'
-                placeholder='Task description'
+                placeholder='Descripción de la actividad'
                 content={data.description}
                 height={260}
                 onChange={content => updateValue('description', content)}
@@ -203,8 +215,10 @@ export function EditTaskDrawer() {
                 readOnly={!can('edit task')}
               />
 
+              {/* Archivos */}
               {can('edit task') && (
                 <Dropzone
+                  className={classes.attachments}
                   mt='xl'
                   selected={task.attachments}
                   onChange={files => uploadAttachments(task, files)}
@@ -212,12 +226,17 @@ export function EditTaskDrawer() {
                 />
               )}
 
+              {/* Comentarios */}
               {can('view comments') && <Comments task={task} />}
+
             </div>
+
             <div className={classes.sidebar}>
+
+              {/* Estado */}
               <Select
-                label='Task group'
-                placeholder='Select task group'
+                label='Estado'
+                placeholder='Selecciona el estado'
                 allowDeselect={false}
                 value={data.group_id.toString()}
                 onChange={value => updateValue('group_id', value)}
@@ -226,12 +245,14 @@ export function EditTaskDrawer() {
                   label: i.name,
                 }))}
                 readOnly={!can('edit task')}
+                size='sm'
               />
 
+              {/* Tipo */}
               <Select
-                label='Issue type'
-                placeholder='Select issue type'
-                mt='md'
+                label='Tipo'
+                placeholder='Selecciona el tipo de actividad'
+                mt='ms'
                 allowDeselect={false}
                 value={data.issue_type}
                 onChange={value => updateValue('issue_type', value)}
@@ -242,13 +263,15 @@ export function EditTaskDrawer() {
                   { value: 'Subtarea', label: 'Subtarea' },
                 ]}
                 readOnly={!can('edit task')}
+                size='sm'
               />
 
+              {/* Responsable */}
               <Select
-                label='Assignee'
-                placeholder='Select assignee'
+                label='Responsable'
+                placeholder='Selecciona un responsable'
                 searchable
-                mt='md'
+                mt='ms'
                 value={data.assigned_to_user_id?.toString()}
                 onChange={value => updateValue('assigned_to_user_id', value)}
                 data={usersWithAccessToProject.map(i => ({
@@ -256,48 +279,61 @@ export function EditTaskDrawer() {
                   label: i.name,
                 }))}
                 readOnly={!can('edit task')}
+                size='sm'
               />
+
+              {/* Fecha de inicio */}
               <DateInput
                 clearable
                 valueFormat='DD MMM YYYY'
-                mt='md'
-                label='Start date'
-                placeholder='Pick task start date'
+                mt='ms'
+                label='Fecha de inicio'
+                placeholder='Selecciona la fecha de inicio'
                 value={data.start_on}
                 onChange={value => updateValue('start_on', value)}
                 readOnly={!can('edit task')}
+                size='sm'
               />
 
+              {/* Fecha de vencimiento */}
               <DateInput
                 clearable
                 valueFormat='DD MMM YYYY'
                 minDate={data.start_on || new Date()}
-                mt='md'
-                label='Due date'
-                placeholder='Pick task due date'
+                mt='ms'
+                label='Fecha de vencimiento'
+                placeholder='Selecciona la fecha de vencimiento'
                 value={data.due_on}
                 onChange={value => updateValue('due_on', value)}
                 readOnly={!can('edit task')}
+                size='sm'
               />
 
+              {/* Etiquetas */}
               <LabelsDropdown
                 items={labels}
                 selected={data.labels}
                 onChange={values => updateValue('labels', values)}
-                mt='md'
+                mt='ms'
               />
 
+              {/* Prioridad */}
               <PriorityDropdown
                 value={data.priority_id}
                 onChange={value => {
                   updateValue('priority_id', value || null);
                 }}
-                mt='md'
+                mt='ms'
               />
 
+              {/* Suscriptores */}
               <MultiSelect
-                label='Subscribers'
-                placeholder={!data.subscribed_users.length ? 'Select subscribers' : null}
+                label='Suscriptores'
+                placeholder={
+                  !data.subscribed_users.length
+                    ? 'Selecciona suscriptores'
+                    : null
+                }
                 mt='lg'
                 value={data.subscribed_users}
                 onChange={values => updateValue('subscribed_users', values)}
@@ -306,7 +342,9 @@ export function EditTaskDrawer() {
                   label: i.name,
                 }))}
                 readOnly={!can('edit task')}
+                size='sm'
               />
+
             </div>
           </form>
         </>

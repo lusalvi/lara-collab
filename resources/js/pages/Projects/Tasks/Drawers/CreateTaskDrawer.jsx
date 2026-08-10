@@ -143,7 +143,7 @@ export function CreateTaskDrawer() {
         </Text>
       }
       position='right'
-      size={{ base: '100%', xs: '100%', sm: '90%', md: 1100, lg: 1200 }}
+      size={1000}
       overlayProps={{ backgroundOpacity: 0.55, blur: 3 }}
       transitionProps={{
         transition: 'slide-left',
@@ -166,21 +166,21 @@ export function CreateTaskDrawer() {
         className={classes.inner}
       >
 
-        {/* Nombre */}
-        <TextInput
-          key={`name-${create.opened}`}
-          className={classes.nameField}
-          label="Nombre"
-          placeholder="Nombre de la actividad"
-          required
-          data-autofocus
-          value={form.data.name}
-          onChange={e => updateValue("name", e.target.value)}
-          error={form.errors.name}
-        />
-
         {/* Contenido */}
         <div className={classes.content}>
+
+          {/* Nombre */}
+          <TextInput
+            key={`name-${create.opened}`}
+            className={classes.nameField}
+            label="Nombre"
+            placeholder="Nombre de la actividad"
+            required
+            data-autofocus
+            value={form.data.name}
+            onChange={e => updateValue("name", e.target.value)}
+            error={form.errors.name}
+          />
 
           <RichTextEditor
             key={create.opened ? "editor-open" : "editor-closed"}
@@ -191,30 +191,31 @@ export function CreateTaskDrawer() {
           />
 
           <Dropzone
-            mt="xl"
+            mt="xs"
             selected={form.data.attachments}
             onChange={files => updateValue("attachments", files)}
             remove={index => removeAttachment(index)}
           />
 
-          <MultiSelect
-            key={`subscribers-${create.opened}`}
-            label="Suscriptores"
-            placeholder="Selecciona suscriptores"
-            searchable
-            mt="md"
-            value={form.data.subscribed_users}
-            onChange={values => updateValue("subscribed_users", values)}
-            data={usersWithAccessToProject.map(i => ({
-              value: i.id.toString(),
-              label: i.name,
-            }))}
-            error={form.errors.subscribed_users}
-          />
+        <MultiSelect
+          className={classes.subscribers}
+          key={`subscribers-${create.opened}`}
+          label="Suscriptores"
+          placeholder="Selecciona suscriptores"
+          searchable
+          mt="sm"
+          value={form.data.subscribed_users}
+          onChange={values => updateValue("subscribed_users", values)}
+          data={usersWithAccessToProject.map(i => ({
+            value: i.id.toString(),
+            label: i.name,
+          }))}
+          error={form.errors.subscribed_users}
+        />
 
           <Flex
             justify="space-between"
-            mt="xl"
+            mt="xs"
           >
             <Button
               variant="transparent"
@@ -251,6 +252,7 @@ export function CreateTaskDrawer() {
               label: i.name,
             }))}
             error={form.errors.group_id}
+            size="sm"
           />
 
           <Select
@@ -258,12 +260,12 @@ export function CreateTaskDrawer() {
             label="Tipo"
             placeholder="Selecciona el tipo de actividad"
             required
-            mt="md"
             value={form.data.issue_type}
             onChange={value => updateValue("issue_type", value || "")}
             data={availableIssueTypes}
             disabled={Boolean(forcedChildType)}
             error={form.errors.issue_type}
+            size="sm"
           />
 
           <Select
@@ -271,7 +273,6 @@ export function CreateTaskDrawer() {
             label="Responsable"
             placeholder="Selecciona un responsable"
             searchable
-            mt="md"
             value={form.data.assigned_to_user_id}
             onChange={value => updateValue("assigned_to_user_id", value)}
             data={usersWithAccessToProject.map(i => ({
@@ -279,17 +280,18 @@ export function CreateTaskDrawer() {
               label: i.name,
             }))}
             error={form.errors.assigned_to_user_id}
+            size="sm"
           />
 
           <DateInput
             key={`start-${create.opened}`}
             clearable
             valueFormat="DD MMM YYYY"
-            mt="md"
             label="Fecha de inicio"
             placeholder="Selecciona la fecha de inicio"
             value={form.data.start_on || null}
             onChange={value => updateValue("start_on", value || "")}
+            size="sm"
           />
 
           <DateInput
@@ -297,11 +299,11 @@ export function CreateTaskDrawer() {
             clearable
             valueFormat="DD MMM YYYY"
             minDate={new Date()}
-            mt="md"
             label="Fecha de vencimiento"
             placeholder="Selecciona la fecha de vencimiento"
             value={form.data.due_on || null}
             onChange={value => updateValue("due_on", value || "")}
+            size="sm"
           />
 
           <LabelsDropdown
@@ -309,14 +311,12 @@ export function CreateTaskDrawer() {
             items={labels}
             selected={form.data.labels}
             onChange={values => updateValue("labels", values)}
-            mt="md"
           />
 
           <PriorityDropdown
             key={`priority-${create.opened}`}
             value={form.data.priority_id}
             onChange={value => updateValue("priority_id", value || null)}
-            mt="md"
           />
 
         </div>

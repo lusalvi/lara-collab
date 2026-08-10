@@ -1,15 +1,31 @@
 .user {
-    background-color: light-dark(var(--mantine-color-white), var(--mantine-color-dark-6));
+    background-color: light-dark(
+        var(--mantine-color-white),
+        var(--mantine-color-dark-6)
+    );
+
     border-radius: var(--mantine-radius-xl);
-    border: rem(1px) solid light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-6));
+
+    border: rem(1px) solid light-dark(
+        var(--mantine-color-gray-2),
+        var(--mantine-color-dark-6)
+    );
+
     transition: 0.3s ease border, 0.3s ease color;
 
     @mixin hover {
-        color: light-dark(var(--mantine-color-dark-4), var(--mantine-color-white));
-        border: rem(1px) solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+        color: light-dark(
+            var(--mantine-color-dark-4),
+            var(--mantine-color-white)
+        );
+
+        border: rem(1px) solid light-dark(
+            var(--mantine-color-gray-3),
+            var(--mantine-color-dark-4)
+        );
     }
 
-    &>span {
+    & > span {
         cursor: pointer;
     }
 }
@@ -18,17 +34,99 @@
     transition: 0.3s ease color, 0.3s ease background-color;
     padding: 5px 10px 5px 15px;
     border-radius: var(--mantine-radius-md);
+    min-width: 0;
 
     @mixin hover {
-        color: light-dark(var(--mantine-color-dark-4), var(--mantine-color-white));
-        background-color: light-dark(var(--mantine-color-gray-1), var(--mantine-color-dark-6));
+        color: light-dark(
+            var(--mantine-color-dark-4),
+            var(--mantine-color-white)
+        );
+
+        background-color: light-dark(
+            var(--mantine-color-gray-1),
+            var(--mantine-color-dark-6)
+        );
     }
+}
+
+/* Separación entre componentes en desktop */
+.task > * {
+    flex-shrink: 0;
+}
+
+.task > * + * {
+    margin-left: 10px;
 }
 
 .name {
     cursor: pointer;
+    min-width: 0;
 }
 
 .completed {
     opacity: 0.35;
+}
+
+/* =========================================
+   MOBILE / TABLET
+========================================= */
+
+@media (max-width: 768px) {
+    .task {
+        display: grid;
+        grid-template-columns: auto auto 1fr;
+        grid-template-areas:
+            "status assignee priority"
+            "info info info"
+            "labels labels labels";
+
+        align-items: center;
+        column-gap: 12px;
+        row-gap: 10px;
+
+        width: 100%;
+        min-width: 0;
+        padding: 8px 10px;
+    }
+
+    /* En mobile no usamos el margin del desktop */
+    .task > * + * {
+        margin-left: 0;
+    }
+
+    .status {
+        grid-area: status;
+        min-width: max-content;
+    }
+
+    .assignee {
+        grid-area: assignee;
+        min-width: max-content;
+    }
+
+    .priority {
+        grid-area: priority;
+        justify-self: end;
+    }
+
+    .taskInfo {
+        grid-area: info;
+        width: 100%;
+        min-width: 0;
+    }
+
+    .name {
+        min-width: 0;
+        white-space: normal !important;
+        overflow: visible !important;
+        text-overflow: unset !important;
+        word-break: break-word;
+        overflow-wrap: anywhere;
+        line-height: 1.35;
+    }
+
+    .labels {
+        grid-area: labels;
+        width: 100%;
+    }
 }

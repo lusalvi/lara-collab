@@ -6,10 +6,7 @@ import NavBarNested from '@/layouts/NavBarNested';
 import Notifications from '@/layouts/Notifications';
 import { Head, usePage } from '@inertiajs/react';
 
-import {
-  AppShell,
-  Burger,
-} from '@mantine/core';
+import { AppShell, Burger } from '@mantine/core';
 
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { useEffect } from 'react';
@@ -62,7 +59,7 @@ export default function MainLayout({ children, title }) {
       >
         {mobile && (
           <AppShell.Header
-            px="sm"
+            px='sm'
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -76,7 +73,7 @@ export default function MainLayout({ children, title }) {
             <Burger
               opened={opened}
               onClick={toggle}
-              size="sm"
+              size='sm'
             />
           </AppShell.Header>
         )}
@@ -91,6 +88,10 @@ export default function MainLayout({ children, title }) {
         <AppShell.Main
           style={{
             minHeight: '100vh',
+            width: '100%',
+            maxWidth: '100%',
+            minWidth: 0,
+            overflowX: 'hidden',
             background: 'var(--mantine-color-body)',
           }}
         >

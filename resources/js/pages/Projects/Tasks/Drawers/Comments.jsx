@@ -30,7 +30,7 @@ export default function Comments({ task }) {
   return (
     <Box mb="xl">
       <Title order={3} mt="xl">
-        Discussion
+          Discusión
         {!loading && (
           <Text c="dimmed" fw={500} display="inline-block" ml={5}>
             ({comments.length})
@@ -40,7 +40,7 @@ export default function Comments({ task }) {
       <RichTextEditor
         ref={editorRef}
         mt="md"
-        placeholder="Write a comment"
+        placeholder="Escribe un comentario"
         height={100}
         content={comment}
         onChange={(content) => setComment(content)}
@@ -52,7 +52,7 @@ export default function Comments({ task }) {
           disabled={comment.length <= 7}
           onClick={() => saveComment(task, comment, () => editorRef.current.setContent(""))}
         >
-          Add comment
+          Agregar comentario
         </Button>
       </Flex>
 

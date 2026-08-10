@@ -27,3 +27,40 @@
     font-size: var(--mantine-font-size-xs);
     user-select: none;
 }
+
+.alert {
+    width: 600px;
+    max-width: calc(100vw - 40px);
+    box-sizing: border-box;
+}
+
+.icon {
+    flex-shrink: 0;
+}
+
+.title,
+.message {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+@media (max-width: 768px) {
+    .alert {
+        width: calc(100vw - 32px);
+        max-width: calc(100vw - 32px);
+        margin: 0 auto;
+    }
+
+    .icon {
+        width: 32px !important;
+        height: 32px !important;
+    }
+
+    .title,
+    .message {
+        white-space: normal !important;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+}

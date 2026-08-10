@@ -71,7 +71,7 @@ const ActivityIndex = () => {
 
   return (
     <>
-      <Breadcrumbs fz={14} mb={30}>
+      <Breadcrumbs fz={14} mb={30} mt="md">
         <div>Mi Trabajo </div>
         <div>Actividades de los proyectos</div>
       </Breadcrumbs>

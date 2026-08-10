@@ -11,6 +11,7 @@ import { actionColumnVisibility, prepareColumns } from '@/utils/table';
 import { usePage } from '@inertiajs/react';
 import { Button, Flex, Grid, Table } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
+import classes from './Users.module.css';
 import TableRow from './TableRow';
 
 const UsersIndex = () => {
@@ -18,7 +19,7 @@ const UsersIndex = () => {
   const isSuperAdmin = auth.user.is_super_admin;
 
   const isArchivedView = !!route().params.archived;
-  const selectableIds = items.data.filter((item) => item.can_force_delete).map((item) => item.id);
+  const selectableIds = items.data.filter(item => item.can_force_delete).map(item => item.id);
   const { selectedIds, toggle, toggleAll, clear, allSelected, someSelected } =
     useBulkSelection(selectableIds);
 
@@ -40,7 +41,7 @@ const UsersIndex = () => {
   ]);
 
   const rows = items.data.length ? (
-    items.data.map((item) => (
+    items.data.map(item => (
       <TableRow
         item={item}
         key={item.id}
@@ -53,8 +54,8 @@ const UsersIndex = () => {
     <TableRowEmpty colSpan={columns.length} />
   );
 
-  const search = (search) => reloadWithQuery({ search });
-  const sort = (sort) => reloadWithQuery(sort);
+  const search = search => reloadWithQuery({ search });
+  const sort = sort => reloadWithQuery(sort);
 
   return (
     <>
@@ -77,7 +78,10 @@ const UsersIndex = () => {
           </Grid.Col>
         )}
         <Grid.Col span='content'>
-          <Flex gap='sm' align='center'>
+          <Flex
+            gap='sm'
+            align='center'
+          >
             {selectedIds.length > 0 && (
               <BulkForceDeleteButton
                 selectedIds={selectedIds}
@@ -100,32 +104,41 @@ const UsersIndex = () => {
         </Grid.Col>
       </Grid>
 
-      <Table.ScrollContainer
-        miw={800}
-        my='lg'
-      >
-        <Table verticalSpacing='sm'>
-          <TableHead
-            columns={columns}
-            sort={sort}
-            selectAll={
-              selectableIds.length > 0
-                ? { checked: allSelected, indeterminate: someSelected, onChange: toggleAll }
-                : undefined
-            }
-          />
-          <Table.Tbody>{rows}</Table.Tbody>
-        </Table>
-      </Table.ScrollContainer>
+      <div className={classes.tableWrapper}>
+        <Table.ScrollContainer
+          my='lg'
+          className={classes.tableContainer}
+        >
+          <Table verticalSpacing='sm'>
+            <TableHead
+              columns={columns}
+              sort={sort}
+              selectAll={
+                selectableIds.length > 0
+                  ? {
+                      checked: allSelected,
+                      indeterminate: someSelected,
+                      onChange: toggleAll,
+                    }
+                  : undefined
+              }
+            />
 
-      <Pagination
-        current={items.meta.current_page}
-        pages={items.meta.last_page}
-      />
+            <Table.Tbody>{rows}</Table.Tbody>
+          </Table>
+        </Table.ScrollContainer>
+
+        <div className={classes.pagination}>
+          <Pagination
+            current={items.meta.current_page}
+            pages={items.meta.last_page}
+          />
+        </div>
+      </div>
     </>
   );
 };
 
-UsersIndex.layout = (page) => <Layout title='Usuarios'>{page}</Layout>;
+UsersIndex.layout = page => <Layout title='Usuarios'>{page}</Layout>;
 
 export default UsersIndex;

@@ -16,7 +16,7 @@ export default function ProjectCard({ item, selectable = false, selected = false
       className={classes.link}
       onClick={stopOnIgnoreLink}
     >
-      <Card withBorder padding="xl" radius="md" w={350} className={classes.card}>
+      <Card withBorder padding="xl" radius="md" w={{ base: '100%', xs: '100%', sm: '100%', md: 350 }} className={classes.card}>
         <Group justify="space-between">
           <Group gap="xs">
             {selectable && (

@@ -64,38 +64,33 @@ export default function ArchivedTask({
       className={classes.archivedCard}
       style={{ marginLeft: paddingLeft }}
     >
+      {/* Header con todos los elementos en una línea */}
       <div className={classes.archivedHeader}>
-        <Group gap="xs" wrap="nowrap">
-          {ToggleButton}
+        {ToggleButton}
+        {CheckboxOrSpace}
+        
+        <IssueTypeIcon
+          type={task.issue_type}
+          size={16}
+        />
 
-          {CheckboxOrSpace}
+        <Text fw={600} className={classes.taskNumber}>
+          #{task.number}
+        </Text>
 
-          <IssueTypeIcon
-            type={task.issue_type}
-            size={16}
-          />
+        <Text
+          className={classes.archivedName}
+          fw={500}
+          c={
+            isOverdue(task) && task.completed_at === null
+              ? "red"
+              : undefined
+          }
+        >
+          {task.name}
+        </Text>
 
-          <Text fw={600}>
-            #{task.number}
-          </Text>
-        </Group>
-
-        <TaskActions task={task} />
-      </div>
-
-      <Text
-        className={classes.archivedName}
-        fw={500}
-        c={
-          isOverdue(task) && task.completed_at === null
-            ? "red"
-            : undefined
-        }
-      >
-        {task.name}
-      </Text>
-
-      <div className={classes.archivedFooter}>
+        {/* Responsable */}
         {task.assigned_to_user ? (
           <Tooltip
             label={task.assigned_to_user.name}
@@ -112,10 +107,14 @@ export default function ArchivedTask({
           <Text
             size="xs"
             c="dimmed"
+            className={classes.noAssignee}
           >
             Sin responsable
           </Text>
         )}
+
+        {/* Acciones al final */}
+        <TaskActions task={task} />
       </div>
     </div>
   );

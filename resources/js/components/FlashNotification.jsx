@@ -10,7 +10,7 @@ import {
 import { useEffect } from "react";
 import classes from "./css/FlashNotification.module.css";
 
-const iconProps = { style: { width: rem(50), height: rem(50) }, stroke: 2 };
+const iconProps = { style: { width: rem(40), height: rem(40) }, stroke: 2 };
 
 const types = {
   info: {
@@ -70,6 +70,7 @@ export default function FlashNotification() {
               title={flash.title}
               icon={types[flash.type].icon}
               classNames={{
+                root: classes.alert,
                 icon: classes.icon,
                 title: classes.title,
                 label: classes.label,

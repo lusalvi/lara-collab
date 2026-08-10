@@ -1,0 +1,128 @@
+.tableWrapper {
+    width: 100%;
+    max-width: 600px;
+}
+
+.tableContainer {
+    width: 100%;
+    max-width: 100%;
+}
+
+/* =========================
+   TABLA
+========================= */
+
+.tableContainer table {
+    width: 100%;
+    max-width: 100%;
+    table-layout: fixed;
+}
+
+/* Columna Área */
+.tableContainer th:first-child,
+.tableContainer td:first-child {
+    width: 75%;
+}
+
+/* Columna Acciones */
+.tableContainer th:last-child,
+.tableContainer td:last-child {
+    width: 25%;
+    text-align: center;
+}
+
+/* Nombres largos */
+.tableContainer td:first-child {
+    overflow-wrap: anywhere;
+}
+
+/* Acciones centradas */
+.tableContainer td:last-child > * {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* =========================
+   PAGINACIÓN
+========================= */
+
+.pagination {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 16px;
+}
+
+
+/* =========================
+   TABLET / MOBILE
+========================= */
+
+@media (max-width: 992px) {
+
+    .tableWrapper {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .tableContainer {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: auto;
+    }
+
+    .tableContainer table {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        table-layout: fixed;
+    }
+
+    .tableContainer th:first-child,
+    .tableContainer td:first-child {
+        width: 70%;
+    }
+
+    .tableContainer th:last-child,
+    .tableContainer td:last-child {
+        width: 30%;
+        text-align: center;
+    }
+}
+
+
+/* =========================
+   PANTALLAS MUY CHICAS
+========================= */
+
+@media (max-width: 360px) {
+
+    .tableContainer {
+        overflow-x: hidden;
+    }
+
+    .tableContainer table {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    .tableContainer th,
+    .tableContainer td {
+        padding-left: 6px;
+        padding-right: 6px;
+    }
+
+    .tableContainer th:first-child,
+    .tableContainer td:first-child {
+        width: 68%;
+    }
+
+    .tableContainer th:last-child,
+    .tableContainer td:last-child {
+        width: 32%;
+        text-align: center;
+    }
+}

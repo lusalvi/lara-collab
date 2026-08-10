@@ -1,6 +1,45 @@
-.accordionControl:not([data-active="true"]) {
-    background-color: light-dark(var(--mantine-color-white), var(--mantine-color-dark-6));
+.projectsContainer {
+    width: fit-content;
+    max-width: 100%;
+}
+
+.accordionControl:not([data-active='true']) {
+    background-color: light-dark(
+        var(--mantine-color-white),
+        var(--mantine-color-dark-6)
+    );
+
     border-radius: var(--mantine-radius-md);
-    border: rem(1px) solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-6));
+
+    border: rem(1px) solid light-dark(
+        var(--mantine-color-gray-3),
+        var(--mantine-color-dark-6)
+    );
+
     transition: 0.3s ease border, 0.3s ease color;
+}
+
+/* Separación entre el nombre del proyecto y la flecha */
+.accordionControl :global(.mantine-Accordion-control) {
+    padding-right: rem(24px);
+}
+
+/* La card se adapta al contenido */
+.accordionControl {
+    width: fit-content;
+    max-width: 100%;
+}
+
+/* Mobile / tablet */
+@media (max-width: 768px) {
+    .projectsContainer {
+        width: fit-content;
+        max-width: 100%;
+    }
+
+    .accordionControl {
+        width: fit-content;
+        max-width: 100%;
+    }
+
 }

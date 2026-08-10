@@ -38,7 +38,7 @@ export function EditTaskDrawer() {
     openedTask,
     auth: { user },
   } = usePage().props;
-  
+
   useEffect(() => {
     if (openedTask) setTimeout(() => openEditTask(openedTask), 50);
   }, []);
@@ -82,7 +82,9 @@ export function EditTaskDrawer() {
               typeof task.due_on === 'string' ? task.due_on.split('T')[0] : task.due_on
             ).toDate()
           : '',
-        subscribed_users: (task?.subscribed_users || []).map(i => i.id.toString()),
+        subscribed_users: (task?.subscribed_users || [])
+          .filter(i => i?.id != null)
+          .map(i => i.id.toString()),
         labels: (task?.labels || []).map(i => i.id),
       });
       setTimeout(() => {
@@ -121,7 +123,7 @@ export function EditTaskDrawer() {
 
   const onBlurUpdate = property => {
     if (data.name.length > 0) {
-        updateTaskProperty(task, property, data[property]);
+      updateTaskProperty(task, property, data[property]);
     }
   };
 
@@ -179,9 +181,7 @@ export function EditTaskDrawer() {
           >
             <Text size='xs'>{task.project.name}</Text>
 
-            <Text size='xs'>
-              Task #{task.number}
-            </Text>
+            <Text size='xs'>Task #{task.number}</Text>
 
             <Text size='xs'>
               Created by {task.created_by_user?.name} on {date(task.created_at)}
@@ -190,7 +190,6 @@ export function EditTaskDrawer() {
 
           <form className={classes.inner}>
             <div className={classes.content}>
-
               {/* Nombre */}
               <TextInput
                 className={classes.nameField}
@@ -228,11 +227,9 @@ export function EditTaskDrawer() {
 
               {/* Comentarios */}
               {can('view comments') && <Comments task={task} />}
-
             </div>
 
             <div className={classes.sidebar}>
-
               {/* Estado */}
               <Select
                 label='Estado'
@@ -329,11 +326,7 @@ export function EditTaskDrawer() {
               {/* Suscriptores */}
               <MultiSelect
                 label='Suscriptores'
-                placeholder={
-                  !data.subscribed_users.length
-                    ? 'Selecciona suscriptores'
-                    : null
-                }
+                placeholder={!data.subscribed_users.length ? 'Selecciona suscriptores' : null}
                 mt='lg'
                 value={data.subscribed_users}
                 onChange={values => updateValue('subscribed_users', values)}
@@ -344,7 +337,6 @@ export function EditTaskDrawer() {
                 readOnly={!can('edit task')}
                 size='sm'
               />
-
             </div>
           </form>
         </>

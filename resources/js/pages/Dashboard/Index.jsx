@@ -18,7 +18,7 @@ const Dashboard = () => {
 
   return (
     <>
-      <Title mb="xl">Dashboard</Title>
+      <Title order={1} mb="xl" mt="md">Dashboard</Title>
 
       <StatsBar
         overdueCount={overdueTasks.length}

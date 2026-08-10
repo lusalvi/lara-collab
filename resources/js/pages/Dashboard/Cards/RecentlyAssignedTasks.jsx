@@ -75,7 +75,7 @@ export default function RecentlyAssignedTasks({ tasks }) {
         </ScrollArea>
       ) : (
         <Center my={30}>
-          <EmptyWithIcon title="No tasks" subtitle="You have no assigned tasks" icon={IconSearch} />
+          <EmptyWithIcon title="Sin actividades" subtitle="No tienes actividades asignadas" icon={IconSearch} />
         </Center>
       )}
     </Card>

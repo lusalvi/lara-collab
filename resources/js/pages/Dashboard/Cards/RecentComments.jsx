@@ -72,7 +72,7 @@ export default function RecentComments({ comments }) {
         </ScrollArea>
       ) : (
         <Center my={30}>
-          <EmptyWithIcon title="No comments" subtitle="On your tasks" icon={IconMessage} />
+          <EmptyWithIcon title="Sin comentarios" subtitle="En tus actividades" icon={IconMessage} />
         </Center>
       )}
     </Card>

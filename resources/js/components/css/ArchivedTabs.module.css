@@ -1,40 +1,47 @@
 .root {
-  margin-bottom: var(--mantine-spacing-lg);
+    margin-top: 20px;
+    margin-bottom: var(--mantine-spacing-lg);
 }
 
 .list {
-  border-bottom: 2px solid var(--mantine-color-default-border);
-  gap: 0;
+    border-bottom: 2px solid var(--mantine-color-default-border);
+    gap: 0;
 }
 
 .tab {
-  font-size: var(--mantine-font-size-sm);
-  font-weight: 500;
-  color: var(--mantine-color-dimmed);
-  padding: 8px 14px;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -2px;
-  border-radius: 0;
-  transition:
-    color 120ms ease,
-    border-color 120ms ease;
-  white-space: nowrap;
+    font-size: var(--mantine-font-size-sm);
+    font-weight: 500;
+    color: var(--mantine-color-dimmed);
+    padding: 8px 14px;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    border-radius: 0;
+    transition:
+        color 120ms ease,
+        border-color 120ms ease;
+    white-space: nowrap;
 }
 
 .tab:hover:not([data-active]) {
-  background-color: var(--mantine-color-default-hover);
-  color: var(--mantine-color-text);
-  border-bottom-color: var(--mantine-color-default-border);
+    background-color: var(--mantine-color-default-hover);
+    color: var(--mantine-color-text);
+    border-bottom-color: var(--mantine-color-default-border);
 }
 
 .tab[data-active] {
-  color: var(--mantine-color-hospitalPrimary-6, var(--mantine-primary-color-filled));
-  border-bottom-color: var(--mantine-color-hospitalPrimary-6, var(--mantine-primary-color-filled));
-  font-weight: 700;
-  background-color: transparent;
+    color: var(
+        --mantine-color-hospitalPrimary-6,
+        var(--mantine-primary-color-filled)
+    );
+    border-bottom-color: var(
+        --mantine-color-hospitalPrimary-6,
+        var(--mantine-primary-color-filled)
+    );
+    font-weight: 700;
+    background-color: transparent;
 }
 
 .tab[data-active][data-color='red'] {
-  color: var(--mantine-color-red-7);
-  border-bottom-color: var(--mantine-color-red-7);
+    color: var(--mantine-color-red-7);
+    border-bottom-color: var(--mantine-color-red-7);
 }

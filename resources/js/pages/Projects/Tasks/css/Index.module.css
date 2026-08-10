@@ -2,15 +2,26 @@
     .viewport {
         display: flex;
         gap: rem(15px);
-
-        padding-left: 4rem;
-        padding-right: 4rem;
-
+        padding-left: var(--mantine-spacing-md);
+        padding-right: var(--mantine-spacing-md);
         height: calc(100dvh - 147px);
+        box-sizing: border-box;
+
+        @media (min-width: 768px) {
+            padding-left: 4rem;
+            padding-right: 4rem;
+        }
     }
 
     overflow-x: auto;
-    margin-left: -4rem;
-    margin-right: -4rem;
-    margin-bottom: -4rem;
+    overflow-y: hidden;
+    margin-left: calc(var(--mantine-spacing-md) * -1);
+    margin-right: calc(var(--mantine-spacing-md) * -1);
+    margin-bottom: calc(var(--mantine-spacing-md) * -1);
+
+    @media (min-width: 768px) {
+        margin-left: -4rem;
+        margin-right: -4rem;
+        margin-bottom: -4rem;
+    }
 }

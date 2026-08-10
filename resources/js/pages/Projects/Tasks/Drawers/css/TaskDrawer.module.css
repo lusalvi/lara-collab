@@ -9,9 +9,13 @@
     width: 70%;
     flex-grow: 1;
 
-    @media (max-width: $mantine-breakpoint-md) {
+    @media (max-width: 992px) {
         width: 100%;
     }
+}
+
+.content > * + * {
+    margin-top: 16px;
 }
 
 .sidebar {
@@ -19,9 +23,13 @@
     width: 30%;
     flex-grow: 1;
 
-    @media (max-width: $mantine-breakpoint-md) {
+    @media (max-width: 992px) {
         width: 100%;
     }
+}
+
+.sidebar > * + * {
+    margin-top: 16px;
 }
 
 .checkbox input {
@@ -31,4 +39,76 @@
 .disabledCheckbox input {
     cursor: default;
     pointer-events: none;
+}
+
+/* =========================
+   TABLET / MOBILE
+========================= */
+
+@media (max-width: 992px) {
+
+    .inner {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding-bottom: 0;
+    }
+
+    /*
+     * Permite ordenar el nombre,
+     * el sidebar y el resto del contenido
+     * como elementos del mismo nivel.
+     */
+    .content {
+        display: contents;
+    }
+
+    /* Nombre primero */
+    .nameField {
+        order: 0;
+    }
+
+    /* Campos del sidebar después del nombre */
+    .sidebar {
+        order: 1;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    /* Descripción, archivos y comentarios después */
+    .content > *:not(.nameField) {
+        order: 2;
+    }
+
+    /* Quitamos los márgenes generales */
+    .content > * {
+        margin-top: 0 !important;
+    }
+
+    .sidebar > * {
+        margin-top: 0 !important;
+    }
+
+    .attachments {
+        margin-top: 20px !important;
+    }
+}
+
+/* =========================
+   INFORMACIÓN DE LA TAREA
+========================= */
+
+.taskInfo {
+    flex-wrap: wrap;
+    white-space: normal;
+}
+
+@media (max-width: 992px) {
+
+    .taskInfo {
+        gap: 6px 10px;
+        line-height: 1.4;
+    }
 }

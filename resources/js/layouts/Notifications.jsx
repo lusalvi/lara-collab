@@ -2,6 +2,7 @@ import EmptyWithIcon from '@/components/EmptyWithIcon';
 import Notification from '@/components/Notification';
 import useNotificationsStore from '@/hooks/store/useNotificationsStore';
 import { redirectTo, redirectToUrl } from '@/utils/route';
+
 import {
   ActionIcon,
   Affix,
@@ -12,36 +13,58 @@ import {
   Title,
   UnstyledButton,
 } from '@mantine/core';
-import { IconBellFilled, IconMessage } from '@tabler/icons-react';
-import { useEffect, useState } from 'react';
+
+import { useMediaQuery } from '@mantine/hooks';
+import { IconMessage } from '@tabler/icons-react';
+
 import classes from './css/Notifications.module.css';
 import AppIcon from '@/components/AppIcon';
 
 export default function Notifications() {
-  const { notifications, markAsRead, markAllAsRead } = useNotificationsStore();
-  const [unreadCount, setUnreadCount] = useState(0);
+  const mobile = useMediaQuery('(max-width: 768px)');
+
+  const {
+    notifications,
+    markAsRead,
+    markAllAsRead,
+  } = useNotificationsStore();
+
+  const unreadCount = notifications.filter(
+    n => n.read_at === null
+  ).length;
 
   const open = notification => {
-    if (notification.read_at === null) markAsRead(notification);
+    if (notification.read_at === null) {
+      markAsRead(notification);
+    }
+
     redirectToUrl(notification.link);
   };
 
-  useEffect(() => {
-    setUnreadCount(notifications.filter(i => i.read_at === null).length);
-  }, [notifications]);
-
   return (
-    <Affix position={{ top: 20, right: 20 }}>
+    <Affix
+      position={{
+        top: 20,
+        right: 20,
+      }}
+      zIndex={100}
+    >
       <Menu
         withArrow
-        position='bottom-end'
+        position="bottom-end"
         withinPortal
-        shadow='md'
-        transitionProps={{ duration: 100, transition: 'pop-top-right' }}
-        offset={{ mainAxis: 10, alignmentAxis: 8 }}
+        shadow="md"
+        transitionProps={{
+          duration: 120,
+          transition: 'pop-top-right',
+        }}
+        offset={{
+          mainAxis: 10,
+          alignmentAxis: 8,
+        }}
       >
         <Indicator
-          color='red'
+          color="red"
           disabled={unreadCount === 0}
           label={unreadCount}
           offset={3}
@@ -50,12 +73,12 @@ export default function Notifications() {
         >
           <Menu.Target>
             <ActionIcon
-              radius='xl'
-              size='lg'
-              variant='filled'
+              radius="xl"
+              size="lg"
+              variant="filled"
             >
               <AppIcon
-                name='notifications'
+                name="notifications"
                 filled
                 size={20}
               />
@@ -63,16 +86,19 @@ export default function Notifications() {
           </Menu.Target>
 
           <Menu.Dropdown
-            miw={340}
-            maw={400}
             p={12}
+            miw={mobile ? 300 : 340}
+            maw={mobile ? 'calc(100vw - 24px)' : 400}
           >
             <Group
-              justify='space-between'
+              justify="space-between"
               m={10}
               ml={15}
             >
-              <Title order={4}>Notificaciones</Title>
+              <Title order={4}>
+                Notificaciones
+              </Title>
+
               {unreadCount > 0 && (
                 <UnstyledButton
                   fz={11}
@@ -105,8 +131,8 @@ export default function Notifications() {
             ) : (
               <Center mih={100}>
                 <EmptyWithIcon
-                  title='Las notificaciones recientes'
-                  subtitle='Aparecerán aqui.'
+                  title="Las notificaciones recientes"
+                  subtitle="Aparecerán aquí."
                   icon={IconMessage}
                   titleFontSize={17}
                   subtitleFontSize={13}

@@ -37,7 +37,7 @@ export function ProjectCard({ project }) {
             {project.name}
           </Title>
           <Text fz={12} fw={700} c="dimmed" tt="uppercase" lineClamp={1}>
-            {project.area.name}
+            {project.area ? project.area.name : '-'}
           </Text>
         </Stack>
         <RingProgress

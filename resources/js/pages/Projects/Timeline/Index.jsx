@@ -14,6 +14,7 @@ import Sidebar from './components/Sidebar/Sidebar';
 import Header from './components/Header';
 import Grid from './components/Grid';
 import Bars from './components/Bars';
+import { useMediaQuery } from '@mantine/hooks';
 
 dayjs.extend(isoWeek);
 dayjs.extend(quarterOfYear);
@@ -25,11 +26,6 @@ const MIN_COLUMNS = {
   status: 140,
 };
 
-const INITIAL_COLUMNS = {
-  activity: 260,
-  assignee: 180,
-  status: 150,
-};
 
 // --- Configuración de cada modo de zoom -------------------------------
 // unit: la unidad de tiempo que representa UNA columna de la grilla.
@@ -144,6 +140,7 @@ function buildGroupedHeader(columnStarts, format) {
 }
 
 export default function TimelineIndex() {
+  const mobile = useMediaQuery('(max-width: 768px)');
   const { project, tasks: initialTasks, taskGroups, usersWithAccessToProject } = usePage().props;
   const [tasks, setTasks] = useState(initialTasks);
   console.log(tasks);
@@ -203,9 +200,15 @@ export default function TimelineIndex() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [zoom]);
 
-  const [columns, setColumns] = useState(INITIAL_COLUMNS);
+  const [columns, setColumns] = useState(() => ({
+    activity: mobile ? 150 : 260,
+    assignee: mobile ? 0 : 180,
+    status: mobile ? 0 : 150,
+  }));
 
-  const listWidth = columns.activity + columns.assignee + columns.status;
+  const listWidth = mobile
+    ? columns.activity
+    : columns.activity + columns.assignee + columns.status;
 
   const resizingPanel = useRef(false);
   const resizingColumn = useRef(null);
@@ -351,7 +354,8 @@ export default function TimelineIndex() {
       <div>
         <Title
           order={1}
-          mb='md'
+          mb="md"
+          mt="md"
         >
           {project.name}
         </Title>
@@ -368,39 +372,44 @@ export default function TimelineIndex() {
           scrollToToday={scrollToToday}
         />
       </div>
+      <div className="timeline-wrapper">
+        {!mobile && (
+          <>
+            <Sidebar
+              mobile={mobile}
+              project={project}
+              tasks={visibleTasks}
+              parentIds={parentIds}
+              collapsed={collapsed}
+              onToggle={toggleCollapsed}
+              taskGroups={taskGroups}
+              columns={columns}
+              onTaskChange={handleTaskChange}
+              listWidth={listWidth}
+              listScrollRef={listScrollRef}
+              ganttScrollRef={ganttScrollRef}
+              syncScroll={syncScroll}
+              startColumnResize={startColumnResize}
+              users={usersWithAccessToProject}
+            />
 
-      <div className='timeline-wrapper'>
-        <Sidebar
-          project={project}
-          tasks={visibleTasks}
-          parentIds={parentIds}
-          collapsed={collapsed}
-          onToggle={toggleCollapsed}
-          taskGroups={taskGroups}
-          columns={columns}
-          onTaskChange={handleTaskChange}
-          listWidth={listWidth}
-          listScrollRef={listScrollRef}
-          ganttScrollRef={ganttScrollRef}
-          syncScroll={syncScroll}
-          startColumnResize={startColumnResize}
-          users={usersWithAccessToProject}
-        />
+            <div
+              className="timeline-panel-resize-handle"
+              onMouseDown={startPanelResize}
+            />
+          </>
+        )}
 
-        <div
-          className='timeline-panel-resize-handle'
-          onMouseDown={startPanelResize}
-        />
-
-        <div className='timeline-gantt'>
-
+        <div className="timeline-gantt">
           <ScrollArea
-            type='auto'
+            type="auto"
             viewportRef={ganttScrollRef}
-            onScrollPositionChange={() => syncScroll(ganttScrollRef.current, listScrollRef)}
+            onScrollPositionChange={() =>
+              syncScroll(ganttScrollRef.current, listScrollRef)
+            }
           >
             <div
-              className='timeline-gantt-inner'
+              className="timeline-gantt-inner"
               style={{ width: totalWidth }}
             >
               <Header
@@ -411,7 +420,7 @@ export default function TimelineIndex() {
               />
 
               <div
-                className='timeline-body'
+                className="timeline-body"
                 style={{ height: Math.max(tasks.length * 44, 120) }}
               >
                 <Grid
@@ -420,7 +429,7 @@ export default function TimelineIndex() {
                 />
 
                 <div
-                  className='timeline-today-line'
+                  className="timeline-today-line"
                   style={{ left: todayOffset }}
                 />
 

@@ -11,13 +11,14 @@ import { actionColumnVisibility, prepareColumns } from '@/utils/table';
 import { usePage } from '@inertiajs/react';
 import { Button, Flex, Grid, Table } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
+import classes from './Areas.module.css';
 import TableRow from './TableRow';
 
 const AreasIndex = () => {
   const { items } = usePage().props;
 
   const isArchivedView = !!route().params.archived;
-  const selectableIds = items.data.filter((item) => item.can_force_delete).map((item) => item.id);
+  const selectableIds = items.data.filter(item => item.can_force_delete).map(item => item.id);
   const { selectedIds, toggle, toggleAll, clear, allSelected, someSelected } =
     useBulkSelection(selectableIds);
 
@@ -31,7 +32,7 @@ const AreasIndex = () => {
   ]);
 
   const rows = items.data.length ? (
-    items.data.map((item) => (
+    items.data.map(item => (
       <TableRow
         item={item}
         key={item.id}
@@ -44,8 +45,8 @@ const AreasIndex = () => {
     <TableRowEmpty colSpan={columns.length} />
   );
 
-  const search = (search) => reloadWithQuery({ search });
-  const sort = (sort) => reloadWithQuery(sort);
+  const search = search => reloadWithQuery({ search });
+  const sort = sort => reloadWithQuery(sort);
 
   return (
     <>
@@ -53,11 +54,12 @@ const AreasIndex = () => {
         activeLabel='Áreas activas'
         archivedLabel='Áreas archivadas'
       />
-
+      <div className={classes.tableWrapper}>
       <Grid
-        justify='space-between'
+        justify="space-between"
         align='center'
         mb='md'
+        gutter='sm'
       >
         {!isArchivedView && (
           <Grid.Col span='content'>
@@ -67,8 +69,12 @@ const AreasIndex = () => {
             />
           </Grid.Col>
         )}
+
         <Grid.Col span='content'>
-          <Flex gap='sm' align='center'>
+          <Flex
+            gap='sm'
+            align='center'
+          >
             {selectedIds.length > 0 && (
               <BulkForceDeleteButton
                 selectedIds={selectedIds}
@@ -78,6 +84,7 @@ const AreasIndex = () => {
                 onSuccess={clear}
               />
             )}
+
             {!isArchivedView && can('create area') && (
               <Button
                 leftSection={<IconPlus size={14} />}
@@ -90,33 +97,40 @@ const AreasIndex = () => {
           </Flex>
         </Grid.Col>
       </Grid>
+        <Table.ScrollContainer
+          my='lg'
+          className={classes.tableContainer}
+        >
+          <Table verticalSpacing='sm'>
+            <TableHead
+              columns={columns}
+              sort={sort}
+              selectAll={
+                selectableIds.length > 0
+                  ? {
+                      checked: allSelected,
+                      indeterminate: someSelected,
+                      onChange: toggleAll,
+                    }
+                  : undefined
+              }
+            />
 
-      <Table.ScrollContainer
-        miw={600}
-        my='lg'
-      >
-        <Table verticalSpacing='sm'>
-          <TableHead
-            columns={columns}
-            sort={sort}
-            selectAll={
-              selectableIds.length > 0
-                ? { checked: allSelected, indeterminate: someSelected, onChange: toggleAll }
-                : undefined
-            }
+            <Table.Tbody>{rows}</Table.Tbody>
+          </Table>
+        </Table.ScrollContainer>
+
+        <div className={classes.pagination}>
+          <Pagination
+            current={items.meta.current_page}
+            pages={items.meta.last_page}
           />
-          <Table.Tbody>{rows}</Table.Tbody>
-        </Table>
-      </Table.ScrollContainer>
-
-      <Pagination
-        current={items.meta.current_page}
-        pages={items.meta.last_page}
-      />
+        </div>
+      </div>
     </>
   );
 };
 
-AreasIndex.layout = (page) => <Layout title='Áreas'>{page}</Layout>;
+AreasIndex.layout = page => <Layout title='Áreas'>{page}</Layout>;
 
 export default AreasIndex;

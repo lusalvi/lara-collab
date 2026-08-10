@@ -134,9 +134,9 @@ export function CreateTaskDrawer() {
       onClose={closeDrawer}
       title={
         <Text
-          fz={rem(28)}
+          fz={{ base: 'lg', sm: rem(28) }}
           fw={600}
-          ml={25}
+          ml={{ base: 0, sm: 25 }}
           my='sm'
         >
           Crear nueva actividad
@@ -165,55 +165,60 @@ export function CreateTaskDrawer() {
         }}
         className={classes.inner}
       >
+
+        {/* Contenido */}
         <div className={classes.content}>
+
+          {/* Nombre */}
           <TextInput
             key={`name-${create.opened}`}
-            label='Nombre'
-            placeholder='Nombre de la actividad'
+            className={classes.nameField}
+            label="Nombre"
+            placeholder="Nombre de la actividad"
             required
             data-autofocus
             value={form.data.name}
-            onChange={e => updateValue('name', e.target.value)}
+            onChange={e => updateValue("name", e.target.value)}
             error={form.errors.name}
           />
 
           <RichTextEditor
-            key={create.opened ? 'editor-open' : 'editor-closed'}
-            mt='xl'
-            placeholder='Descripción de la actividad'
+            key={create.opened ? "editor-open" : "editor-closed"}
+            placeholder="Descripción de la actividad"
             height={260}
             value={form.data.description}
-            onChange={content => updateValue('description', content)}
+            onChange={content => updateValue("description", content)}
           />
 
           <Dropzone
-            mt='xl'
+            mt="xs"
             selected={form.data.attachments}
-            onChange={files => updateValue('attachments', files)}
+            onChange={files => updateValue("attachments", files)}
             remove={index => removeAttachment(index)}
           />
 
-          <MultiSelect
-            key={`subscribers-${create.opened}`}
-            label='Suscriptores'
-            placeholder='Selecciona suscriptores'
-            searchable
-            mt='md'
-            value={form.data.subscribed_users}
-            onChange={values => updateValue('subscribed_users', values)}
-            data={usersWithAccessToProject.map(i => ({
-              value: i.id.toString(),
-              label: i.name,
-            }))}
-            error={form.errors.subscribed_users}
-          />
+        <MultiSelect
+          className={classes.subscribers}
+          key={`subscribers-${create.opened}`}
+          label="Suscriptores"
+          placeholder="Selecciona suscriptores"
+          searchable
+          mt="sm"
+          value={form.data.subscribed_users}
+          onChange={values => updateValue("subscribed_users", values)}
+          data={usersWithAccessToProject.map(i => ({
+            value: i.id.toString(),
+            label: i.name,
+          }))}
+          error={form.errors.subscribed_users}
+        />
 
           <Flex
-            justify='space-between'
-            mt='xl'
+            justify="space-between"
+            mt="xs"
           >
             <Button
-              variant='transparent'
+              variant="transparent"
               w={100}
               disabled={form.processing}
               onClick={closeDrawer}
@@ -222,95 +227,100 @@ export function CreateTaskDrawer() {
             </Button>
 
             <Button
-              type='submit'
+              type="submit"
               w={120}
               loading={form.processing}
             >
               Crear
             </Button>
           </Flex>
+
         </div>
+
+        {/* Sidebar */}
         <div className={classes.sidebar}>
+
           <Select
             key={`group-${create.opened}`}
-            label='Estado'
-            placeholder='Selecciona el estado'
+            label="Estado"
+            placeholder="Selecciona el estado"
             required
             value={form.data.group_id}
-            onChange={value => updateValue('group_id', value)}
+            onChange={value => updateValue("group_id", value)}
             data={taskGroups.map(i => ({
               value: i.id.toString(),
               label: i.name,
             }))}
             error={form.errors.group_id}
+            size="sm"
           />
 
           <Select
             key={`issue-${create.opened}`}
-            label='Tipo'
-            placeholder='Selecciona el tipo de actividad'
+            label="Tipo"
+            placeholder="Selecciona el tipo de actividad"
             required
-            mt='md'
             value={form.data.issue_type}
-            onChange={value => updateValue('issue_type', value || '')}
+            onChange={value => updateValue("issue_type", value || "")}
             data={availableIssueTypes}
             disabled={Boolean(forcedChildType)}
             error={form.errors.issue_type}
+            size="sm"
           />
 
           <Select
             key={`assignee-${create.opened}`}
-            label='Reesponsable'
-            placeholder='Selecciona un responsable'
+            label="Responsable"
+            placeholder="Selecciona un responsable"
             searchable
-            mt='md'
             value={form.data.assigned_to_user_id}
-            onChange={value => updateValue('assigned_to_user_id', value)}
+            onChange={value => updateValue("assigned_to_user_id", value)}
             data={usersWithAccessToProject.map(i => ({
               value: i.id.toString(),
               label: i.name,
             }))}
             error={form.errors.assigned_to_user_id}
+            size="sm"
           />
 
           <DateInput
             key={`start-${create.opened}`}
             clearable
-            valueFormat='DD MMM YYYY'
-            mt='md'
-            label='Fecha de inicio'
-            placeholder='Selecciona la fecha de inicio'
+            valueFormat="DD MMM YYYY"
+            label="Fecha de inicio"
+            placeholder="Selecciona la fecha de inicio"
             value={form.data.start_on || null}
-            onChange={value => updateValue('start_on', value || '')}
+            onChange={value => updateValue("start_on", value || "")}
+            size="sm"
           />
 
           <DateInput
             key={`due-${create.opened}`}
             clearable
-            valueFormat='DD MMM YYYY'
+            valueFormat="DD MMM YYYY"
             minDate={new Date()}
-            mt='md'
-            label='Fecha de vencimiento'
-            placeholder='Selecciona la fecha de vencimiento'
+            label="Fecha de vencimiento"
+            placeholder="Selecciona la fecha de vencimiento"
             value={form.data.due_on || null}
-            onChange={value => updateValue('due_on', value || '')}
+            onChange={value => updateValue("due_on", value || "")}
+            size="sm"
           />
 
           <LabelsDropdown
             key={`labels-${create.opened}`}
             items={labels}
             selected={form.data.labels}
-            onChange={values => updateValue('labels', values)}
-            mt='md'
+            onChange={values => updateValue("labels", values)}
           />
 
           <PriorityDropdown
             key={`priority-${create.opened}`}
             value={form.data.priority_id}
-            onChange={value => updateValue('priority_id', value || null)}
-            mt='md'
+            onChange={value => updateValue("priority_id", value || null)}
           />
+
         </div>
+
       </form>
     </Drawer>
   );

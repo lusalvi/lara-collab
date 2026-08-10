@@ -1,14 +1,21 @@
 import Logo from "@/components/Logo";
+import AppIcon from "@/components/AppIcon";
 import useNavigationStore from "@/hooks/store/useNavigationStore";
-import { usePage } from "@inertiajs/react";
-import { Group, ScrollArea, rem } from "@mantine/core";
+import {
+  ActionIcon,
+  Group,
+  ScrollArea,
+  rem,
+} from "@mantine/core";
 import { useEffect } from "react";
 import NavbarLinksGroup from "./NavbarLinksGroup";
 import UserButton from "./UserButton";
 import classes from "./css/NavBarNested.module.css";
 
-export default function Sidebar() {
-  const { version } = usePage().props;
+export default function Sidebar({
+  closeDrawer = () => {},
+  mobile = false,
+}) {
   const { items, setItems } = useNavigationStore();
 
   useEffect(() => {
@@ -89,8 +96,30 @@ export default function Sidebar() {
   return (
     <nav className={classes.navbar}>
       <div className={classes.header}>
-        <Group justify="space-between">
-          <Logo style={{ width: rem(120) }} />
+        <Group justify="space-between" wrap="nowrap">
+          <div
+            onClick={mobile ? closeDrawer : undefined}
+            style={{
+              cursor: mobile ? "pointer" : "default",
+            }}
+          >
+            <Logo style={{ width: rem(120) }} />
+          </div>
+
+          {mobile && (
+            <ActionIcon
+              variant="subtle"
+              color="white"
+              radius="xl"
+              size="lg"
+              onClick={closeDrawer}
+            >
+              <AppIcon
+                name="close"
+                size={22}
+              />
+            </ActionIcon>
+          )}
         </Group>
       </div>
 
@@ -99,7 +128,11 @@ export default function Sidebar() {
           {items
             .filter((i) => i.visible)
             .map((item) => (
-              <NavbarLinksGroup key={item.label} item={item} />
+              <NavbarLinksGroup
+                key={item.label}
+                item={item}
+                closeDrawer={closeDrawer}
+              />
             ))}
         </div>
       </ScrollArea>

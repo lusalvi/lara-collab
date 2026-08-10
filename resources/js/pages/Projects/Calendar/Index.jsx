@@ -27,6 +27,7 @@ const CalendarIndex = () => {
       <Title
         order={1}
         mb='md'
+        mt="md"
       >
         {project.name}
       </Title>

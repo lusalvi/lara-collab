@@ -5,11 +5,17 @@ import useWebSockets from '@/hooks/useWebSockets';
 import NavBarNested from '@/layouts/NavBarNested';
 import Notifications from '@/layouts/Notifications';
 import { Head, usePage } from '@inertiajs/react';
-import { AppShell } from '@mantine/core';
+
+import { AppShell, Burger } from '@mantine/core';
+
+import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { useEffect } from 'react';
 
 export default function MainLayout({ children, title }) {
   window.can = useAuthorization().can;
+
+  const mobile = useMediaQuery('(max-width: 768px)');
+  const [opened, { toggle, close }] = useDisclosure(false);
 
   const { initUserWebSocket } = useWebSockets();
   const { notifications } = usePage().props.auth;
@@ -20,30 +26,78 @@ export default function MainLayout({ children, title }) {
 
     const stopListening = initUserWebSocket();
 
-    return () => {
-      stopListening?.();
-    };
+    return () => stopListening?.();
   }, []);
 
   return (
-    <AppShell
-      navbar={{ width: 280, breakpoint: 'sm', collapsed: { mobile: false } }}
-      padding='4rem'
-    >
+    <>
       <Head title={title} />
+
       <FlashNotification />
-      <Notifications />
-      <AppShell.Navbar>
-        <NavBarNested></NavBarNested>
-      </AppShell.Navbar>
-      <AppShell.Main
-        style={{
-          backgroundColor: 'var(--mantine-color-body)',
-          minHeight: '100vh',
+      {(!mobile || !opened) && <Notifications />}
+
+      <AppShell
+        header={
+          mobile
+            ? {
+                height: 60,
+                collapsed: opened,
+              }
+            : undefined
+        }
+        navbar={{
+          width: 280,
+          breakpoint: 'md',
+          collapsed: {
+            mobile: !opened,
+          },
+        }}
+        padding={{
+          base: 'sm',
+          md: 'md',
         }}
       >
-        {children}
-      </AppShell.Main>{' '}
-    </AppShell>
+        {mobile && (
+          <AppShell.Header
+            px='sm'
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'flex-start',
+
+              background: 'transparent',
+              borderBottom: 'none',
+              boxShadow: 'none',
+            }}
+          >
+            <Burger
+              opened={opened}
+              onClick={toggle}
+              size='sm'
+            />
+          </AppShell.Header>
+        )}
+
+        <AppShell.Navbar p={0}>
+          <NavBarNested
+            closeDrawer={close}
+            mobile={mobile}
+          />
+        </AppShell.Navbar>
+
+        <AppShell.Main
+          style={{
+            minHeight: '100vh',
+            width: '100%',
+            maxWidth: '100%',
+            minWidth: 0,
+            overflowX: 'hidden',
+            background: 'var(--mantine-color-body)',
+          }}
+        >
+          {children}
+        </AppShell.Main>
+      </AppShell>
+    </>
   );
 }

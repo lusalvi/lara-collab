@@ -153,3 +153,51 @@
 [data-mantine-color-scheme="dark"] .fc-event:hover {
     box-shadow: 0 4px 12px rgba(0,0,0,.35);
 }
+
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width: 768px) {
+    .fc {
+        font-size: 0.85rem;
+    }
+
+    .fc-toolbar {
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 1rem !important;
+    }
+
+    .fc-toolbar-chunk {
+        width: 100%;
+    }
+
+    .fc-toolbar-chunk:first-child {
+        order: 2;
+    }
+
+    .fc-toolbar-chunk:last-child {
+        order: 1;
+    }
+
+    .fc-col-header-cell-cushion {
+        padding: 0.4rem 0 !important;
+    }
+
+    .fc-daygrid-day-number {
+        padding: 0.3rem !important;
+    }
+
+    .fc-event {
+        padding: 2px 4px !important;
+        font-size: 0.75rem;
+    }
+
+    .fc-daygrid-day-frame {
+        min-height: auto;
+    }
+
+    .fc .fc-button-primary {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.85rem;
+    }
+}

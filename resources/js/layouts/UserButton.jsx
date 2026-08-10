@@ -3,8 +3,9 @@ import { getInitials } from '@/utils/user';
 import { router, usePage } from '@inertiajs/react';
 import {
   Avatar,
+  Box,
+  Collapse,
   Group,
-  Menu,
   Text,
   UnstyledButton,
   darken,
@@ -13,7 +14,7 @@ import {
   useMantineColorScheme,
   useMantineTheme,
 } from '@mantine/core';
-import { upperFirst } from '@mantine/hooks';
+import { upperFirst, useDisclosure } from '@mantine/hooks';
 import AppIcon from '@/components/AppIcon';
 import classes from './css/UserButton.module.css';
 
@@ -22,6 +23,7 @@ export default function UserButton() {
   const { setColorScheme } = useMantineColorScheme({ keepTransition: true });
   const computedColorScheme = useComputedColorScheme();
   const { colors } = useMantineTheme();
+  const [opened, { toggle }] = useDisclosure(false);
 
   const logout = () => {
     router.delete(route('logout'), {
@@ -29,110 +31,146 @@ export default function UserButton() {
     });
   };
 
+  const handleMenuItemClick = (callback) => {
+    callback();
+    toggle();
+  };
+
   return (
-    <Menu
-      position='right'
-      offset={10}
-      withArrow
-      width={200}
-      shadow='md'
-      styles={{ dropdown: { translate: '0 -12px' } }}
-    >
-      <Menu.Target>
-        <UnstyledButton className={classes.user}>
-          <Group>
-            <Avatar
-              src={user.avatar}
-              radius='xl'
-              color={computedColorScheme === 'light' ? 'white' : 'blue'}
-              alt={user.name}
+    <>
+      <UnstyledButton
+        className={classes.user}
+        onClick={toggle}
+        style={{
+          width: '100%',
+        }}
+      >
+        <Group>
+          <Avatar
+            src={user.avatar}
+            radius='xl'
+            color={computedColorScheme === 'light' ? 'white' : 'blue'}
+            alt={user.name}
+          >
+            {getInitials(user.name)}
+          </Avatar>
+          <div style={{ flex: 1 }}>
+            <Text
+              size='sm'
+              fw={500}
             >
-              {getInitials(user.name)}
-            </Avatar>
-            <div style={{ flex: 1 }}>
-              <Text
-                size='sm'
-                fw={500}
-              >
-                {user.name}
-              </Text>
+              {user.name}
+            </Text>
 
-              <Text
-                c={computedColorScheme === 'light' ? 'blue.4' : 'dimmed'}
-                size='xs'
-              >
-                {user.job_title}
-              </Text>
-            </div>
-            <AppIcon
-              name='chevron_right'
-              size={18}
-            />{' '}
-          </Group>
-        </UnstyledButton>
-      </Menu.Target>
+            <Text
+              c={computedColorScheme === 'light' ? 'blue.4' : 'dimmed'}
+              size='xs'
+            >
+              {user.job_title}
+            </Text>
+          </div>
+          <AppIcon
+            name='chevron_right'
+            size={18}
+            style={{
+              transform: opened ? 'rotate(90deg)' : 'rotate(0deg)',
+              transition: 'transform .2s ease',
+            }}
+          />
+        </Group>
+      </UnstyledButton>
 
-      <Menu.Dropdown>
-        <Menu.Label>Cuenta</Menu.Label>
-        <Menu.Item
-          leftSection={
-            <AppIcon
-              name='person'
-              size={18}
-            />
-          }
-          onClick={() => redirectTo('account.profile.edit')}
+      <Collapse in={opened}>
+        <Box
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '4px',
+            marginTop: '8px',
+          }}
         >
-          Mi Perfil
-        </Menu.Item>
-        <Menu.Item
-          leftSection={
-            <AppIcon
-              name='notifications'
-              size={18}
-            />
-          }
-          onClick={() => redirectTo('notifications')}
-        >
-          Notificaciones
-        </Menu.Item>
-
-        <Menu.Divider />
-
-        <Menu.Item
-          leftSection={
-            computedColorScheme === 'light' ? (
+          <UnstyledButton
+            className={classes.menuItem}
+            onClick={() =>
+              handleMenuItemClick(() => redirectTo('account.profile.edit'))
+            }
+          >
+            <Group gap='sm'>
               <AppIcon
-                name='light_mode'
+                name='person'
                 size={18}
               />
-            ) : (
+              <Text size='sm'>Mi Perfil</Text>
+            </Group>
+          </UnstyledButton>
+
+          <UnstyledButton
+            className={classes.menuItem}
+            onClick={() =>
+              handleMenuItemClick(() => redirectTo('notifications'))
+            }
+          >
+            <Group gap='sm'>
               <AppIcon
-                name='dark_mode'
+                name='notifications'
                 size={18}
               />
-            )
-          }
-          onClick={() => setColorScheme(computedColorScheme === 'light' ? 'dark' : 'light')}
-        >
-          {computedColorScheme === 'light' ? 'Modo claro' : 'Modo oscuro'}
-        </Menu.Item>
+              <Text size='sm'>Notificaciones</Text>
+            </Group>
+          </UnstyledButton>
 
-        <Menu.Divider />
+          <UnstyledButton
+            className={classes.menuItem}
+            onClick={() =>
+              handleMenuItemClick(() =>
+                setColorScheme(
+                  computedColorScheme === 'light' ? 'dark' : 'light'
+                )
+              )
+            }
+          >
+            <Group gap='sm'>
+              {computedColorScheme === 'light' ? (
+                <AppIcon
+                  name='light_mode'
+                  size={18}
+                />
+              ) : (
+                <AppIcon
+                  name='dark_mode'
+                  size={18}
+                />
+              )}
+              <Text size='sm'>
+                {computedColorScheme === 'light'
+                  ? 'Modo claro'
+                  : 'Modo oscuro'}
+              </Text>
+            </Group>
+          </UnstyledButton>
 
-        <Menu.Item
-          color='red'
-          leftSection={
-            <AppIcon
-              name='logout'
-              size={18}
-            />
-          }
-          onClick={logout}
-        >
-          Cerrar Sesión
-        </Menu.Item>
-      </Menu.Dropdown>
-    </Menu>
+          <Box
+            style={{
+              height: '1px',
+              backgroundColor: 'light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-6))',
+              margin: '4px 0',
+            }}
+          />
+
+          <UnstyledButton
+            className={`${classes.menuItem} ${classes.logout}`}
+            onClick={() => handleMenuItemClick(logout)}
+          >
+            <Group gap='sm'>
+              <AppIcon
+                name='logout'
+                size={18}
+              />
+              <Text size='sm'>Cerrar Sesión</Text>
+            </Group>
+          </UnstyledButton>
+        </Box>
+      </Collapse>
+    </>
   );
 }

@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Task;
+use App\Notifications\TaskAssignedNotification;
 
 class TaskObserver
 {
@@ -57,6 +58,10 @@ class TaskObserver
 
             $task->assigned_at = now();
             $task->saveQuietly();
+
+            if ($task->assigned_to_user_id && $task->assigned_to_user_id !== auth()->id()) {
+                $task->assignedToUser->notify(new TaskAssignedNotification($task));
+            }
         }
         if ($task->isDirty('due_on')) {
             $task->activities()->create([

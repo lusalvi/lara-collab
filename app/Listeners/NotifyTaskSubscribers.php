@@ -44,6 +44,7 @@ class NotifyTaskSubscribers
             ->subscribedUsers
             ->reject(fn (User $user) => $user->id === auth()->id())
             ->reject(fn (User $user) => $mentionedUsers->contains('id', $user->id))
+            ->reject(fn (User $user) => $user->id === $task->assigned_to_user_id)
             ->each(function (User $user) use ($event) {
                 $user->notify(new TaskCreatedNotification($event->task));
             });

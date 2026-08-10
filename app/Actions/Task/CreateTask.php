@@ -6,6 +6,7 @@ use App\Events\Task\AttachmentsUploaded;
 use App\Events\Task\TaskCreated;
 use App\Models\Project;
 use App\Models\Task;
+use App\Notifications\TaskAssignedNotification;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -41,6 +42,10 @@ class CreateTask
 
             if (! empty($data['attachments'])) {
                 $this->uploadAttachments($task, $data['attachments'], false);
+            }
+
+            if ($task->assigned_to_user_id && $task->assigned_to_user_id !== auth()->id()) {
+                $task->assignedToUser->notify(new TaskAssignedNotification($task));
             }
 
             TaskCreated::dispatch($task);

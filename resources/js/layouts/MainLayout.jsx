@@ -54,7 +54,8 @@ export default function MainLayout({ children, title }) {
         }}
         padding={{
           base: 'sm',
-          md: 'md',
+          md: 'xl',
+          lg: 40,
         }}
       >
         {mobile && (

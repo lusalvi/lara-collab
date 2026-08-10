@@ -13,16 +13,17 @@ export default function TaskCreator({ user }) {
   }
 
   return (
-    <Group gap='xs'>
+    <Group gap='xs' wrap='nowrap' style={{ overflow: 'hidden' }}>
       <Avatar
         src={user.avatar}
         size='sm'
         radius='xl'
         alt={user.name}
+        style={{ flexShrink: 0 }}
       >
         {user.name?.[0]}
       </Avatar>
-      <Text size='sm' lineClamp={1}>
+      <Text size='sm' truncate='end'>
         {user.name}
       </Text>
     </Group>

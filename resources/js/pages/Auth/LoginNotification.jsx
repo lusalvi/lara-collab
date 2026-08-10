@@ -7,7 +7,7 @@ import {
 
 export default function LoginNotification({ notify }) {
   return (
-    <div style={{ marginTop: "25px" }}>
+    <div style={{ marginTop: "clamp(12px, 3vw, 25px)" }}>
       {notify === "password-reset" && (
         <Alert radius="md" title="Password was reset" icon={<IconInfoCircle />}>
           Tu contraseña ha sido restablecida. Por favor, inicia sesión con tu nueva contraseña.

@@ -19,7 +19,7 @@ export default function GuestLayout({
         style={{
           minHeight: '100vh',
           display: 'flex',
-          background: '#EEF3F8',
+          background: 'light-dark(#EEF3F8, var(--mantine-color-dark-8))',
         }}
       >
         {/* ======================================
@@ -36,7 +36,7 @@ export default function GuestLayout({
             justifyContent: 'center',
             alignItems: 'center',
             padding: '5rem',
-            background: 'linear-gradient(135deg,#003764 0%,#0E4B7A 100%)',
+            background: 'light-dark(linear-gradient(135deg,#003764 0%,#0E4B7A 100%), linear-gradient(135deg,#001F3A 0%,#002D55 100%))',
           }}
         >
           {/* decoración */}
@@ -109,30 +109,33 @@ export default function GuestLayout({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            padding: '2rem',
+            // En mobile ocupa todo el ancho; en desktop comparte con el panel izquierdo
+            minWidth: 0,
+            padding: 'var(--guest-panel-padding, 2rem)',
           }}
+          // Padding responsive: 1rem en mobile, 2rem en desktop
+          mod={{ 'data-guest-panel': true }}
         >
           <Paper
-            radius={34}
+            radius={{ base: 20, sm: 34 }}
             shadow='xl'
-            p={45}
+            p={{ base: 'xl', sm: 32, md: 45 }}
             style={{
               width: '100%',
               maxWidth: 500,
-              background: '#FFF',
+              background: 'light-dark(#FFF, var(--mantine-color-dark-6))',
             }}
           >
             {(heading || subtitle) && (
-              <Stack
-                gap={6}
-              >
+              <Stack gap={6}>
                 {heading && (
                   <Title
                     order={2}
                     style={{
-                      color: '#003764',
+                      color: 'light-dark(#003764, var(--mantine-color-hospitalPrimary-3))',
                       fontWeight: 800,
                       fontFamily: 'Montserrat',
+                      fontSize: 'clamp(1.4rem, 4vw, 1.875rem)',
                     }}
                   >
                     {heading}
@@ -140,10 +143,7 @@ export default function GuestLayout({
                 )}
 
                 {subtitle && (
-                  <Text
-                    size='sm'
-                    c='dimmed'
-                  >
+                  <Text size='sm' c='dimmed'>
                     {subtitle}
                   </Text>
                 )}

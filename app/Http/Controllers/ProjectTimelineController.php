@@ -8,8 +8,22 @@ use App\Services\PermissionService;
 use Inertia\Inertia;
 use Inertia\Response;
 
+/**
+ * Controlador de la vista de línea de tiempo (Gantt) del proyecto.
+ *
+ * Transforma las tareas en una estructura plana y normalizada para
+ * que el componente React de la timeline pueda renderizarlas correctamente.
+ * Las fechas se normalizan: si una tarea tiene solo `start_on` o solo `due_on`,
+ * se usa el campo disponible para el otro extremo de la barra Gantt.
+ */
 class ProjectTimelineController extends Controller
 {
+    /**
+     * Muestra la vista de timeline del proyecto con sus tareas formateadas.
+     *
+     * @param  Project  $project
+     * @return Response
+     */
     public function index(Project $project): Response
     {
         $this->authorize('viewAny', [Task::class, $project]);

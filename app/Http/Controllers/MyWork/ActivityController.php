@@ -12,8 +12,19 @@ use Illuminate\Support\Arr;
 use Inertia\Inertia;
 use Inertia\Response;
 
+/**
+ * Controlador de actividad reciente del usuario (sección "Mi trabajo").
+ *
+ * Muestra un historial de actividades filtrado por los proyectos
+ * a los que tiene acceso el usuario autenticado.
+ */
 class ActivityController extends Controller
 {
+    /**
+     * Muestra las últimas 100 actividades agrupadas por fecha.
+     *
+     * @return Response
+     */
     public function index(): Response
     {
         /** @var User */
@@ -34,6 +45,7 @@ class ActivityController extends Controller
                     ->get()
             ),
             'dropdowns' => [
+                // Opción "Todos los proyectos" añadida al inicio de la lista
                 'projects' => Arr::prepend(
                     Project::dropdownValues(),
                     ['value' => '0', 'label' => 'Todos los proyectos']

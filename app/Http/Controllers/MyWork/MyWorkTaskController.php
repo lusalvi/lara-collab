@@ -10,8 +10,23 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
+/**
+ * Controlador de tareas propias del usuario (sección "Mi trabajo").
+ *
+ * Muestra las tareas pendientes asignadas al usuario autenticado,
+ * agrupadas por proyecto, con soporte de ordenamiento por prioridad.
+ */
 class MyWorkTaskController extends Controller
 {
+        /**
+     * Muestra las tareas pendientes asignadas al usuario, agrupadas por proyecto.
+     *
+     * Soporta ordenamiento por prioridad (`sort_priority=asc|desc`).
+     * Las tareas sin prioridad asignada siempre se ubican al final.
+     *
+     * @param  Request  $request  Puede contener: sort_priority (asc|desc).
+     * @return Response
+     */
     public function index(Request $request): Response
     {
         /** @var User */
@@ -30,6 +45,8 @@ class MyWorkTaskController extends Controller
                             ->whereNull('completed_at')
                             ->withoutGlobalScope('ordered')
                             ->when($prioritySort, function ($query, $direction) {
+                                // Ordenamiento por prioridad con NULLs siempre al final,
+                                // luego por fecha de vencimiento como criterio secundario.
                                 $direction = $direction === 'asc' ? 'asc' : 'desc';
 
                                 $query

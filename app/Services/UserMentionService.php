@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
+// Detecta y extrae usuarios mencionados (@usuario) en contenido HTML
 class UserMentionService
 {
     public static function hasMentions(?string $content): bool
@@ -16,6 +17,7 @@ class UserMentionService
             : Str::of($content)->contains('data-type="mention"');
     }
 
+    // Extrae usuarios mencionados que tienen acceso al proyecto
     public static function getUsersFromMentions(string $content, Project $project): Collection
     {
         $users = PermissionService::usersWithAccessToProject($project);

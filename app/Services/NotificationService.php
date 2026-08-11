@@ -2,8 +2,10 @@
 
 namespace App\Services;
 
+// Obtiene y formatea notificaciones del usuario autenticado
 class NotificationService
 {
+   // Retorna últimas notificaciones, null si no está autenticado
     public static function getLatest(int $limit)
     {
         if (! auth()->check()) {

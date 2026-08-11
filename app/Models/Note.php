@@ -5,6 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * Note
+ * 
+ * Nota del proyecto: puede estar protegida con passcode encriptado (PBKDF2).
+ * El passcode_salt nunca se expone en JSON.
+ */
 class Note extends Model
 {
     protected $fillable = [
@@ -23,6 +29,7 @@ class Note extends Model
         'passcode_salt',
     ];
 
+    // ─── Relaciones ───────────────────────────────────────────────────────────
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);

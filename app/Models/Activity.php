@@ -22,6 +22,14 @@ class Activity extends Model
         'created_at',
     ];
 
+    /**
+     * Define los filtros disponibles para las actividades.
+     *
+     * Permite filtrar las actividades por proyecto utilizando
+     * el parámetro de consulta "project".
+     *
+     * @return array Lista de filtros aplicables al modelo.
+     */    
     public function filters(): array
     {
         return [
@@ -39,6 +47,13 @@ class Activity extends Model
         return $this->belongsTo(User::class);
     }
 
+    /**
+     *
+     * Permite asociar una actividad con diferentes tipos de modelos,
+     * como tareas, grupos u otras entidades registrables.
+     *
+     * @return MorphTo Relación polimórfica con el modelo de origen.
+     */
     public function activityCapable(): MorphTo
     {
         return $this->morphTo();

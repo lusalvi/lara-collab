@@ -7,6 +7,12 @@ use Lacodix\LaravelModelFilter\Traits\IsSortable;
 use LaravelArchivable\Archivable;
 use Spatie\Permission\Models\Role as SpatieRole;
 
+/**
+ * Rol del sistema.
+ *
+ * Extiende el modelo de roles de Spatie y agrega funcionalidades
+ * de archivado, búsqueda y ordenamiento.
+ */
 class Role extends SpatieRole
 {
     use Archivable, IsSearchable, IsSortable;

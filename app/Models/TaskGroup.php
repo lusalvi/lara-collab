@@ -21,9 +21,16 @@ class TaskGroup extends Model implements AuditableContract, Sortable
     public $timestamps = false;
 
     protected $fillable = ['name', 'color', 'project_id', 'order_column', 'archived_by_id'];
-
+  
+    /**
+     * Configura el comportamiento inicial del modelo.
+     *
+     * Aplica un scope global para que los grupos de tareas
+     * se obtengan siempre respetando su orden establecido.
+     */
     protected static function booted(): void
     {
+        // Ordena automáticamente los grupos cada vez que se consultan.
         static::addGlobalScope('ordered', function ($query) {
             $query->ordered();
         });

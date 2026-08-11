@@ -21,6 +21,12 @@ use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use Spatie\Permission\Traits\HasRoles;
 
+/**
+ * User
+ * 
+ * Usuario de la aplicación. Traits: archivable, auditable, roles/permisos (Spatie),
+ * searchable, sortable, favoriter (favoritos), API tokens, password reset
+ */
 class User extends Authenticatable implements AuditableContract, CanResetPasswordContract
 {
     use Archivable, Auditable, CanResetPassword, Favoriter, HasApiTokens, HasArchivedBy, HasFactory, HasRoles, IsSearchable, IsSortable, Notifiable;
@@ -111,7 +117,7 @@ class User extends Authenticatable implements AuditableContract, CanResetPasswor
     }
 
     // ─── Acceso a proyectos ───────────────────────────────────────────────────
-
+    // Usa PermissionService para obtener usuarios con acceso (superadmin + area admin + explícito)
     public function hasProjectAccess(Project $project): bool
     {
         $users = PermissionService::usersWithAccessToProject($project);

@@ -15,6 +15,12 @@ use Overtrue\LaravelFavorite\Traits\Favoriteable;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 
+/**
+ * Project
+ * 
+ * Proyecto: contiene tareas, notas, usuarios. Traits: archivable, auditable,
+ * searchable, sortable, favoriteable
+ */
 class Project extends Model implements AuditableContract
 {
     use Archivable, Auditable, Favoriteable, HasArchivedBy, IsSearchable, IsSortable;
@@ -35,6 +41,7 @@ class Project extends Model implements AuditableContract
         'unArchived',
     ];
 
+    // ─── Relaciones ───────────────────────────────────────────────────────────
     public function area(): BelongsTo
     {
         return $this->belongsTo(Area::class);
@@ -60,6 +67,13 @@ class Project extends Model implements AuditableContract
         return $this->hasMany(Note::class);
     }
 
+    /**
+     * Proyectos marcados como favorito por el usuario actual
+     * 
+     * Relación morphMany vía tabla favorites, filtra solo para user actual
+     * 
+     * @return BelongsToMany
+     */
     public function favoritedByAuthUser(): BelongsToMany
     {
         return $this->belongsToMany(
@@ -77,6 +91,13 @@ class Project extends Model implements AuditableContract
         return $this->morphMany(Activity::class, 'activity_capable');
     }
 
+    // ─── Dropdown helpers ─────────────────────────────────────────────────────
+ 
+    /**
+     * Lista de proyectos para dropdowns
+     * 
+     * @return array Array [['value' => '1', 'label' => 'Proyecto A'], ...]
+     */
     public static function dropdownValues(): array
     {
         return self::orderBy('name')

@@ -165,6 +165,7 @@ class ForceDeleteService
         return $count;
     }
 
+    // Desvincula comentarios, adjuntos, actividades, tasks; elimina acceso y suscripciones
     protected function forceDeleteUser(User $user): void
     {
         DB::table('comments')->where('user_id', $user->id)->update(['user_id' => null]);

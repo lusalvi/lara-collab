@@ -8,6 +8,12 @@ use Lacodix\LaravelModelFilter\Traits\IsSearchable;
 use Lacodix\LaravelModelFilter\Traits\IsSortable;
 use LaravelArchivable\Archivable;
 
+/**
+ * Label
+ *
+ * Etiquetas utilizadas para clasificar y organizar elementos del sistema.
+ * Incluye funcionalidades de archivado, búsqueda y ordenamiento.
+ */
 class Label extends Model
 {
     use Archivable, HasArchivedBy, IsSearchable, IsSortable;

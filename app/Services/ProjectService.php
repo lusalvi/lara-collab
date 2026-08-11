@@ -5,10 +5,12 @@ namespace App\Services;
 use App\Models\Project;
 use Illuminate\Support\Facades\DB;
 
+// Actualiza acceso de usuarios a proyectos
 class ProjectService
 {
     public function __construct(public Project $project) {}
 
+    // Reemplaza accesos: borra previos e inserta nuevos IDs de usuarios
     public function updateUserAccess(array $userIds): bool
     {
         DB::table('project_user_access')

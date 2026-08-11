@@ -23,6 +23,12 @@ use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 
+/**
+ * Task (Actividad/Tarea)
+ * 
+ * Jerarquía: Épica → Historia → Tarea → Subtarea
+ * Características: archivable, auditable, ordenable, filtrable, searchable
+ */
 class Task extends Model implements AuditableContract, Sortable
 {
     use Archivable, Auditable, HasArchivedBy, HasFactory, HasFilters, IsSearchable, SortableTrait;
@@ -37,6 +43,12 @@ class Task extends Model implements AuditableContract, Sortable
         'Subtarea' => [],
     ];
 
+    /**
+     * Verifica si esta tarea puede tener un hijo del tipo especificado
+     * 
+     * @param string $issueType Tipo de hijo (Subtarea, etc.)
+     * @return bool
+     */
     public function canHaveChildOfType(string $issueType): bool
     {
         return in_array($issueType, self::ALLOWED_CHILD_TYPES[$this->issue_type] ?? [], true);
@@ -104,6 +116,11 @@ class Task extends Model implements AuditableContract, Sortable
         'children:id,name,number,issue_type,parent_task_id',
     ];
 
+     /**
+     * Define filtros disponibles para esta tarea
+     * 
+     * @return array Filtros por group_id, assignee, due_on, status, labels, etc.
+     */
     public function filters(): array
     {
         return [
@@ -123,12 +140,25 @@ class Task extends Model implements AuditableContract, Sortable
         });
     }
 
+    /**
+     * Scope: Carga relaciones por defecto
+     * 
+     * @param Builder $query
+     * @return void
+     */
     public function scopeWithDefault(Builder $query)
     {
         $query->with($this->defaultWith);
     }
 
-    /* Tareas por vencer */
+    /**
+     * Scope: Tareas próximas a vencer sin notificar
+     * 
+     * Busca tareas con due_on = mañana, no completadas, no notificadas, con usuario asignado
+     * 
+     * @param Builder $query
+     * @return Builder
+     */    
     public function scopeDueSoonPendingNotification(Builder $query): Builder
     {
         return $query
@@ -139,7 +169,15 @@ class Task extends Model implements AuditableContract, Sortable
             ->whereHas('project');
     }
 
-    /* Tareas vencidas */
+
+    /**
+     * Scope: Tareas vencidas sin notificar
+     * 
+     * Busca tareas con due_on < hoy, no completadas, no notificadas, con usuario asignado
+     * 
+     * @param Builder $query
+     * @return Builder
+     */
     public function scopeOverduePendingNotification(Builder $query): Builder
     {
         return $query
@@ -150,31 +188,61 @@ class Task extends Model implements AuditableContract, Sortable
             ->whereHas('project');
     }
 
+    /**
+     * Carga relaciones por defecto en esta instancia
+     * 
+     * @return Task
+     */
     public function loadDefault()
     {
         return $this->load($this->defaultWith);
     }
 
+    /**
+     * Proyecto al que pertenece
+     * 
+     * @return BelongsTo
+     */
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
     }
 
+    /**
+     * Grupo de tareas (TaskGroup) al que pertenece
+     * 
+     * @return BelongsTo
+     */
     public function taskGroup(): BelongsTo
     {
         return $this->belongsTo(TaskGroup::class, 'group_id');
     }
-
+    /**
+     * Tarea padre (si es subtarea)
+     * 
+     * @return BelongsTo
+     */
     public function parent(): BelongsTo
     {
         return $this->belongsTo(Task::class, 'parent_task_id');
     }
 
+    /**
+     * Tareas hijas (subtareas)
+     * 
+     * @return HasMany
+     */
     public function children(): HasMany
     {
         return $this->hasMany(Task::class, 'parent_task_id');
     }
 
+    /**
+     * Archiva esta tarea y sus hijas recursivamente
+     * 
+     * @param int|null $archivedById ID del usuario que archiva (para auditoría)
+     * @return void
+     */
     public function archiveWithChildren(?int $archivedById = null): void
     {
         foreach ($this->children()->withArchived()->get() as $child) {
@@ -188,7 +256,13 @@ class Task extends Model implements AuditableContract, Sortable
 
         $this->archive();
     }
-
+    /**
+     * Restaura esta tarea y sus hijas recursivamente
+     * 
+     * Limpia archived_by_id y desarchiva en cascada
+     * 
+     * @return void
+     */
     public function restoreWithChildren(): void
     {
         $this->unArchive();
@@ -198,49 +272,93 @@ class Task extends Model implements AuditableContract, Sortable
             $child->restoreWithChildren();
         }
     }
-
+    /**
+     * Usuario que creó la tarea
+     * 
+     * @return BelongsTo
+     */
     public function createdByUser(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by_user_id');
     }
 
+    /**
+     * Usuario asignado a la tarea
+     * 
+     * @return BelongsTo
+     */
     public function assignedToUser(): BelongsTo
     {
         return $this->belongsTo(User::class, 'assigned_to_user_id');
     }
 
+    /**
+     * Prioridad de la tarea
+     * 
+     * @return BelongsTo
+     */    
     public function priority(): BelongsTo
     {
         return $this->belongsTo(TaskPriority::class, 'priority_id');
     }
 
+    /**
+     * Usuarios suscritos a esta tarea (reciben notificaciones)
+     * 
+     * @return BelongsToMany
+     */
     public function subscribedUsers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'subscribe_task');
     }
 
+    /**
+     * Labels/etiquetas de la tarea
+     * 
+     * @return BelongsToMany
+     */
     public function labels(): BelongsToMany
     {
         return $this->belongsToMany(Label::class);
     }
-
+    /**
+     * Archivos adjuntos de la tarea
+     * 
+     * @return HasMany
+     */
     public function attachments(): HasMany
     {
         return $this->hasMany(Attachment::class);
     }
-
+    /**
+     * Comentarios de la tarea
+     * 
+     * @return HasMany
+     */
     public function comments(): HasMany
     {
         return $this->hasMany(Comment::class);
     }
-
+    /**
+     * Actividades/historial de cambios de la tarea
+     * 
+     * @return MorphMany
+     */
     public function activities(): MorphMany
     {
         return $this->morphMany(Activity::class, 'activity_capable');
     }
 
+    /**
+     * ¿Puede el usuario actual forzar borrado de esta tarea?
+     * 
+     * Retorna null si no está archivada o no hay usuario autenticado
+     * 
+     * @return bool|null
+     */
     public function getCanForceDeleteAttribute(): ?bool
     {
+        // Solo si está archivada
         if (! $this->archived_at) {
             return null;
         }
@@ -250,10 +368,16 @@ class Task extends Model implements AuditableContract, Sortable
         if (! $user) {
             return null;
         }
-
+        // Valida policy pasando project completo (no el select de defaultWith)
         return $user->can('forceDelete', [$this, $this->projectForPolicy()]);
     }
-
+    /**
+     * ¿Puede el usuario actual restaurar esta tarea?
+     * 
+     * Retorna null si no está archivada o no hay usuario autenticado
+     * 
+     * @return bool|null
+     */
     public function getCanRestoreAttribute(): ?bool
     {
         if (! $this->archived_at) {
@@ -270,15 +394,20 @@ class Task extends Model implements AuditableContract, Sortable
     }
 
     /**
-     * Resuelve el Project completo (no el select recortado de defaultWith) para
-     * evaluar las policies de Task, que necesitan campos como area_id.
+     * Obtiene el Project completo para evaluar policies
+     * 
+     * Las policies necesitan area_id que no viene en defaultWith.
+     * Si project ya está cargado y tiene area_id, lo usa; sino, lo query
+     * 
+     * @return Project|null
      */
     private function projectForPolicy(): ?Project
     {
+        // Si project ya está cargado y tiene area_id, retorna
         if ($this->relationLoaded('project') && $this->project && array_key_exists('area_id', $this->project->getAttributes())) {
             return $this->project;
         }
-
+        // Sino, query project completo y cachea en propiedad privada
         return $this->fullProjectForPolicy ??= Project::withArchived()->find($this->project_id);
     }
 }

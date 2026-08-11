@@ -5,6 +5,7 @@ namespace App\Services;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Encryption\Encrypter;
 
+// Encriptación de notas con passcode
 class NoteEncryption
 {
     private const PBKDF2_ALGO = 'sha256';
@@ -23,11 +24,13 @@ class NoteEncryption
         return self::encrypter($passcode, $salt)->encryptString((string) $content);
     }
 
+    // Desencripta contenido, lanza DecryptException si falla
     public static function decrypt(string $passcode, string $salt, string $payload): string
     {
         return self::encrypter($passcode, $salt)->decryptString($payload);
     }
 
+    // Valida si passcode es correcto intentando desencriptar
     public static function isValidPasscode(string $passcode, string $salt, ?string $payload): bool
     {
         if (blank($payload) || blank($salt)) {
@@ -43,6 +46,7 @@ class NoteEncryption
         }
     }
 
+    // Deriva clave segura y crea encriptador
     private static function encrypter(string $passcode, string $salt): Encrypter
     {
         $key = hash_pbkdf2(

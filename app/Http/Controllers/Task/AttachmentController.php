@@ -12,8 +12,23 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
+/**
+ * Controlador de adjuntos de tareas.
+ *
+ * Permite subir y eliminar archivos adjuntos a una tarea.
+ * Los archivos se almacenan en disco; al eliminar se borran
+ * tanto el archivo original como su miniatura (thumb).
+ */
 class AttachmentController extends Controller
 {
+    /**
+     * Sube uno o más archivos adjuntos a una tarea.
+     *
+     * Se permiten hasta 10 archivos por solicitud, con un máximo de 5 MB cada uno.
+     * Delega la lógica de almacenamiento al Action CreateTask.
+     *
+     * @param  Request  $request  Contiene: attachments (array de archivos).
+     */
     public function store(Request $request, Project $project, Task $task): JsonResponse
     {
         $this->authorize('viewAny', [Attachment::class, $project]);
@@ -28,6 +43,12 @@ class AttachmentController extends Controller
         return response()->json(['files' => $files]);
     }
 
+    /**
+     * Elimina un adjunto de la tarea y sus archivos del disco.
+     *
+     * Borra el archivo original y su miniatura, luego elimina el registro
+     * de la base de datos y despacha el evento correspondiente.
+     */
     public function destroy(Project $project, Task $task, Attachment $attachment): JsonResponse
     {
         $this->authorize('delete', [$attachment, $project]);

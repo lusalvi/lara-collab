@@ -8,9 +8,18 @@ use App\Http\Requests\Comment\StoreCommentRequest;
 use App\Models\Comment;
 use App\Models\Project;
 use App\Models\Task;
+use Illuminate\Http\JsonResponse;
 
+/**
+ * Controlador de comentarios de tareas.
+ */
 class CommentController extends Controller
 {
+    /**
+     * Devuelve los comentarios de una tarea ordenados del más reciente al más antiguo.
+     *
+     * @return JsonResponse
+     */
     public function index(Project $project, Task $task)
     {
         $this->authorize('viewAny', [Comment::class, $project]);
@@ -20,6 +29,11 @@ class CommentController extends Controller
         );
     }
 
+    /**
+     * Crea un nuevo comentario en la tarea y dispara el evento de notificación.
+     *
+     * @return JsonResponse
+     */
     public function store(StoreCommentRequest $request, Project $project, Task $task)
     {
         $this->authorize('create', [Comment::class, $project]);

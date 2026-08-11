@@ -9,11 +9,18 @@ use App\Http\Resources\Role\RoleResource;
 use App\Models\Role;
 use App\Services\ForceDeleteService;
 use App\Services\PermissionService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 
+/**
+ * Controlador de roles y permisos (Settings).
+ *
+ * Gestiona los roles del sistema usando Spatie Laravel Permission.
+ * Un rol no puede archivarse ni eliminarse si todavía está asignado a usuarios.
+ */
 class RoleController extends Controller
 {
     public function __construct()
@@ -21,6 +28,9 @@ class RoleController extends Controller
         $this->authorizeResource(Role::class, 'role');
     }
 
+    /**
+     * Lista los roles con conteo de permisos asignados.
+     */
     public function index(Request $request): Response
     {
         return Inertia::render('Settings/Roles/Index', [
@@ -34,6 +44,11 @@ class RoleController extends Controller
         ]);
     }
 
+    /**
+     * Muestra el formulario de creación de rol con todos los permisos agrupados.
+     *
+     * @return Response
+     */
     public function create()
     {
         return Inertia::render('Settings/Roles/Create', [
@@ -41,6 +56,11 @@ class RoleController extends Controller
         ]);
     }
 
+    /**
+     * Crea un nuevo rol y le asigna los permisos seleccionados.
+     *
+     * @return RedirectResponse
+     */
     public function store(StoreRoleRequest $request)
     {
         $role = Role::create(['name' => $request->name, 'guard_name' => 'web']);
@@ -49,6 +69,11 @@ class RoleController extends Controller
         return redirect()->route('settings.roles.index')->success('Rol Creado', 'Un nuevo rol se creó con éxito.');
     }
 
+    /**
+     * Muestra el formulario de edición del rol con sus permisos actuales.
+     *
+     * @return Response
+     */
     public function edit(Role $role)
     {
         return Inertia::render('Settings/Roles/Edit', [
@@ -57,6 +82,11 @@ class RoleController extends Controller
         ]);
     }
 
+    /**
+     * Actualiza el nombre y permisos de un rol.
+     *
+     * @return RedirectResponse
+     */
     public function update(Role $role, UpdateRoleRequest $request)
     {
         $role->update(['name' => $request->name]);
@@ -65,6 +95,13 @@ class RoleController extends Controller
         return redirect()->route('settings.roles.index')->success('Rol Actualizado', 'El rol se actualizó con éxito.');
     }
 
+    /**
+     * Archiva un rol.
+     *
+     * Bloquea el archivado si el rol está asignado a algún usuario activo.
+     *
+     * @return RedirectResponse
+     */
     public function destroy(Role $role)
     {
         $usersWithRole = DB::table('model_has_roles')->where('role_id', $role->id)->exists();
@@ -78,6 +115,11 @@ class RoleController extends Controller
         return redirect()->back()->success('Rol Archivado', 'El rol se archivó con éxito.');
     }
 
+    /**
+     * Restaura un rol archivado.
+     *
+     * @return RedirectResponse
+     */
     public function restore(int $roleId)
     {
         $role = Role::withArchived()->findOrFail($roleId);
@@ -90,6 +132,13 @@ class RoleController extends Controller
         return redirect()->back()->success('Rol Restaurado', 'La restauración del rol se realizó con éxito.');
     }
 
+    /**
+     * Elimina permanentemente un lote de roles archivados.
+     *
+     * Bloquea la eliminación de roles que aún tienen usuarios asignados.
+     *
+     * @return RedirectResponse
+     */
     public function bulkForceDelete(Request $request, ForceDeleteService $forceDeleteService)
     {
         $request->validate([

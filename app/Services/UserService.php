@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Http;
 // Almacena avatar subido o descarga de unavatar.io basado en email
 class UserService
 {
-
     // Si hay archivo: guarda localmente; si no: descarga de unavatar.io, null si falla
     public static function storeOrFetchAvatar(User $user, ?UploadedFile $avatar): ?string
     {

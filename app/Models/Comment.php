@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
  * Comment
- * 
+ *
  * Comentario en una tarea. Genera actividad (historial) automáticamente vía observer.
  */
 class Comment extends Model
@@ -32,8 +32,6 @@ class Comment extends Model
 
     /**
      * Actividades generadas por este comentario
-     * 
-     * @return MorphMany
      */
     public function activities(): MorphMany
     {

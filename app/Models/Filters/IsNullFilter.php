@@ -18,7 +18,7 @@ class IsNullFilter extends Filter
     /**
      * Aplica el filtro de valores nulos sobre la consulta.
      *
-     * @param Builder $query Consulta Eloquent a filtrar.
+     * @param  Builder  $query  Consulta Eloquent a filtrar.
      * @return Builder Consulta modificada.
      */
     public function apply(Builder $query): Builder

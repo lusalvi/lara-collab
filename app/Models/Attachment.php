@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * Attachment
- * 
+ *
  * Archivo adjunto de una tarea. Incluye path del archivo, thumbnail (si imagen),
  * tipo MIME, tamaño. ForceDeleteService borra archivos físicos del disco.
  */

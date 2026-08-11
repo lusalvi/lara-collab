@@ -5,6 +5,7 @@ namespace App\Models;
 use OwenIt\Auditing\Auditable;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 use Spatie\Permission\Models\Permission as SpatiePermission;
+
 /**
  * Permiso del sistema.
  *

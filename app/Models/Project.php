@@ -17,7 +17,7 @@ use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 
 /**
  * Project
- * 
+ *
  * Proyecto: contiene tareas, notas, usuarios. Traits: archivable, auditable,
  * searchable, sortable, favoriteable
  */
@@ -69,10 +69,8 @@ class Project extends Model implements AuditableContract
 
     /**
      * Proyectos marcados como favorito por el usuario actual
-     * 
+     *
      * Relación morphMany vía tabla favorites, filtra solo para user actual
-     * 
-     * @return BelongsToMany
      */
     public function favoritedByAuthUser(): BelongsToMany
     {
@@ -92,10 +90,10 @@ class Project extends Model implements AuditableContract
     }
 
     // ─── Dropdown helpers ─────────────────────────────────────────────────────
- 
+
     /**
      * Lista de proyectos para dropdowns
-     * 
+     *
      * @return array Array [['value' => '1', 'label' => 'Proyecto A'], ...]
      */
     public static function dropdownValues(): array

@@ -18,7 +18,7 @@ class WhereInFilter extends Filter
     /**
      * Aplica el filtro utilizando una lista de valores permitidos.
      *
-     * @param Builder $query Consulta Eloquent a filtrar.
+     * @param  Builder  $query  Consulta Eloquent a filtrar.
      * @return Builder Consulta modificada.
      */
     public function apply(Builder $query): Builder

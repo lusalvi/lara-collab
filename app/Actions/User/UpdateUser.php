@@ -22,10 +22,10 @@ class UpdateUser
      * - Avatar: se actualiza si el usuario no tiene uno, o si se envió un archivo nuevo.
      * - Contraseña: solo se actualiza si se envió un valor no vacío (permite editar sin cambiarla).
      *
-     * @param  User   $user  Usuario a modificar.
+     * @param  User  $user  Usuario a modificar.
      * @param  array  $data  Datos validados: name, job_title, phone, email, area_id,
      *                       roles[], avatar (nullable), password (nullable).
-     * @return bool          True si la actualización fue exitosa.
+     * @return bool True si la actualización fue exitosa.
      */
     public function update($user, array $data): bool
     {

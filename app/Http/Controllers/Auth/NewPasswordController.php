@@ -23,9 +23,6 @@ class NewPasswordController extends Controller
      * Muestra el formulario para ingresar la nueva contraseña.
      *
      * Recibe el token y el email desde la URL del enlace enviado por correo.
-     *
-     * @param Request  $request
-     * @return Response
      */
     public function create(Request $request): Response
     {
@@ -40,9 +37,6 @@ class NewPasswordController extends Controller
      *
      * Si el reset es exitoso, redirige al login con aviso. En caso de token inválido,
      * lanza un error de validación con un mensaje en español.
-     *
-     * @param  Request  $request
-     * @return RedirectResponse
      */
     public function store(Request $request): RedirectResponse
     {

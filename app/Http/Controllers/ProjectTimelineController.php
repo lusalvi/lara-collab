@@ -20,9 +20,6 @@ class ProjectTimelineController extends Controller
 {
     /**
      * Muestra la vista de timeline del proyecto con sus tareas formateadas.
-     *
-     * @param  Project  $project
-     * @return Response
      */
     public function index(Project $project): Response
     {

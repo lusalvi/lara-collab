@@ -43,10 +43,9 @@ class TaskController extends Controller
      * incluye los ancestros de las tareas encontradas para poder renderizar
      * correctamente la jerarquía en el frontend.
      *
-     * @param  Request       $request  Puede contener: search, sort_priority, archived, y otros filtros.
-     * @param  Project       $project  Proyecto al que pertenecen las tareas.
-     * @param  Task|null     $task     Tarea específica a abrir en el panel lateral (opcional).
-     * @return Response
+     * @param  Request  $request  Puede contener: search, sort_priority, archived, y otros filtros.
+     * @param  Project  $project  Proyecto al que pertenecen las tareas.
+     * @param  Task|null  $task  Tarea específica a abrir en el panel lateral (opcional).
      */
     public function index(Request $request, Project $project, ?Task $task = null): Response
     {
@@ -54,14 +53,14 @@ class TaskController extends Controller
 
         $groups = $project
             ->taskGroups()
-            ->when($request->has('archived'), fn($query) => $query->onlyArchived())
+            ->when($request->has('archived'), fn ($query) => $query->onlyArchived())
             ->get();
 
         $searchQuery = $request->input('search');
 
         $groupedTasks = $project
             ->taskGroups()
-            ->with(['project' => fn($query) => $query->withArchived()])
+            ->with(['project' => fn ($query) => $query->withArchived()])
             ->get()
             ->mapWithKeys(function (TaskGroup $group) use ($request, $project, $searchQuery) {
                 $prioritySort = $request->input('sort_priority');
@@ -70,9 +69,9 @@ class TaskController extends Controller
                     ->where('group_id', $group->id)
                     ->searchByQueryString()
                     ->filterByQueryString()
-                    ->when($request->has('archived'), fn($query) => $query->onlyArchived())
+                    ->when($request->has('archived'), fn ($query) => $query->onlyArchived())
                     ->withDefault()
-                    ->when($project->isArchived(), fn($query) => $query->with(['project' => fn($query) => $query->withArchived()]))
+                    ->when($project->isArchived(), fn ($query) => $query->with(['project' => fn ($query) => $query->withArchived()]))
                     ->when($prioritySort, function ($query, $direction) {
                         // Ordenamiento por prioridad: las tareas sin prioridad van al final,
                         // luego se ordena por el campo `order` de task_priorities.
@@ -96,7 +95,7 @@ class TaskController extends Controller
                     $ancestorIds = [];
 
                     // Punto de partida: padres directos de las tareas que tienen parent
-                    $toCheck = $matchedTasks->filter(fn($t) => $t->parent_task_id)->pluck('parent_task_id')->unique()->all();
+                    $toCheck = $matchedTasks->filter(fn ($t) => $t->parent_task_id)->pluck('parent_task_id')->unique()->all();
 
                     // Se sube por la cadena de padres hasta llegar a la raíz
                     while (! empty($toCheck)) {
@@ -111,11 +110,11 @@ class TaskController extends Controller
                             ->where('project_id', $project->id)
                             ->where('group_id', $group->id)
                             ->withDefault()
-                            ->when($project->isArchived(), fn($query) => $query->with(['project' => fn($query) => $query->withArchived()]))
+                            ->when($project->isArchived(), fn ($query) => $query->with(['project' => fn ($query) => $query->withArchived()]))
                             ->get();
 
                         $ancestorIds = array_merge($ancestorIds, $ancestors->pluck('id')->all());
-                        $toCheck = $ancestors->filter(fn($t) => $t->parent_task_id)->pluck('parent_task_id')->unique()->all();
+                        $toCheck = $ancestors->filter(fn ($t) => $t->parent_task_id)->pluck('parent_task_id')->unique()->all();
 
                         $matchedTasks = $matchedTasks->merge($ancestors);
                     }
@@ -141,8 +140,7 @@ class TaskController extends Controller
      * Delega la lógica de creación (notificaciones, adjuntos, etc.) al Action CreateTask.
      *
      * @param  StoreTaskRequest  $request  Datos validados de la tarea.
-     * @param  Project           $project  Proyecto al que pertenece la tarea.
-     * @return RedirectResponse
+     * @param  Project  $project  Proyecto al que pertenece la tarea.
      */
     public function store(StoreTaskRequest $request, Project $project): RedirectResponse
     {
@@ -159,9 +157,8 @@ class TaskController extends Controller
      * Delega la lógica de actualización (eventos, notificaciones) al Action UpdateTask.
      *
      * @param  UpdateTaskRequest  $request  Datos validados con los campos a modificar.
-     * @param  Project            $project  Proyecto al que pertenece la tarea.
-     * @param  Task               $task     Tarea a actualizar.
-     * @return JsonResponse
+     * @param  Project  $project  Proyecto al que pertenece la tarea.
+     * @param  Task  $task  Tarea a actualizar.
      */
     public function update(UpdateTaskRequest $request, Project $project, Task $task): JsonResponse
     {
@@ -179,8 +176,6 @@ class TaskController extends Controller
      *
      * @param  Request  $request  Contiene: ids (array de IDs en el nuevo orden),
      *                            group_id, from_index, to_index.
-     * @param  Project  $project
-     * @return JsonResponse
      */
     public function reorder(Request $request, Project $project): JsonResponse
     {
@@ -205,8 +200,6 @@ class TaskController extends Controller
      * automáticamente. En caso contrario, elimina la fecha de completado.
      *
      * @param  Request  $request  Contiene: ids, to_group_id, from_group_id, from_index, to_index.
-     * @param  Project  $project
-     * @return JsonResponse
      */
     public function move(Request $request, Project $project): JsonResponse
     {
@@ -242,8 +235,6 @@ class TaskController extends Controller
      * la tarea pasa a ser raíz.
      *
      * @param  Request  $request  Contiene: task_id, parent_task_id (nullable), ids (nuevo orden).
-     * @param  Project  $project
-     * @return JsonResponse
      */
     public function reparent(Request $request, Project $project): JsonResponse
     {
@@ -295,9 +286,6 @@ class TaskController extends Controller
      * Marca o desmarca una tarea como completada.
      *
      * @param  Request  $request  Contiene: completed (bool).
-     * @param  Project  $project
-     * @param  Task     $task
-     * @return JsonResponse
      */
     public function complete(Request $request, Project $project, Task $task): JsonResponse
     {
@@ -313,10 +301,6 @@ class TaskController extends Controller
 
     /**
      * Archiva una tarea y todas sus subtareas en cascada.
-     *
-     * @param  Project  $project
-     * @param  Task     $task
-     * @return RedirectResponse
      */
     public function destroy(Project $project, Task $task): RedirectResponse
     {
@@ -330,10 +314,6 @@ class TaskController extends Controller
 
     /**
      * Restaura una tarea archivada y todas sus subtareas.
-     *
-     * @param  Project  $project
-     * @param  Task     $task
-     * @return RedirectResponse
      */
     public function restore(Project $project, Task $task): RedirectResponse
     {
@@ -353,8 +333,6 @@ class TaskController extends Controller
      * Cada tarea se archiva con sus subtareas en cascada.
      *
      * @param  Request  $request  Contiene: ids (array de IDs de tareas a archivar).
-     * @param  Project  $project
-     * @return JsonResponse
      */
     public function bulkArchive(Request $request, Project $project): JsonResponse
     {
@@ -387,10 +365,8 @@ class TaskController extends Controller
      * recursivamente por las subtareas, por lo que no hace falta incluirlas
      * explícitamente en la solicitud.
      *
-     * @param  Request             $request            Contiene: ids (IDs de tareas raíz a eliminar).
-     * @param  Project             $project
-     * @param  ForceDeleteService  $forceDeleteService Servicio encargado del borrado en cascada.
-     * @return RedirectResponse
+     * @param  Request  $request  Contiene: ids (IDs de tareas raíz a eliminar).
+     * @param  ForceDeleteService  $forceDeleteService  Servicio encargado del borrado en cascada.
      */
     public function bulkForceDelete(Request $request, Project $project, ForceDeleteService $forceDeleteService): RedirectResponse
     {

@@ -7,6 +7,7 @@ use App\Http\Requests\TaskPriority\StoreTaskPriorityRequest;
 use App\Http\Requests\TaskPriority\UpdateTaskPriorityRequest;
 use App\Http\Resources\TaskPriorityResource;
 use App\Models\TaskPriority;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -27,9 +28,6 @@ class TaskPriorityController extends Controller
 
     /**
      * Lista las prioridades de tareas ordenadas por su campo `order`.
-     *
-     * @param  Request  $request
-     * @return Response
      */
     public function index(Request $request): Response
     {
@@ -50,8 +48,7 @@ class TaskPriorityController extends Controller
     /**
      * Crea una nueva prioridad de tareas.
      *
-     * @param  StoreTaskPriorityRequest  $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function store(StoreTaskPriorityRequest $request)
     {
@@ -63,8 +60,7 @@ class TaskPriorityController extends Controller
     /**
      * Muestra el formulario de edición de una prioridad.
      *
-     * @param  TaskPriority  $taskPriority
-     * @return \Inertia\Response
+     * @return Response
      */
     public function edit(TaskPriority $taskPriority)
     {
@@ -76,9 +72,7 @@ class TaskPriorityController extends Controller
     /**
      * Actualiza una prioridad de tareas.
      *
-     * @param  UpdateTaskPriorityRequest  $request
-     * @param  TaskPriority               $taskPriority
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function update(UpdateTaskPriorityRequest $request, TaskPriority $taskPriority)
     {
@@ -93,8 +87,7 @@ class TaskPriorityController extends Controller
      * A diferencia del resto de recursos, las prioridades no pasan por el flujo
      * de archivado; se eliminan directamente.
      *
-     * @param  TaskPriority  $taskPriority
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function destroy(TaskPriority $taskPriority)
     {

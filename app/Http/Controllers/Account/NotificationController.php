@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Account;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Notification\NotificationGroupedByDateCollection;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Notifications\DatabaseNotification;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -15,10 +16,8 @@ use Inertia\Response;
  */
 class NotificationController extends Controller
 {
-        /**
+    /**
      * Muestra las notificaciones del usuario agrupadas por fecha.
-     *
-     * @return Response
      */
     public function index(): Response
     {
@@ -33,14 +32,13 @@ class NotificationController extends Controller
         ]);
     }
 
-       /**
+    /**
      * Marca una notificación específica como leída.
      *
      * Verifica que la notificación pertenezca al usuario autenticado
      * antes de marcarla, para evitar acceso cruzado entre usuarios.
      *
-     * @param  DatabaseNotification  $notification
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function read(DatabaseNotification $notification)
     {
@@ -60,7 +58,7 @@ class NotificationController extends Controller
     /**
      * Marca todas las notificaciones no leídas del usuario como leídas.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function readAll()
     {
@@ -69,10 +67,10 @@ class NotificationController extends Controller
         return response()->json();
     }
 
-     /**
+    /**
      * Elimina todas las notificaciones ya leídas del usuario.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function destroyRead()
     {

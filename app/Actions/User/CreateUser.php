@@ -25,7 +25,7 @@ class CreateUser
      *
      * @param  array  $data  Datos validados del request: name, job_title, phone, email,
      *                       password (en texto plano), area_id, roles[], avatar (opcional).
-     * @return User          El usuario recién creado con sus roles asignados.
+     * @return User El usuario recién creado con sus roles asignados.
      */
     public function create(array $data): User
     {

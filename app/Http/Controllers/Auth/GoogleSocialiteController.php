@@ -22,18 +22,14 @@ class GoogleSocialiteController extends Controller
 {
     /**
      * Redirige al proveedor de Google para iniciar el flujo OAuth.
-     *
-     * @return RedirectResponse
      */
     public function redirectToGoogle(): RedirectResponse
     {
         return Socialite::driver('google')->redirect();
     }
 
-      /**
+    /**
      * Procesa el callback de Google tras la autenticación OAuth.
-     *
-     * @return RedirectResponse
      */
     public function handleCallback(): RedirectResponse
     {

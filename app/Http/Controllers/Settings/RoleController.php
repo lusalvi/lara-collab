@@ -9,6 +9,7 @@ use App\Http\Resources\Role\RoleResource;
 use App\Models\Role;
 use App\Services\ForceDeleteService;
 use App\Services\PermissionService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -29,9 +30,6 @@ class RoleController extends Controller
 
     /**
      * Lista los roles con conteo de permisos asignados.
-     *
-     * @param  Request  $request
-     * @return Response
      */
     public function index(Request $request): Response
     {
@@ -49,7 +47,7 @@ class RoleController extends Controller
     /**
      * Muestra el formulario de creación de rol con todos los permisos agrupados.
      *
-     * @return \Inertia\Response
+     * @return Response
      */
     public function create()
     {
@@ -61,8 +59,7 @@ class RoleController extends Controller
     /**
      * Crea un nuevo rol y le asigna los permisos seleccionados.
      *
-     * @param  StoreRoleRequest  $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function store(StoreRoleRequest $request)
     {
@@ -75,8 +72,7 @@ class RoleController extends Controller
     /**
      * Muestra el formulario de edición del rol con sus permisos actuales.
      *
-     * @param  Role  $role
-     * @return \Inertia\Response
+     * @return Response
      */
     public function edit(Role $role)
     {
@@ -89,9 +85,7 @@ class RoleController extends Controller
     /**
      * Actualiza el nombre y permisos de un rol.
      *
-     * @param  Role              $role
-     * @param  UpdateRoleRequest $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function update(Role $role, UpdateRoleRequest $request)
     {
@@ -106,8 +100,7 @@ class RoleController extends Controller
      *
      * Bloquea el archivado si el rol está asignado a algún usuario activo.
      *
-     * @param  Role  $role
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function destroy(Role $role)
     {
@@ -125,8 +118,7 @@ class RoleController extends Controller
     /**
      * Restaura un rol archivado.
      *
-     * @param  int  $roleId
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function restore(int $roleId)
     {
@@ -145,9 +137,7 @@ class RoleController extends Controller
      *
      * Bloquea la eliminación de roles que aún tienen usuarios asignados.
      *
-     * @param  Request             $request
-     * @param  ForceDeleteService  $forceDeleteService
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function bulkForceDelete(Request $request, ForceDeleteService $forceDeleteService)
     {

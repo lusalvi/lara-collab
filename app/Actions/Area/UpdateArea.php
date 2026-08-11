@@ -12,9 +12,9 @@ class UpdateArea
     /**
      * Actualiza el área con los datos provistos.
      *
-     * @param  Area   $area  Área a modificar.
+     * @param  Area  $area  Área a modificar.
      * @param  array  $data  Datos validados con los nuevos valores.
-     * @return bool          True si la actualización fue exitosa, false en caso contrario.
+     * @return bool True si la actualización fue exitosa, false en caso contrario.
      */
     public function update(Area $area, array $data): bool
     {

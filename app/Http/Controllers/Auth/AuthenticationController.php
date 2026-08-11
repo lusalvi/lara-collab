@@ -20,8 +20,6 @@ class AuthenticationController extends Controller
      *
      * Pasa la variable `notify` de la sesión para mostrar alertas contextuales
      * (ej: "sesión expirada", "login con Google fallido").
-     *
-     * @return Response
      */
     public function create(): Response
     {
@@ -33,9 +31,6 @@ class AuthenticationController extends Controller
      *
      * Delega la validación de credenciales al LoginRequest y regenera la sesión
      * para prevenir ataques de fijación de sesión.
-     *
-     * @param  LoginRequest  $request
-     * @return RedirectResponse
      */
     public function store(LoginRequest $request): RedirectResponse
     {
@@ -50,9 +45,6 @@ class AuthenticationController extends Controller
      * Cierra la sesión del usuario autenticado.
      *
      * Invalida la sesión y regenera el token CSRF.
-     *
-     * @param  Request  $request
-     * @return RedirectResponse
      */
     public function destroy(Request $request): RedirectResponse
     {

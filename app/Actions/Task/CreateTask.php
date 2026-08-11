@@ -28,8 +28,8 @@ class CreateTask
      * se revierte todo.
      *
      * @param  Project  $project  Proyecto al que pertenecerá la tarea.
-     * @param  array    $data     Datos validados provenientes del request.
-     * @return Task               La tarea recién creada.
+     * @param  array  $data  Datos validados provenientes del request.
+     * @return Task La tarea recién creada.
      */
     public function create(Project $project, array $data): Task
     {
@@ -73,10 +73,10 @@ class CreateTask
      * Sube una lista de archivos adjuntos a la tarea, genera sus miniaturas
      * y registra una actividad. Opcionalmente despacha el evento de adjuntos.
      *
-     * @param  Task              $task           Tarea destino.
-     * @param  array             $items          Archivos a subir (instancias de UploadedFile).
-     * @param  bool              $dispatchEvent  Si es true, despacha AttachmentsUploaded al terminar.
-     * @return Collection                        Colección de adjuntos creados.
+     * @param  Task  $task  Tarea destino.
+     * @param  array  $items  Archivos a subir (instancias de UploadedFile).
+     * @param  bool  $dispatchEvent  Si es true, despacha AttachmentsUploaded al terminar.
+     * @return Collection Colección de adjuntos creados.
      */
     public function uploadAttachments(Task $task, array $items, $dispatchEvent = true): Collection
     {
@@ -124,10 +124,10 @@ class CreateTask
      * Devuelve null si el archivo no es una imagen compatible o si
      * la generación falla (por ejemplo, imagen corrupta).
      *
-     * @param  UploadedFile  $file      Archivo subido.
-     * @param  Task          $task      Tarea propietaria (usada para construir la ruta).
-     * @param  string        $filename  Nombre de archivo ya generado para la imagen original.
-     * @return string|null             Ruta relativa a storage de la miniatura, o null.
+     * @param  UploadedFile  $file  Archivo subido.
+     * @param  Task  $task  Tarea propietaria (usada para construir la ruta).
+     * @param  string  $filename  Nombre de archivo ya generado para la imagen original.
+     * @return string|null Ruta relativa a storage de la miniatura, o null.
      */
     protected function generateThumb(UploadedFile $file, Task $task, string $filename)
     {

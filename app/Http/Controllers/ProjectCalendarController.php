@@ -20,9 +20,6 @@ class ProjectCalendarController extends Controller
      *
      * Solo incluye tareas que tienen `due_on` definido, ya que sin fecha
      * no tienen posición en el calendario.
-     *
-     * @param  Project  $project
-     * @return Response
      */
     public function index(Project $project): Response
     {

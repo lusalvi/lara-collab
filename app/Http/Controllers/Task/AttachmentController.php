@@ -28,9 +28,6 @@ class AttachmentController extends Controller
      * Delega la lógica de almacenamiento al Action CreateTask.
      *
      * @param  Request  $request  Contiene: attachments (array de archivos).
-     * @param  Project  $project
-     * @param  Task     $task
-     * @return JsonResponse
      */
     public function store(Request $request, Project $project, Task $task): JsonResponse
     {
@@ -51,11 +48,6 @@ class AttachmentController extends Controller
      *
      * Borra el archivo original y su miniatura, luego elimina el registro
      * de la base de datos y despacha el evento correspondiente.
-     *
-     * @param  Project     $project
-     * @param  Task        $task
-     * @param  Attachment  $attachment
-     * @return JsonResponse
      */
     public function destroy(Project $project, Task $task, Attachment $attachment): JsonResponse
     {

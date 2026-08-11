@@ -18,14 +18,13 @@ use Inertia\Response;
  */
 class MyWorkTaskController extends Controller
 {
-        /**
+    /**
      * Muestra las tareas pendientes asignadas al usuario, agrupadas por proyecto.
      *
      * Soporta ordenamiento por prioridad (`sort_priority=asc|desc`).
      * Las tareas sin prioridad asignada siempre se ubican al final.
      *
      * @param  Request  $request  Puede contener: sort_priority (asc|desc).
-     * @return Response
      */
     public function index(Request $request): Response
     {

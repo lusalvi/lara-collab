@@ -21,10 +21,10 @@ class UpdateAuthUser
      * - Avatar: se actualiza si el usuario no tiene uno, o si se envió un archivo nuevo.
      * - Contraseña: solo se actualiza si se envió un valor no vacío.
      *
-     * @param  User   $user  El usuario autenticado que edita su propio perfil.
+     * @param  User  $user  El usuario autenticado que edita su propio perfil.
      * @param  array  $data  Datos validados: name, job_title, phone, email,
      *                       avatar (nullable), password (nullable).
-     * @return bool          True si la actualización fue exitosa.
+     * @return bool True si la actualización fue exitosa.
      */
     public function update($user, array $data): bool
     {

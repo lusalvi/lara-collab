@@ -31,10 +31,6 @@ class NoteController extends Controller
      *
      * Las notas bloqueadas se devuelven sin contenido (null) para evitar
      * exponer datos cifrados al frontend antes de que el usuario ingrese su passcode.
-     *
-     * @param  Request  $request
-     * @param  Project  $project
-     * @return Response
      */
     public function index(Request $request, Project $project): Response
     {
@@ -59,10 +55,6 @@ class NoteController extends Controller
 
     /**
      * Crea una nueva nota en el proyecto.
-     *
-     * @param  StoreNoteRequest  $request
-     * @param  Project           $project
-     * @return RedirectResponse
      */
     public function store(StoreNoteRequest $request, Project $project): RedirectResponse
     {
@@ -78,11 +70,6 @@ class NoteController extends Controller
      *
      * Si la nota está bloqueada, valida el passcode antes de guardar.
      * El nuevo contenido se re-cifra automáticamente con el mismo salt existente.
-     *
-     * @param  UpdateNoteRequest  $request
-     * @param  Project            $project
-     * @param  Note               $note
-     * @return RedirectResponse
      */
     public function update(UpdateNoteRequest $request, Project $project, Note $note): RedirectResponse
     {
@@ -116,11 +103,6 @@ class NoteController extends Controller
      *
      * Genera un salt aleatorio para la derivación de la clave y cifra el contenido.
      * El passcode nunca se almacena; solo se guarda el salt y el contenido cifrado.
-     *
-     * @param  LockNoteRequest  $request
-     * @param  Project          $project
-     * @param  Note             $note
-     * @return RedirectResponse
      */
     public function lock(LockNoteRequest $request, Project $project, Note $note): RedirectResponse
     {
@@ -147,11 +129,6 @@ class NoteController extends Controller
      *
      * Solo devuelve el contenido si el passcode es válido; no modifica el estado
      * de la nota en la base de datos.
-     *
-     * @param  UnlockNoteRequest  $request
-     * @param  Project            $project
-     * @param  Note               $note
-     * @return JsonResponse
      */
     public function unlock(UnlockNoteRequest $request, Project $project, Note $note): JsonResponse
     {
@@ -171,11 +148,6 @@ class NoteController extends Controller
      *
      * Valida el passcode, descifra el contenido y guarda la nota sin cifrado.
      * Si el request incluye contenido editado, lo usa; si no, conserva el descifrado.
-     *
-     * @param  RemoveLockNoteRequest  $request
-     * @param  Project                $project
-     * @param  Note                   $note
-     * @return RedirectResponse
      */
     public function removeLock(RemoveLockNoteRequest $request, Project $project, Note $note): RedirectResponse
     {
@@ -199,10 +171,6 @@ class NoteController extends Controller
 
     /**
      * Elimina una nota del proyecto.
-     *
-     * @param  Project  $project
-     * @param  Note     $note
-     * @return RedirectResponse
      */
     public function destroy(Project $project, Note $note): RedirectResponse
     {

@@ -18,10 +18,8 @@ use Inertia\Response;
  */
 class DashboardController extends Controller
 {
-     /**
+    /**
      * Muestra el dashboard personalizado del usuario autenticado.
-     *
-     * @return Response
      */
     public function index(): Response
     {
@@ -53,7 +51,7 @@ class DashboardController extends Controller
                 ->with('taskGroup:id,name')
                 ->orderBy('due_on')
                 ->get(['id', 'name', 'due_on', 'group_id', 'project_id']),
-             // Últimas 10 tareas asignadas recientemente al usuario (no completadas)
+            // Últimas 10 tareas asignadas recientemente al usuario (no completadas)
             'recentlyAssignedTasks' => Task::whereIn('project_id', $projectIds)
                 ->whereNull('completed_at')
                 ->whereNotNull('assigned_at')

@@ -17,7 +17,7 @@ class CreateArea
      * Crea y persiste una nueva área con los datos provistos.
      *
      * @param  array  $data  Datos validados (nombre y cualquier otro campo fillable de Area).
-     * @return Area          El área recién creada.
+     * @return Area El área recién creada.
      */
     public function create(array $data): Area
     {

@@ -15,10 +15,8 @@ use Inertia\Response;
  */
 class ResetPasswordController extends Controller
 {
-        /**
+    /**
      * Muestra el formulario de solicitud de reset de contraseña.
-     *
-     * @return Response
      */
     public function create(): Response
     {
@@ -27,13 +25,10 @@ class ResetPasswordController extends Controller
         ]);
     }
 
-        /**
+    /**
      * Envía el enlace de restablecimiento al correo indicado.
      *
      * Si el email no existe o hay throttle, devuelve mensajes de error en español.
-     *
-     * @param  Request  $request
-     * @return RedirectResponse
      */
     public function store(Request $request): RedirectResponse
     {

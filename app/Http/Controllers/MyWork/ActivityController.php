@@ -22,8 +22,6 @@ class ActivityController extends Controller
 {
     /**
      * Muestra las últimas 100 actividades agrupadas por fecha.
-     *
-     * @return Response
      */
     public function index(): Response
     {

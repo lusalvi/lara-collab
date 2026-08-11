@@ -24,7 +24,7 @@ class UpdateTask
      * - `subscribed_users`: sincroniza la tabla pivote en lugar de actualizar la fila de la tarea.
      * - `labels`: ídem para etiquetas.
      *
-     * @param  Task   $task  Tarea a actualizar.
+     * @param  Task  $task  Tarea a actualizar.
      * @param  array  $data  Array con exactamente un par clave-valor (campo => nuevo valor).
      */
     public function update(Task $task, array $data): void

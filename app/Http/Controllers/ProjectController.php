@@ -10,8 +10,10 @@ use App\Models\Project;
 use App\Models\User;
 use App\Services\ForceDeleteService;
 use App\Services\ProjectService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 /**
  * Controlador de proyectos.
@@ -37,7 +39,7 @@ class ProjectController extends Controller
      * Incluye conteos de tareas totales, completadas y vencidas, y marca favoritos.
      *
      * @param  Request  $request  Puede contener: search, archived.
-     * @return \Inertia\Response
+     * @return Response
      */
     public function index(Request $request)
     {
@@ -48,22 +50,22 @@ class ProjectController extends Controller
             'items' => ProjectResource::collection(
                 Project::searchByQueryString()
                     // Superadmin ve todos; admin de área ve los de su área; resto solo los asignados
-                    ->when($authUser->isSuperAdmin(), fn($q) => $q) // sin filtro adicional
+                    ->when($authUser->isSuperAdmin(), fn ($q) => $q) // sin filtro adicional
                     ->when(
                         $authUser->isAdmin() && ! $authUser->isSuperAdmin(),
-                        fn($q) => $q->where('area_id', $authUser->area_id)
+                        fn ($q) => $q->where('area_id', $authUser->area_id)
                     )
                     ->when(
                         $authUser->isNotAdmin(),
-                        fn($q) => $q->whereHas('users', fn($q2) => $q2->where('id', $authUser->id))
+                        fn ($q) => $q->whereHas('users', fn ($q2) => $q2->where('id', $authUser->id))
                             ->where('area_id', $authUser->area_id)
                     )
-                    ->when($request->has('archived'), fn($query) => $query->onlyArchived())
+                    ->when($request->has('archived'), fn ($query) => $query->onlyArchived())
                     ->with(['area:id,name', 'users:id,name,avatar'])
                     ->withCount([
                         'tasks AS all_tasks_count',
-                        'tasks AS completed_tasks_count' => fn($q) => $q->whereNotNull('completed_at'),
-                        'tasks AS overdue_tasks_count' => fn($q) => $q->whereNull('completed_at')->whereDate('due_on', '<', now()),
+                        'tasks AS completed_tasks_count' => fn ($q) => $q->whereNotNull('completed_at'),
+                        'tasks AS overdue_tasks_count' => fn ($q) => $q->whereNull('completed_at')->whereDate('due_on', '<', now()),
                     ])
                     ->withExists('favoritedByAuthUser AS favorite')
                     ->orderBy('favorite', 'desc')
@@ -80,7 +82,7 @@ class ProjectController extends Controller
      * - Superadmin: ve todas las áreas y todos los usuarios.
      * - Admin de área: ve solo su área y los usuarios de la misma.
      *
-     * @return \Inertia\Response
+     * @return Response
      */
     public function create()
     {
@@ -93,8 +95,8 @@ class ProjectController extends Controller
                 'areas' => $authUser->isSuperAdmin()
                     ? Area::dropdownValues()
                     : Area::where('id', $authUser->area_id)->get(['id', 'name'])
-                    ->map(fn($i) => ['value' => (string) $i->id, 'label' => $i->name])
-                    ->toArray(),
+                        ->map(fn ($i) => ['value' => (string) $i->id, 'label' => $i->name])
+                        ->toArray(),
                 // Solo usuarios del mismo área (o todos si superadmin)
                 'users' => User::userDropdownValues($authUser->isSuperAdmin() ? null : $authUser->area_id),
             ],
@@ -106,8 +108,7 @@ class ProjectController extends Controller
      *
      * Aplica las mismas restricciones de área que en `create()`.
      *
-     * @param  Project  $project
-     * @return \Inertia\Response
+     * @return Response
      */
     public function edit(Project $project)
     {
@@ -122,8 +123,8 @@ class ProjectController extends Controller
                 'areas' => $authUser->isSuperAdmin()
                     ? Area::dropdownValues()
                     : Area::where('id', $authUser->area_id)->get(['id', 'name'])
-                    ->map(fn($i) => ['value' => (string) $i->id, 'label' => $i->name])
-                    ->toArray(),
+                        ->map(fn ($i) => ['value' => (string) $i->id, 'label' => $i->name])
+                        ->toArray(),
                 'users' => User::userDropdownValues($authUser->isSuperAdmin() ? null : $authUser->area_id),
             ],
         ]);
@@ -135,8 +136,7 @@ class ProjectController extends Controller
      * Los grupos iniciales representan el flujo estándar de trabajo:
      * Backlog → Por hacer → En curso → En revisión → Finalizado.
      *
-     * @param  StoreProjectRequest  $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function store(StoreProjectRequest $request)
     {
@@ -162,9 +162,7 @@ class ProjectController extends Controller
     /**
      * Actualiza los datos de un proyecto y sincroniza sus usuarios asignados.
      *
-     * @param  UpdateProjectRequest  $request
-     * @param  Project               $project
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function update(UpdateProjectRequest $request, Project $project)
     {
@@ -181,8 +179,7 @@ class ProjectController extends Controller
     /**
      * Archiva un proyecto (soft delete con registro del usuario que archivó).
      *
-     * @param  Project  $project
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function destroy(Project $project)
     {
@@ -196,7 +193,7 @@ class ProjectController extends Controller
      * Restaura un proyecto archivado.
      *
      * @param  int  $projectId  ID del proyecto (se busca incluido en archivados).
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function restore(int $projectId)
     {
@@ -213,9 +210,8 @@ class ProjectController extends Controller
     /**
      * Elimina permanentemente un lote de proyectos archivados.
      *
-     * @param  Request             $request            Contiene: ids (array de IDs a eliminar).
-     * @param  ForceDeleteService  $forceDeleteService
-     * @return \Illuminate\Http\RedirectResponse
+     * @param  Request  $request  Contiene: ids (array de IDs a eliminar).
+     * @return RedirectResponse
      */
     public function bulkForceDelete(Request $request, ForceDeleteService $forceDeleteService)
     {
@@ -241,8 +237,7 @@ class ProjectController extends Controller
     /**
      * Agrega o quita el proyecto de los favoritos del usuario autenticado.
      *
-     * @param  Project  $project
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function favoriteToggle(Project $project)
     {
@@ -259,8 +254,7 @@ class ProjectController extends Controller
      * Delega la lógica de sincronización al servicio ProjectService.
      *
      * @param  Request  $request  Contiene: users (array de IDs de usuarios con acceso).
-     * @param  Project  $project
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function userAccess(Request $request, Project $project)
     {

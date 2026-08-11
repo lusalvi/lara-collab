@@ -11,6 +11,7 @@ use App\Http\Resources\Area\AreaResource;
 use App\Models\Area;
 use App\Models\User;
 use App\Services\ForceDeleteService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -35,7 +36,6 @@ class AreaController extends Controller
      * El superadmin ve todas las áreas; el admin de área solo ve la propia.
      *
      * @param  Request  $request  Puede contener: search, sort, archived.
-     * @return Response
      */
     public function index(Request $request): Response
     {
@@ -47,8 +47,8 @@ class AreaController extends Controller
                 Area::searchByQueryString()
                     ->sortByQueryString()
                     // Admin de área solo ve su propio área; superadmin ve todas
-                    ->when(! $authUser->isSuperAdmin() && $authUser->area_id, fn($q) => $q->where('id', $authUser->area_id))
-                    ->when($request->has('archived'), fn($query) => $query->onlyArchived())
+                    ->when(! $authUser->isSuperAdmin() && $authUser->area_id, fn ($q) => $q->where('id', $authUser->area_id))
+                    ->when($request->has('archived'), fn ($query) => $query->onlyArchived())
                     ->paginate(12)
             ),
         ]);
@@ -57,7 +57,7 @@ class AreaController extends Controller
     /**
      * Muestra el formulario de creación de área.
      *
-     * @return \Inertia\Response
+     * @return Response
      */
     public function create()
     {
@@ -67,8 +67,7 @@ class AreaController extends Controller
     /**
      * Crea una nueva área.
      *
-     * @param  StoreAreaRequest  $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function store(StoreAreaRequest $request)
     {
@@ -80,8 +79,7 @@ class AreaController extends Controller
     /**
      * Muestra el formulario de edición de un área.
      *
-     * @param  Area  $area
-     * @return \Inertia\Response
+     * @return Response
      */
     public function edit(Area $area)
     {
@@ -93,9 +91,7 @@ class AreaController extends Controller
     /**
      * Actualiza los datos de un área existente.
      *
-     * @param  Area              $area
-     * @param  UpdateAreaRequest $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function update(Area $area, UpdateAreaRequest $request)
     {
@@ -107,8 +103,7 @@ class AreaController extends Controller
     /**
      * Archiva un área (soft delete con registro del usuario que archivó).
      *
-     * @param  Area  $area
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function destroy(Area $area)
     {
@@ -122,7 +117,7 @@ class AreaController extends Controller
      * Restaura un área archivada.
      *
      * @param  int  $areaId  ID del área (se busca incluida en archivadas).
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function restore(int $areaId)
     {
@@ -142,9 +137,8 @@ class AreaController extends Controller
      * Bloquea la eliminación si alguna de las áreas todavía tiene usuarios
      * o proyectos asociados (incluso archivados), e informa cuáles son las afectadas.
      *
-     * @param  Request             $request            Contiene: ids (array de IDs a eliminar).
-     * @param  ForceDeleteService  $forceDeleteService
-     * @return \Illuminate\Http\RedirectResponse
+     * @param  Request  $request  Contiene: ids (array de IDs a eliminar).
+     * @return RedirectResponse
      */
     public function bulkForceDelete(Request $request, ForceDeleteService $forceDeleteService)
     {
@@ -161,7 +155,7 @@ class AreaController extends Controller
 
         // No se puede eliminar un área que aún tiene usuarios o proyectos vinculados
         $blockedAreas = $areas->filter(
-            fn(Area $area) => $area->projects()->withArchived()->exists() || $area->users()->withArchived()->exists()
+            fn (Area $area) => $area->projects()->withArchived()->exists() || $area->users()->withArchived()->exists()
         );
 
         if ($blockedAreas->isNotEmpty()) {

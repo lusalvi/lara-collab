@@ -9,6 +9,7 @@ use App\Http\Requests\User\UpdateUserRequest;
 use App\Http\Resources\User\UserResource;
 use App\Models\User;
 use App\Services\ForceDeleteService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -33,7 +34,6 @@ class UserController extends Controller
      * El superadmin ve todos los usuarios; el admin de área solo los de su área.
      *
      * @param  Request  $request  Puede contener: search, sort, archived.
-     * @return Response
      */
     public function index(Request $request): Response
     {
@@ -55,7 +55,7 @@ class UserController extends Controller
     /**
      * Muestra el formulario de creación de usuario.
      *
-     * @return \Inertia\Response
+     * @return Response
      */
     public function create()
     {
@@ -68,8 +68,7 @@ class UserController extends Controller
      * Delega la lógica de creación (envío de email de bienvenida, hash de contraseña)
      * al Action CreateUser.
      *
-     * @param  StoreUserRequest  $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function store(StoreUserRequest $request)
     {
@@ -81,8 +80,7 @@ class UserController extends Controller
     /**
      * Muestra el formulario de edición de un usuario.
      *
-     * @param  User  $user
-     * @return \Inertia\Response
+     * @return Response
      */
     public function edit(User $user)
     {
@@ -92,9 +90,7 @@ class UserController extends Controller
     /**
      * Actualiza los datos de un usuario existente.
      *
-     * @param  User              $user
-     * @param  UpdateUserRequest $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function update(User $user, UpdateUserRequest $request)
     {
@@ -108,8 +104,7 @@ class UserController extends Controller
      *
      * Protección: un usuario no puede archivarse a sí mismo.
      *
-     * @param  User  $user
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function destroy(User $user)
     {
@@ -126,7 +121,7 @@ class UserController extends Controller
      * Restaura un usuario archivado.
      *
      * @param  int  $userId  ID del usuario (buscado incluido en archivados).
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function restore(int $userId)
     {
@@ -140,15 +135,14 @@ class UserController extends Controller
         return redirect()->back()->success('Usuario Restaurado', 'La restauración del usuario se realizó con éxito.');
     }
 
-     /**
+    /**
      * Elimina permanentemente un lote de usuarios archivados.
      *
      * Protección: no se puede eliminar al usuario autenticado,
      * incluso si está incluido en la lista.
      *
-     * @param  Request             $request            Contiene: ids (array de IDs a eliminar).
-     * @param  ForceDeleteService  $forceDeleteService
-     * @return \Illuminate\Http\RedirectResponse
+     * @param  Request  $request  Contiene: ids (array de IDs a eliminar).
+     * @return RedirectResponse
      */
     public function bulkForceDelete(Request $request, ForceDeleteService $forceDeleteService)
     {

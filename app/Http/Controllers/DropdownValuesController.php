@@ -22,11 +22,10 @@ use Illuminate\Support\Collection;
  */
 class DropdownValuesController extends Controller
 {
-       /**
+    /**
      * Devuelve los valores de dropdown solicitados en formato JSON.
      *
      * @param  Request  $request  Puede contener: users, mentionProjectUsers (+ projectId).
-     * @return JsonResponse
      */
     public function __invoke(Request $request): JsonResponse
     {

@@ -8,6 +8,7 @@ use App\Http\Requests\Label\UpdateLabelRequest;
 use App\Http\Resources\Label\LabelResource;
 use App\Models\Label;
 use App\Services\ForceDeleteService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -26,9 +27,6 @@ class LabelController extends Controller
 
     /**
      * Lista las etiquetas con soporte de búsqueda, ordenamiento y archivadas.
-     *
-     * @param  Request  $request
-     * @return Response
      */
     public function index(Request $request): Response
     {
@@ -50,8 +48,7 @@ class LabelController extends Controller
     /**
      * Crea una nueva etiqueta.
      *
-     * @param  StoreLabelRequest  $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function store(StoreLabelRequest $request)
     {
@@ -63,8 +60,7 @@ class LabelController extends Controller
     /**
      * Muestra el formulario de edición de una etiqueta.
      *
-     * @param  Label  $label
-     * @return \Inertia\Response
+     * @return Response
      */
     public function edit(Label $label)
     {
@@ -74,9 +70,7 @@ class LabelController extends Controller
     /**
      * Actualiza una etiqueta existente.
      *
-     * @param  Label              $label
-     * @param  UpdateLabelRequest $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function update(Label $label, UpdateLabelRequest $request)
     {
@@ -88,8 +82,7 @@ class LabelController extends Controller
     /**
      * Archiva una etiqueta.
      *
-     * @param  Label  $label
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function destroy(Label $label)
     {
@@ -102,8 +95,7 @@ class LabelController extends Controller
     /**
      * Restaura una etiqueta archivada.
      *
-     * @param  int  $labelId
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function restore(int $labelId)
     {
@@ -120,9 +112,7 @@ class LabelController extends Controller
     /**
      * Elimina permanentemente un lote de etiquetas archivadas.
      *
-     * @param  Request             $request
-     * @param  ForceDeleteService  $forceDeleteService
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function bulkForceDelete(Request $request, ForceDeleteService $forceDeleteService)
     {

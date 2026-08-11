@@ -6,17 +6,19 @@ use App\Actions\User\UpdateAuthUser;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UpdateAuthUserRequest;
 use App\Http\Resources\User\AuthUserResource;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
+use Inertia\Response;
 
 /**
  * Controlador del perfil del usuario autenticado.
  */
 class ProfileController extends Controller
 {
-       /**
+    /**
      * Muestra el formulario de edición del perfil.
      *
-     * @return \Inertia\Response
+     * @return Response
      */
     public function edit()
     {
@@ -30,8 +32,7 @@ class ProfileController extends Controller
      *
      * Delega la lógica de actualización (avatar, datos personales) al Action UpdateAuthUser.
      *
-     * @param  UpdateAuthUserRequest  $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function update(UpdateAuthUserRequest $request)
     {

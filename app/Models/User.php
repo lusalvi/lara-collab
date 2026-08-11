@@ -23,7 +23,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 /**
  * User
- * 
+ *
  * Usuario de la aplicación. Traits: archivable, auditable, roles/permisos (Spatie),
  * searchable, sortable, favoriter (favoritos), API tokens, password reset
  */

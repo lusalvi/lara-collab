@@ -18,7 +18,7 @@ class WhereHasFilter extends Filter
     /**
      * Aplica el filtro sobre una relación del modelo.
      *
-     * @param Builder $query Consulta Eloquent a filtrar.
+     * @param  Builder  $query  Consulta Eloquent a filtrar.
      * @return Builder Consulta modificada.
      */
     public function apply(Builder $query): Builder

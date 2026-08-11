@@ -14,7 +14,7 @@ use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 
 /**
  * Area
- * 
+ *
  * Área de negocio: agrupa usuarios, proyectos y administradores.
  * Traits: archivable, auditable, searchable, sortable
  */
@@ -48,8 +48,8 @@ class Area extends Model implements AuditableContract
 
     /**
      * Lista de áreas para dropdowns con opciones de filtro
-     * 
-     * @param array $options Opciones: ['hasProjects'] filtra solo áreas con proyectos
+     *
+     * @param  array  $options  Opciones: ['hasProjects'] filtra solo áreas con proyectos
      * @return array Array [['value' => '1', 'label' => 'Área A'], ...]
      */
     public static function dropdownValues($options = []): array

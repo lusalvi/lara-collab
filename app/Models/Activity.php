@@ -29,7 +29,7 @@ class Activity extends Model
      * el parámetro de consulta "project".
      *
      * @return array Lista de filtros aplicables al modelo.
-     */    
+     */
     public function filters(): array
     {
         return [
@@ -48,7 +48,6 @@ class Activity extends Model
     }
 
     /**
-     *
      * Permite asociar una actividad con diferentes tipos de modelos,
      * como tareas, grupos u otras entidades registrables.
      *

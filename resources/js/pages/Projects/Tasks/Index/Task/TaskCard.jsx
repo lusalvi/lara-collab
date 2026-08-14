@@ -24,7 +24,7 @@ export default function TaskCard({ task, index }) {
         <div
           {...provided.draggableProps}
           ref={provided.innerRef}
-           className={`${classes.task} ${snapshot.isDragging && classes.itemDragging}`}
+          className={`${classes.task} ${snapshot.isDragging && classes.itemDragging}`}
         >
           {task.priority && (
             <Tooltip
@@ -56,8 +56,12 @@ export default function TaskCard({ task, index }) {
                       : isDueSoon(task)
                       ? 'yellow.7'
                       : ''
-                    : ''
+                    : 'var(--mantine-color-gray-6)'
                 }
+                style={{
+                  opacity: task.completed_at ? 0.6 : 1,
+                  textDecoration: task.completed_at ? 'line-through' : undefined,
+                }}
                 onClick={() => openEditTask(task)}
               >
                 #{task.number + ': ' + task.name}

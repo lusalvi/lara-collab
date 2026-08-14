@@ -36,6 +36,10 @@ class CreateTask
     {
         return DB::transaction(function () use ($project, $data) {
 
+            // Obtener el grupo para verificar si es "Finalizado"
+            $group = $project->taskGroups()->find($data['group_id']);
+            $completedAt = ($group && $group->name === 'Finalizado') ? now() : null;
+
             $task = $project->tasks()->create([
                 'group_id' => $data['group_id'],
                 'created_by_user_id' => auth()->id(),
@@ -49,7 +53,7 @@ class CreateTask
                 'start_on' => $data['start_on'],
                 'due_on' => $data['due_on'],
                 'priority_id' => $data['priority_id'] ?? null,
-                'completed_at' => null,
+                'completed_at' => $completedAt,
             ]);
 
             // Asociar usuarios suscriptos (notificaciones de actividad)

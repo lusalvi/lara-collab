@@ -24,7 +24,7 @@ const TasksIndex = () => {
   currentProject = project;
 
   const { groups, setGroups, reorderGroup } = useTaskGroupsStore();
-  const { tasks, setTasks, addTask, reorderTask, moveTask, clearTaskSelection } = useTasksStore();
+  const { tasks, setTasks, addTask, reorderTask, moveTask, setGroups: setTasksGroups, clearTaskSelection } = useTasksStore();
   const { hasFilters } = useTaskFiltersStore();
   const { initProjectWebSocket } = useWebSockets();
   const { tasksView } = usePreferences();
@@ -38,6 +38,8 @@ const TasksIndex = () => {
   useEffect(() => {
     setGroups(taskGroups);
     setTasks(groupedTasks);
+    // ACTUALIZADO: Pasar grupos al store de tareas también
+    setTasksGroups(taskGroups);
     if (openedTask) addTask(openedTask);
   }, [taskGroups, groupedTasks]);
 
@@ -45,6 +47,7 @@ const TasksIndex = () => {
     return initProjectWebSocket(project);
   }, []);
 
+  // ACTUALIZADO: Agregar lógica para pasar nombre de grupo al mover
   const onDragEnd = ({ source, destination }) => {
     if (!destination) {
       return;
@@ -53,7 +56,10 @@ const TasksIndex = () => {
       if (source.droppableId === destination.droppableId) {
         reorderTask(source, destination);
       } else {
-        moveTask(source, destination);
+        // Obtener nombre del grupo destino
+        const destGroupId = +destination.droppableId.split("-")[1];
+        const destGroup = groups.find(g => g.id === destGroupId);
+        moveTask(source, destination, destGroup?.name);
       }
     } else {
       reorderGroup(source.index, destination.index);

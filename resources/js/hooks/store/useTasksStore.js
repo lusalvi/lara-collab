@@ -13,6 +13,7 @@ const useTasksStore = create((set, get) => ({
 
   tasks: {},
   selectedTaskIds: [],
+  groups: [], // Agregar grupos al estado para acceder a sus nombres
 
   toggleTaskSelection: (taskId) => {
     return set(produce(state => {
@@ -87,6 +88,10 @@ const useTasksStore = create((set, get) => ({
     }
   },
   setTasks: (tasks) => set(() => ({ tasks: { ...tasks } })),
+  
+  // Agregar método para setear grupos (necesario para acceder a nombres)
+  setGroups: (groups) => set(() => ({ groups: groups })),
+  
   addTask: (task) => {
     return set(produce(state => {
       const index = state.tasks[task.group_id].findIndex((i) => i.id === task.id);
@@ -178,11 +183,26 @@ const useTasksStore = create((set, get) => ({
 
     return set(produce(state => { state.tasks[sourceGroupId] = result }));
   },
-  moveTask: (source, destination) => {
+  
+  // ACTUALIZADO: Agregar lógica para updatear completed_at al mover entre grupos
+  moveTask: (source, destination, destinationGroupName = null) => {
     const sourceGroupId = +source.droppableId.split("-")[1];
     const destinationGroupId = +destination.droppableId.split("-")[1];
 
     const result = move(get().tasks, sourceGroupId, destinationGroupId, source.index, destination.index);
+
+    // Obtener nombre del grupo destino si no se proporciona
+    const groups = get().groups || [];
+    const destGroup = groups.find(g => g.id === destinationGroupId);
+    const isCompletedGroup = destinationGroupName === 'Finalizado' || destGroup?.name === 'Finalizado';
+
+    // Actualizar completed_at si se mueve a "Finalizado"
+    if (isCompletedGroup && result[destinationGroupId][destination.index]) {
+      result[destinationGroupId][destination.index].completed_at = new Date().toISOString();
+    } else if (!isCompletedGroup && result[destinationGroupId][destination.index]) {
+      // Si se mueve DESDE "Finalizado" a otro grupo, limpiar completed_at
+      result[destinationGroupId][destination.index].completed_at = null;
+    }
 
     const data = {
       ids: result[destinationGroupId].map((i) => i.id),
@@ -201,6 +221,7 @@ const useTasksStore = create((set, get) => ({
       state.tasks[destinationGroupId] = result[destinationGroupId];
     }));
   },
+  
   reparentTask: ({ taskId, newParentId, groupId, ids }) => {
     const data = {
       task_id: taskId,

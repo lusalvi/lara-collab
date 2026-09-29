@@ -908,8 +908,18 @@ const PersonalTasksIndex = () => {
                     )}
                 </Group>
 
-                {/* Ordenamiento + Nueva tarea */}
+                {/* Limpiar completadas + Ordenamiento + Nueva tarea */}
                 <Group gap='md' align='center'>
+                    {hasCompleted && (
+                        <Button
+                            variant='light' color='red' size='xs'
+                            leftSection={<IconCircleCheck size={14} />}
+                            loading={clearingCompleted}
+                            onClick={handleClearCompleted}
+                        >
+                            Limpiar tareas completadas ({completedTasks.length})
+                        </Button>
+                    )}
                     <Group gap='xs' align='center'>
                         <IconAdjustmentsHorizontal size={14} color='var(--mantine-color-dimmed)' />
                         <Text size='xs' c='dimmed' fw={500}>Ordenar por:</Text>
@@ -933,27 +943,17 @@ const PersonalTasksIndex = () => {
 
                 {/* Cronograma principal */}
                 <div className={classes.mainCol}>
-                    <ScrollArea h='calc(100vh - 220px)' type='scroll' offsetScrollbars>
+                    <ScrollArea
+                        type='scroll'
+                        offsetScrollbars
+                        style={{ position: 'absolute', inset: 0 }}
+                    >
                         <DailySchedule
                             tasks={allDayTasks}
                             onEdit={handleEdit}
                             onDragCreate={handleDragCreate}
                         />
                     </ScrollArea>
-
-                    {/* Limpiar completadas */}
-                    {hasCompleted && (
-                        <Group justify='flex-end' mt='xs'>
-                            <Button
-                                variant='subtle' color='red' size='xs'
-                                leftSection={<IconCircleCheck size={13} />}
-                                loading={clearingCompleted}
-                                onClick={handleClearCompleted}
-                            >
-                                Limpiar tareas completadas ({completedTasks.length})
-                            </Button>
-                        </Group>
-                    )}
                 </div>
 
                 {/* Sidebar */}

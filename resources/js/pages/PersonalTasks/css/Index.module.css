@@ -35,14 +35,19 @@
     display: grid;
     grid-template-columns: 1fr 280px;
     gap: rem(16px);
-    align-items: flex-start;
+    align-items: stretch;
 }
 
+/* El cronograma se adapta al alto de la fila: su scroll va en absolute para no
+   aportar altura propia, así la fila mide lo que mida la sidebar (o el mínimo). */
 .mainCol {
     min-width: 0;
+    position: relative;
+    min-height: calc(100vh - 220px);
 }
 
 .sidebar {
+    align-self: start;
     display: flex;
     flex-direction: column;
     gap: rem(12px);
@@ -282,6 +287,11 @@
 
     .sidebar {
         position: static;
+    }
+
+    /* Una columna: el cronograma vuelve a tener alto propio */
+    .mainCol {
+        height: calc(100vh - 220px);
     }
 }
 

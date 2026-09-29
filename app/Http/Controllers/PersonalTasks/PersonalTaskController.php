@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -105,6 +106,8 @@ class PersonalTaskController extends Controller
             'scheduled_for'  => ['required', 'date'],
             'scheduled_time' => ['nullable', 'date_format:H:i'],
             'scheduled_end_time' => ['nullable', 'date_format:H:i'],
+            // Sin hora de comienzo no hay recordatorio: PersonalTaskObserver lo fuerza a null
+            'reminder_minutes' => ['nullable', Rule::in(PersonalTask::REMINDER_OPTIONS)],
         ]);
 
         $validated = $this->normalizeTimes($validated);
@@ -131,6 +134,7 @@ class PersonalTaskController extends Controller
             'scheduled_for'  => ['sometimes', 'required', 'date'],
             'scheduled_time' => ['sometimes', 'nullable', 'date_format:H:i'],
             'scheduled_end_time' => ['sometimes', 'nullable', 'date_format:H:i'],
+            'reminder_minutes' => ['sometimes', 'nullable', Rule::in(PersonalTask::REMINDER_OPTIONS)],
         ]);
 
         $validated = $this->normalizeTimes($validated, $personalTask);

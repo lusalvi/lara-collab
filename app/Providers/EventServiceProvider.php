@@ -8,9 +8,11 @@ use App\Events\UserCreated;
 use App\Listeners\NotifyTaskSubscribers;
 use App\Listeners\SendEmailWithCredentials;
 use App\Models\Comment;
+use App\Models\PersonalTask;
 use App\Models\Project;
 use App\Models\Task;
 use App\Observers\CommentObserver;
+use App\Observers\PersonalTaskObserver;
 use App\Observers\ProjectObserver;
 use App\Observers\TaskObserver;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -44,6 +46,7 @@ class EventServiceProvider extends ServiceProvider
         Project::class => [ProjectObserver::class],
         Task::class => [TaskObserver::class],
         Comment::class => [CommentObserver::class],
+        PersonalTask::class => [PersonalTaskObserver::class],
     ];
 
     /**

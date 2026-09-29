@@ -57,6 +57,15 @@ function capitalize(str) {
     return str ? str.charAt(0).toUpperCase() + str.slice(1) : '';
 }
 
+// Opciones del recordatorio (el valor es la anticipación en minutos; 'none' = sin recordatorio)
+const REMINDER_OPTIONS = [
+    { value: 'none', label: 'Sin recordatorio' },
+    { value: '5',    label: '5 minutos antes' },
+    { value: '15',   label: '15 minutos antes' },
+    { value: '30',   label: '30 minutos antes' },
+    { value: '60',   label: '1 hora antes' },
+];
+
 // Recorta "HH:MM:SS" → "HH:MM" (la BD devuelve segundos)
 function toHHMM(t) {
     return t ? String(t).slice(0, 5) : '';
@@ -155,6 +164,7 @@ function TaskDrawer({ opened, onClose, task, priorities, viewingDate }) {
     const empty = {
         description: '', notes: '', priority_id: null, scheduled_for: viewingDate,
         use_range: false, scheduled_time: '', scheduled_end_time: '',
+        reminder_minutes: 'none',
     };
     const [form, setForm] = useState(empty);
     const [submitting, setSubmitting] = useState(false);
@@ -182,6 +192,7 @@ function TaskDrawer({ opened, onClose, task, priorities, viewingDate }) {
                     use_range:      Boolean(task.scheduled_end_time),
                     scheduled_time: toHHMM(task.scheduled_time),
                     scheduled_end_time: toHHMM(task.scheduled_end_time),
+                    reminder_minutes: task.reminder_minutes ? String(task.reminder_minutes) : 'none',
                 });
             } else {
                 setForm({ ...empty, scheduled_for: viewingDate });
@@ -189,7 +200,14 @@ function TaskDrawer({ opened, onClose, task, priorities, viewingDate }) {
         }
     }
 
-    function update(field, value) { setForm(prev => ({ ...prev, [field]: value })); }
+    function update(field, value) {
+        setForm(prev => ({
+            ...prev,
+            [field]: value,
+            // Sin hora de comienzo no puede haber recordatorio: vuelve a "Sin recordatorio"
+            ...(field === 'scheduled_time' && !value ? { reminder_minutes: 'none' } : {}),
+        }));
+    }
 
     // Al desactivar el rango se descarta la hora de fin (queda solo la hora puntual)
     function toggleRange(checked) {
@@ -217,6 +235,9 @@ function TaskDrawer({ opened, onClose, task, priorities, viewingDate }) {
             scheduled_for:  form.scheduled_for || viewingDate,
             scheduled_time: form.scheduled_time || null,
             scheduled_end_time: form.use_range ? (form.scheduled_end_time || null) : null,
+            reminder_minutes: form.scheduled_time && form.reminder_minutes !== 'none'
+                ? Number(form.reminder_minutes)
+                : null,
         };
         const opts = { preserveScroll: true, onSuccess: () => onClose(), onFinish: () => setSubmitting(false) };
         if (isEditing) {
@@ -314,6 +335,18 @@ function TaskDrawer({ opened, onClose, task, priorities, viewingDate }) {
                             />
                         </Box>
                     )}
+                    <Select
+                        label='Recordatorio'
+                        description={form.scheduled_time
+                            ? 'Te avisamos antes de la hora de comienzo.'
+                            : 'Definí una hora de comienzo para poder activar un recordatorio.'}
+                        data={REMINDER_OPTIONS}
+                        value={form.scheduled_time ? form.reminder_minutes : 'none'}
+                        onChange={val => update('reminder_minutes', val ?? 'none')}
+                        disabled={!form.scheduled_time}
+                        allowDeselect={false}
+                        size='sm'
+                    />
                 </div>
                 <Group justify='space-between' mt='xl' px={rem(20)} pb={rem(20)}>
                     <Button variant='transparent' onClick={onClose} disabled={submitting}>Cancelar</Button>

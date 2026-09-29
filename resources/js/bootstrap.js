@@ -9,8 +9,8 @@ NProgress.configure({
 let timeout = null;
 
 router.on('start', (event) => {
-  if (event.detail.visit.headers?.['X-Silent']) return;
-  timeout = setTimeout(() => NProgress.start(), 250);
+    if (event.detail.visit.headers?.['X-Silent']) return;
+    timeout = setTimeout(() => NProgress.start(), 250);
 });
 
 router.on('progress', (event) => {

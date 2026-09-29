@@ -1,34 +1,28 @@
 /* ════════════════════════════════════════════════════════════════
-   Agenda Personal — estilos
-   Usa variables de Mantine: colores, radius, dark-mode via light-dark()
+   Tareas Personales — Cronograma diario
+   Usa variables de Mantine. Compatible light/dark.
    ════════════════════════════════════════════════════════════════ */
 
-/* ── Cabecera de página ─────────────────────────────────────────── */
+/* ── Cabecera ────────────────────────────────────────────────────── */
 .pageHeader {
-    margin-bottom: rem(20px);
+    margin-bottom: rem(16px);
 }
 
-/* ── Barra de fecha + ordenamiento ─────────────────────────────── */
+/* ── Toolbar ─────────────────────────────────────────────────────── */
 .toolbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
     gap: rem(8px);
-    margin-bottom: rem(12px);
+    margin-bottom: rem(16px);
 }
 
 .dateChip {
     padding: rem(5px) rem(12px);
     border-radius: var(--mantine-radius-md);
-    border: rem(1px) solid light-dark(
-        var(--mantine-color-gray-3),
-        var(--mantine-color-dark-4)
-    );
-    background: light-dark(
-        var(--mantine-color-white),
-        var(--mantine-color-dark-6)
-    );
+    border: rem(1px) solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+    background: light-dark(var(--mantine-color-white), var(--mantine-color-dark-6));
     cursor: default;
 }
 
@@ -36,199 +30,236 @@
     color: var(--mantine-primary-color-filled);
 }
 
-/* ── Barra de nueva tarea ───────────────────────────────────────── */
-.newTaskBar {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: rem(16px);
+/* ── Layout principal: cronograma + sidebar ─────────────────────── */
+.layout {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: rem(16px);
+    align-items: flex-start;
 }
 
-/* ── Contenedor de la lista ─────────────────────────────────────── */
-.taskList {
-    width: 100%;
-}
-
-/* ════════════════════════════════════════════════════════════════
-   SECCIÓN (cabecera coloreada + cuerpo con filas)
-   ════════════════════════════════════════════════════════════════ */
-
-.section {
-    border-radius: var(--mantine-radius-md);
-    overflow: hidden;
-    border: rem(1px) solid light-dark(
-        var(--mantine-color-gray-2),
-        var(--mantine-color-dark-5)
-    );
-}
-
-/* Cabecera de sección */
-.sectionHeader {
-    padding: rem(10px) rem(16px);
-}
-
-/* Variante: pendientes anteriores — fondo naranja muy suave */
-.sectionHeader--overdue {
-    background: light-dark(
-        color-mix(in srgb, var(--mantine-color-orange-1) 60%, transparent),
-        color-mix(in srgb, var(--mantine-color-orange-9) 25%, var(--mantine-color-dark-6))
-    );
-}
-
-/* Variante: hoy — fondo azul muy suave (color primario del sistema) */
-.sectionHeader--today {
-    background: light-dark(
-        color-mix(in srgb, var(--mantine-primary-color-1, var(--mantine-color-blue-1)) 55%, transparent),
-        color-mix(in srgb, var(--mantine-color-blue-9) 20%, var(--mantine-color-dark-6))
-    );
-}
-
-/* Variante: completadas — fondo verde muy suave */
-.sectionHeader--completed {
-    background: light-dark(
-        color-mix(in srgb, var(--mantine-color-green-1) 55%, transparent),
-        color-mix(in srgb, var(--mantine-color-green-9) 20%, var(--mantine-color-dark-6))
-    );
-}
-
-/* Ícono de sección */
-.sectionIconWrap {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: rem(26px);
-    height: rem(26px);
-    border-radius: 50%;
-    flex-shrink: 0;
-    margin-top: rem(1px);
-}
-
-.sectionIconWrap--overdue {
-    color: var(--mantine-color-orange-6);
-    background: light-dark(var(--mantine-color-orange-1), var(--mantine-color-orange-9));
-}
-
-.sectionIconWrap--today {
-    color: var(--mantine-primary-color-filled);
-    background: light-dark(
-        color-mix(in srgb, var(--mantine-primary-color-1, var(--mantine-color-blue-1)) 80%, transparent),
-        var(--mantine-color-blue-9)
-    );
-}
-
-.sectionIconWrap--completed {
-    color: var(--mantine-color-green-6);
-    background: light-dark(var(--mantine-color-green-1), var(--mantine-color-green-9));
-}
-
-/* Cuerpo de sección */
-.sectionBody {
-    background: light-dark(
-        var(--mantine-color-white),
-        var(--mantine-color-dark-7)
-    );
-}
-
-/* ════════════════════════════════════════════════════════════════
-   FILA DE TAREA
-   ════════════════════════════════════════════════════════════════ */
-
-.taskRow {
-    display: flex;
-    align-items: center;
-    gap: rem(12px);
-    padding: rem(10px) rem(16px);
-    border-top: rem(1px) solid light-dark(
-        var(--mantine-color-gray-1),
-        var(--mantine-color-dark-5)
-    );
+.mainCol {
     min-width: 0;
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: rem(12px);
+    position: sticky;
+    top: rem(20px);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   CRONOGRAMA
+   ════════════════════════════════════════════════════════════════ */
+
+.schedule {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: rem(24px);
+}
+
+/* Sección "Sin horario" */
+.unscheduledSection {
+    border-bottom: rem(1px) solid light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-5));
+    padding: rem(10px) rem(10px) rem(14px) rem(10px);
+    margin-bottom: rem(4px);
+}
+
+.unscheduledLabel {
+    letter-spacing: 0.04em;
+    font-size: rem(11px);
+}
+
+/* Fila de tarea sin horario */
+.unscheduledRow {
+    display: flex;
+    align-items: center;
+    gap: rem(6px);
+    padding: rem(5px) rem(8px);
+    border-radius: var(--mantine-radius-sm);
     transition: background-color 0.1s ease;
 }
 
-.taskRow:hover {
-    background-color: light-dark(
-        var(--mantine-color-gray-0),
-        var(--mantine-color-dark-6)
-    );
+.unscheduledRow:hover {
+    background: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6));
 }
 
-/* Menú ⋮ oculto hasta hover */
-.taskRow .menuTrigger {
-    opacity: 0;
-    transition: opacity 0.1s ease;
-}
-.taskRow:hover .menuTrigger {
+.unscheduledRow:hover .menuTrigger {
     opacity: 1;
 }
 
-/* En touch siempre visible */
-@media (hover: none) {
-    .taskRow .menuTrigger {
-        opacity: 1;
-    }
+/* Grid de horas */
+.timeGrid {
+    position: relative;
+    width: 100%;
 }
 
-/* Estado completada */
-.taskRowCompleted {
-    background-color: light-dark(
-        var(--mantine-color-gray-0),
-        var(--mantine-color-dark-7)
-    );
-}
-.taskRowCompleted:hover {
-    background-color: light-dark(
-        var(--mantine-color-gray-1),
-        var(--mantine-color-dark-6)
-    );
+/* Fila de hora (label + línea) */
+.hourRow {
+    position: absolute;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    gap: rem(8px);
+    pointer-events: none;
 }
 
-/* ── Partes de la fila ──────────────────────────────────────────── */
+.hourLabel {
+    flex-shrink: 0;
+    width: rem(40px);
+    text-align: right;
+    font-size: rem(11px);
+    color: var(--mantine-color-dimmed);
+    font-variant-numeric: tabular-nums;
+    user-select: none;
+}
 
+.hourLine {
+    flex: 1;
+    height: rem(1px);
+    background: light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-5));
+}
+
+/* Contenedor posicionado de un bloque de tarea */
+.taskBlockWrapper {
+    --gutter-left: 3.5rem;   /* deja espacio para la columna de horas */
+    --gutter-right: 0.5rem;
+    position: absolute;
+    /* Columnas para tareas superpuestas: --col / --cols los define el componente */
+    left: calc(var(--gutter-left) + (100% - var(--gutter-left) - var(--gutter-right)) * var(--col, 0) / var(--cols, 1));
+    width: calc((100% - var(--gutter-left) - var(--gutter-right)) / var(--cols, 1) - 4px);
+    z-index: 1;
+    /* Fondo opaco: evita que las líneas de hora y otras tareas se transparenten */
+    background: var(--mantine-color-body);
+    border-radius: var(--mantine-radius-sm);
+}
+
+/* Bloque visual de una tarea con hora */
+.taskBlock {
+    border-left: rem(3px) solid;
+    border-radius: var(--mantine-radius-sm);
+    padding: rem(6px) rem(8px);
+    min-height: rem(48px);
+    transition: filter 0.1s ease;
+    cursor: default;
+}
+
+.taskBlock:hover {
+    filter: brightness(0.97);
+}
+
+/* Tarea con rango horario: la altura la dicta el wrapper (duración) */
+.taskBlockRange {
+    height: 100%;
+    min-height: 0;
+    padding: rem(3px) rem(8px);
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.taskBlock:hover .menuTrigger {
+    opacity: 1;
+}
+
+.taskBlockCompleted {
+    opacity: 0.5;
+}
+
+/* ── Dot de prioridad ────────────────────────────────────────────── */
+.priorityDot {
+    flex-shrink: 0;
+    width: rem(7px);
+    height: rem(7px);
+    border-radius: 50%;
+    display: inline-block;
+}
+
+/* Chip de prioridad (en overdue card) */
+.priorityChip {
+    display: inline-flex;
+    align-items: center;
+    font-size: rem(10px);
+    font-weight: 600;
+    padding: 0 rem(5px);
+    border-radius: rem(3px);
+    border: rem(1px) solid;
+    line-height: 1.6;
+    white-space: nowrap;
+}
+
+/* ── Partes comunes de tarea ─────────────────────────────────────── */
 .taskCheck {
     flex-shrink: 0;
     display: flex;
     align-items: center;
-    width: rem(20px);
+    width: rem(18px);
 }
 
-.taskBody {
-    flex: 1;
-    min-width: 0;
-}
-
-.taskTitle {
-    line-height: 1.4;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.taskNotes {
-    margin-top: rem(2px);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-/* Metadatos: prioridad y fecha */
-.taskMeta {
+/* Menú ⋮: oculto hasta hover */
+.menuTrigger {
+    opacity: 0;
+    transition: opacity 0.1s ease;
     flex-shrink: 0;
+}
+
+@media (hover: none) {
+    .menuTrigger { opacity: 1; }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   CARDS LATERALES
+   ════════════════════════════════════════════════════════════════ */
+
+.sideCard {
+    overflow: hidden;
+}
+
+.sideCardHeader {
+    padding: rem(10px) rem(12px);
+    background: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6));
+    border-bottom: rem(1px) solid light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-5));
+}
+
+.sideCardIcon {
     display: flex;
     align-items: center;
-    gap: rem(5px);
-    white-space: nowrap;
+    justify-content: center;
+    width: rem(22px);
+    height: rem(22px);
+    border-radius: 50%;
 }
 
-.taskDate {
-    min-width: rem(130px);
+.sideCardIcon__overdue {
+    color: var(--mantine-color-orange-6);
+    background: light-dark(var(--mantine-color-orange-1), var(--mantine-color-orange-9));
 }
 
-.metaIcon {
-    color: var(--mantine-color-dimmed);
-    flex-shrink: 0;
+.sideCardBody {
+    padding: rem(4px) 0;
 }
 
-/* ── Drawer ─────────────────────────────────────────────────────── */
+/* Fila dentro de las cards laterales */
+.sideRow {
+    padding: rem(8px) rem(12px);
+    transition: background-color 0.1s ease;
+}
+
+.sideRow:hover {
+    background: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6));
+}
+
+.sideRow:hover .menuTrigger {
+    opacity: 1;
+}
+
+.sideRowBorder {
+    border-bottom: rem(1px) solid light-dark(var(--mantine-color-gray-1), var(--mantine-color-dark-6));
+}
+
+/* ── Drawer ──────────────────────────────────────────────────────── */
 .drawerForm {
     display: flex;
     flex-direction: column;
@@ -243,19 +274,73 @@
     flex: 1;
 }
 
-/* ── Mobile ─────────────────────────────────────────────────────── */
-@media (max-width: 640px) {
-    .taskList { max-width: 100%; }
+/* ── Responsive ──────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+    .layout {
+        grid-template-columns: 1fr;
+    }
 
+    .sidebar {
+        position: static;
+    }
+}
+
+@media (max-width: 600px) {
     .toolbar {
         flex-direction: column;
         align-items: flex-start;
+        gap: rem(10px);
     }
 
-    /* Ocultar fecha en mobile para no apilarse */
-    .taskDate { display: none; }
+    .taskBlockWrapper {
+        --gutter-left: 3rem;
+        --gutter-right: 0.25rem;
+    }
 
-    .taskMeta { font-size: rem(11px); }
+    .hourLabel {
+        width: rem(34px);
+        font-size: rem(10px);
+    }
+}
 
-    .taskRow .menuTrigger { opacity: 1; }
+/* ── Drag-to-create ──────────────────────────────────────────────── */
+
+/* Cursor crosshair sobre el grid cuando no se está arrastrando */
+.timeGrid {
+    cursor: crosshair;
+}
+
+/* Durante el drag: deshabilitar selección de texto */
+.timeGridDragging {
+    user-select: none;
+    cursor: ns-resize;
+}
+
+/* Rectángulo de selección visual */
+.dragSelection {
+    position: absolute;
+    left: rem(56px);
+    right: rem(8px);
+    z-index: 10;
+    background: light-dark(
+        color-mix(in srgb, var(--mantine-primary-color-filled) 18%, transparent),
+        color-mix(in srgb, var(--mantine-primary-color-filled) 28%, transparent)
+    );
+    border: rem(1.5px) solid light-dark(
+        color-mix(in srgb, var(--mantine-primary-color-filled) 55%, transparent),
+        color-mix(in srgb, var(--mantine-primary-color-filled) 70%, transparent)
+    );
+    border-radius: var(--mantine-radius-sm);
+    pointer-events: none;
+    display: flex;
+    align-items: flex-start;
+    padding: rem(3px) rem(6px);
+}
+
+/* Etiqueta de hora dentro de la selección */
+.dragLabel {
+    font-size: rem(11px);
+    font-weight: 600;
+    color: var(--mantine-primary-color-filled);
+    font-variant-numeric: tabular-nums;
 }

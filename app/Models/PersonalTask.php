@@ -17,6 +17,8 @@ use Illuminate\Support\Carbon;
  *   - notes          → descripción/detalle opcional
  *   - scheduled_for  → fecha programada (date)
  *   - scheduled_time → hora opcional (time|null). Si es null, la tarea es solo de fecha.
+ *   - scheduled_end_time → hora de fin opcional (time|null). Solo tiene sentido con scheduled_time:
+ *       sin fin = horario puntual; con fin = rango horario.
  *
  * Navegación de fechas:
  *   Los scopes reciben una $date Carbon para poder usarse con cualquier fecha,
@@ -36,6 +38,7 @@ class PersonalTask extends Model
         'notes',
         'scheduled_for',
         'scheduled_time',
+        'scheduled_end_time',
         'completed_at',
         'order_column',
     ];

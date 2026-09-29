@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -103,7 +104,10 @@ class PersonalTaskController extends Controller
             'priority_id'    => ['nullable', 'exists:task_priorities,id'],
             'scheduled_for'  => ['required', 'date'],
             'scheduled_time' => ['nullable', 'date_format:H:i'],
+            'scheduled_end_time' => ['nullable', 'date_format:H:i'],
         ]);
+
+        $validated = $this->normalizeTimes($validated);
 
         PersonalTask::create([
             ...$validated,
@@ -126,11 +130,58 @@ class PersonalTaskController extends Controller
             'priority_id'    => ['sometimes', 'nullable', 'exists:task_priorities,id'],
             'scheduled_for'  => ['sometimes', 'required', 'date'],
             'scheduled_time' => ['sometimes', 'nullable', 'date_format:H:i'],
+            'scheduled_end_time' => ['sometimes', 'nullable', 'date_format:H:i'],
         ]);
+
+        $validated = $this->normalizeTimes($validated, $personalTask);
 
         $personalTask->update($validated);
 
         return back();
+    }
+
+    /**
+     * Valida la coherencia entre hora de comienzo y hora de fin.
+     *
+     * - No puede haber hora de fin sin hora de comienzo.
+     * - La hora de fin debe ser posterior a la de comienzo.
+     * - Si la tarea queda sin hora de comienzo, se limpia la hora de fin.
+     *
+     * En updates parciales se completa con los valores actuales de la tarea.
+     */
+    private function normalizeTimes(array $validated, ?PersonalTask $existing = null): array
+    {
+        $start = array_key_exists('scheduled_time', $validated)
+            ? $validated['scheduled_time']
+            : $existing?->scheduled_time;
+        $end = array_key_exists('scheduled_end_time', $validated)
+            ? $validated['scheduled_end_time']
+            : $existing?->scheduled_end_time;
+
+        // La BD devuelve HH:MM:SS; comparamos siempre como HH:MM
+        $start = $start ? substr($start, 0, 5) : null;
+        $end   = $end   ? substr($end, 0, 5)   : null;
+
+        if ($end !== null && $start === null) {
+            if (! empty($validated['scheduled_end_time'])) {
+                throw ValidationException::withMessages([
+                    'scheduled_time' => 'La hora de comienzo es obligatoria cuando hay hora de fin.',
+                ]);
+            }
+
+            // Se quitó la hora de comienzo: la de fin ya no tiene sentido
+            $validated['scheduled_end_time'] = null;
+
+            return $validated;
+        }
+
+        if ($end !== null && $end <= $start) {
+            throw ValidationException::withMessages([
+                'scheduled_end_time' => 'La hora de fin debe ser posterior a la hora de comienzo.',
+            ]);
+        }
+
+        return $validated;
     }
 
     public function toggle(PersonalTask $personalTask): RedirectResponse

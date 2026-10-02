@@ -22,6 +22,9 @@ class Kernel extends ConsoleKernel
         /* Tareas que vencen al dia siguiente:se avisa una sola vez, un dia antes */
         $schedule->command('task:notify-due-soon')->dailyAt('09:00');
 
+        /* Recordatorios internos de tareas personales: se revisan cada minuto */
+        $schedule->command('personal-task:send-reminders')->everyMinute()->withoutOverlapping();
+
     }
 
     /**

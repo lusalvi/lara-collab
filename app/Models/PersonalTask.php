@@ -63,8 +63,8 @@ class PersonalTask extends Model
 
     protected $casts = [
         'scheduled_for' => 'date',
-        'completed_at'  => 'datetime',
-        'remind_at'     => 'datetime',
+        'completed_at' => 'datetime',
+        'remind_at' => 'datetime',
         'reminder_notified_at' => 'datetime',
     ];
 

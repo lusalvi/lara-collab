@@ -8,6 +8,7 @@ use App\Http\Controllers\DropdownValuesController;
 use App\Http\Controllers\MyWork\ActivityController;
 use App\Http\Controllers\MyWork\MyWorkTaskController;
 use App\Http\Controllers\Note\NoteController;
+use App\Http\Controllers\PersonalTasks\PersonalTaskController;
 use App\Http\Controllers\ProjectCalendarController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectTimelineController;
@@ -19,7 +20,6 @@ use App\Http\Controllers\Task\CommentController;
 use App\Http\Controllers\Task\GroupController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\PersonalTasks\PersonalTaskController;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', 'dashboard');
@@ -44,12 +44,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::resource('projects', ProjectController::class)->except(['show']);
 
     Route::group(['prefix' => 'personal-tasks', 'as' => 'personal-tasks.'], function () {
-        Route::get('/',                        [PersonalTaskController::class, 'index'])->name('index');
-        Route::post('/',                       [PersonalTaskController::class, 'store'])->name('store');
-        Route::delete('completed/clear',       [PersonalTaskController::class, 'clearCompleted'])->name('clear-completed');
-        Route::put('{personalTask}',           [PersonalTaskController::class, 'update'])->name('update');
-        Route::post('{personalTask}/toggle',   [PersonalTaskController::class, 'toggle'])->name('toggle');
-        Route::delete('{personalTask}',        [PersonalTaskController::class, 'destroy'])->name('destroy');
+        Route::get('/', [PersonalTaskController::class, 'index'])->name('index');
+        Route::post('/', [PersonalTaskController::class, 'store'])->name('store');
+        Route::delete('completed/clear', [PersonalTaskController::class, 'clearCompleted'])->name('clear-completed');
+        Route::put('{personalTask}', [PersonalTaskController::class, 'update'])->name('update');
+        Route::post('{personalTask}/toggle', [PersonalTaskController::class, 'toggle'])->name('toggle');
+        Route::delete('{personalTask}', [PersonalTaskController::class, 'destroy'])->name('destroy');
     });
 
     Route::group(['prefix' => 'projects', 'as' => 'projects.'], function () {

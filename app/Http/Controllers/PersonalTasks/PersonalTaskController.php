@@ -5,6 +5,7 @@ namespace App\Http\Controllers\PersonalTasks;
 use App\Http\Controllers\Controller;
 use App\Models\PersonalTask;
 use App\Models\TaskPriority;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -33,7 +34,7 @@ class PersonalTaskController extends Controller
 {
     public function index(Request $request): Response
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = auth()->user();
 
         // Fecha visualizada. Si no viene o es inválida, se usa hoy.
@@ -41,8 +42,8 @@ class PersonalTaskController extends Controller
             ? Carbon::createFromFormat('Y-m-d', $request->input('date'))->startOfDay()
             : now()->startOfDay();
 
-        $today        = now()->startOfDay();
-        $isToday      = $viewingDate->isSameDay($today);
+        $today = now()->startOfDay();
+        $isToday = $viewingDate->isSameDay($today);
         $prioritySort = $request->input('sort_priority');
 
         // Closure de ordenamiento reutilizable (no modifica order_column)
@@ -60,8 +61,8 @@ class PersonalTaskController extends Controller
             } else {
                 // Sin sort por prioridad: si hay hora la ponemos primero dentro del día
                 $query->orderByRaw('personal_tasks.scheduled_time IS NULL')
-                      ->orderBy('personal_tasks.scheduled_time', 'asc')
-                      ->orderBy('personal_tasks.order_column', 'asc');
+                    ->orderBy('personal_tasks.scheduled_time', 'asc')
+                    ->orderBy('personal_tasks.order_column', 'asc');
             }
         };
 
@@ -87,23 +88,23 @@ class PersonalTaskController extends Controller
             ->get();
 
         return Inertia::render('PersonalTasks/Index', [
-            'dateTasks'      => $dateTasks,
-            'overdueTasks'   => $overdueTasks,
+            'dateTasks' => $dateTasks,
+            'overdueTasks' => $overdueTasks,
             'completedTasks' => $completedTasks,
-            'priorities'     => TaskPriority::orderBy('order')->get(),
-            'viewingDate'    => $viewingDate->toDateString(),
-            'today'          => $today->toDateString(),
-            'isToday'        => $isToday,
+            'priorities' => TaskPriority::orderBy('order')->get(),
+            'viewingDate' => $viewingDate->toDateString(),
+            'today' => $today->toDateString(),
+            'isToday' => $isToday,
         ]);
     }
 
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'description'    => ['required', 'string', 'max:500'],
-            'notes'          => ['nullable', 'string', 'max:5000'],
-            'priority_id'    => ['nullable', 'exists:task_priorities,id'],
-            'scheduled_for'  => ['required', 'date'],
+            'description' => ['required', 'string', 'max:500'],
+            'notes' => ['nullable', 'string', 'max:5000'],
+            'priority_id' => ['nullable', 'exists:task_priorities,id'],
+            'scheduled_for' => ['required', 'date'],
             'scheduled_time' => ['nullable', 'date_format:H:i'],
             'scheduled_end_time' => ['nullable', 'date_format:H:i'],
             // Sin hora de comienzo no hay recordatorio: PersonalTaskObserver lo fuerza a null
@@ -114,7 +115,7 @@ class PersonalTaskController extends Controller
 
         PersonalTask::create([
             ...$validated,
-            'user_id'      => auth()->id(),
+            'user_id' => auth()->id(),
             'order_column' => PersonalTask::where('user_id', auth()->id())
                 ->whereDate('scheduled_for', $validated['scheduled_for'])
                 ->max('order_column') + 1,
@@ -128,10 +129,10 @@ class PersonalTaskController extends Controller
         Gate::allowIf(fn () => $personalTask->user_id === auth()->id());
 
         $validated = $request->validate([
-            'description'    => ['sometimes', 'required', 'string', 'max:500'],
-            'notes'          => ['sometimes', 'nullable', 'string', 'max:5000'],
-            'priority_id'    => ['sometimes', 'nullable', 'exists:task_priorities,id'],
-            'scheduled_for'  => ['sometimes', 'required', 'date'],
+            'description' => ['sometimes', 'required', 'string', 'max:500'],
+            'notes' => ['sometimes', 'nullable', 'string', 'max:5000'],
+            'priority_id' => ['sometimes', 'nullable', 'exists:task_priorities,id'],
+            'scheduled_for' => ['sometimes', 'required', 'date'],
             'scheduled_time' => ['sometimes', 'nullable', 'date_format:H:i'],
             'scheduled_end_time' => ['sometimes', 'nullable', 'date_format:H:i'],
             'reminder_minutes' => ['sometimes', 'nullable', Rule::in(PersonalTask::REMINDER_OPTIONS)],
@@ -164,7 +165,7 @@ class PersonalTaskController extends Controller
 
         // La BD devuelve HH:MM:SS; comparamos siempre como HH:MM
         $start = $start ? substr($start, 0, 5) : null;
-        $end   = $end   ? substr($end, 0, 5)   : null;
+        $end = $end ? substr($end, 0, 5) : null;
 
         if ($end !== null && $start === null) {
             if (! empty($validated['scheduled_end_time'])) {
